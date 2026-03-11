@@ -10,28 +10,59 @@
     ]
   },
   "cities": {
-    "brisbane": {
+    "sydney": {
       "regimes": [
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
         "stagnation",
         "stagnation",
+        "stagnation",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "stagnation",
+        "stagnation",
+        "boom",
+        "stagnation",
+        "stagnation",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "boom",
         "stagnation",
         "stagnation",
         "stagnation",
         "stagnation",
         "stagnation",
         "boom",
+        "stagnation",
+        "correction",
+        "correction",
+        "stagnation",
+        "stagnation",
         "boom",
-        "boom",
-        "boom",
-        "boom",
-        "boom",
+        "stagnation",
+        "stagnation",
         "correction",
-        "correction",
-        "correction",
-        "correction",
-        "boom",
-        "boom",
-        "boom",
         "correction",
         "correction",
         "correction",
@@ -42,74 +73,43 @@
         "stagnation",
         "stagnation",
         "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
         "correction",
         "correction",
-        "correction",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
         "stagnation",
         "boom",
         "boom",
         "boom",
-        "boom",
-        "boom"
+        "stagnation"
       ],
       "state_params": {
         "correction": {
-          "mean_return": -0.007124,
-          "std": 0.014348
+          "mean_return": -0.007172,
+          "std": 0.013435
         },
         "stagnation": {
-          "mean_return": 0.008889,
-          "std": 0.008715
+          "mean_return": 0.030504,
+          "std": 0.010561
         },
         "boom": {
-          "mean_return": 0.042767,
-          "std": 0.021104
+          "mean_return": 0.055677,
+          "std": 0.01971
         }
       },
       "transition_matrix": [
         [
-          0.8041,
-          0.1384,
-          0.0575
+          0.8012,
+          0.1986,
+          0.0002
         ],
         [
-          0.0289,
-          0.9142,
-          0.0569
+          0.2592,
+          0.4905,
+          0.2503
         ],
         [
-          0.1515,
           0.0,
-          0.8485
+          0.5919,
+          0.4081
         ]
       ]
     },
@@ -216,6 +216,109 @@
         ]
       ]
     },
+    "brisbane": {
+      "regimes": [
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "boom",
+        "boom",
+        "boom",
+        "boom",
+        "boom",
+        "boom",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "boom",
+        "boom",
+        "boom",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "correction",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "correction",
+        "correction",
+        "correction",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "stagnation",
+        "boom",
+        "boom",
+        "boom",
+        "boom",
+        "boom"
+      ],
+      "state_params": {
+        "correction": {
+          "mean_return": -0.007124,
+          "std": 0.014348
+        },
+        "stagnation": {
+          "mean_return": 0.008889,
+          "std": 0.008715
+        },
+        "boom": {
+          "mean_return": 0.042767,
+          "std": 0.021104
+        }
+      },
+      "transition_matrix": [
+        [
+          0.8041,
+          0.1384,
+          0.0575
+        ],
+        [
+          0.0289,
+          0.9142,
+          0.0569
+        ],
+        [
+          0.1515,
+          0.0,
+          0.8485
+        ]
+      ]
+    },
     "perth": {
       "regimes": [
         "stagnation",
@@ -316,109 +419,6 @@
           0.0,
           0.245,
           0.755
-        ]
-      ]
-    },
-    "sydney": {
-      "regimes": [
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "stagnation",
-        "stagnation",
-        "boom",
-        "stagnation",
-        "stagnation",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "boom",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "boom",
-        "stagnation",
-        "correction",
-        "correction",
-        "stagnation",
-        "stagnation",
-        "boom",
-        "stagnation",
-        "stagnation",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "correction",
-        "stagnation",
-        "stagnation",
-        "stagnation",
-        "correction",
-        "correction",
-        "stagnation",
-        "boom",
-        "boom",
-        "boom",
-        "stagnation"
-      ],
-      "state_params": {
-        "correction": {
-          "mean_return": -0.007172,
-          "std": 0.013435
-        },
-        "stagnation": {
-          "mean_return": 0.030504,
-          "std": 0.010561
-        },
-        "boom": {
-          "mean_return": 0.055677,
-          "std": 0.01971
-        }
-      },
-      "transition_matrix": [
-        [
-          0.8012,
-          0.1986,
-          0.0002
-        ],
-        [
-          0.2592,
-          0.4905,
-          0.2503
-        ],
-        [
-          0.0,
-          0.5919,
-          0.4081
         ]
       ]
     }
