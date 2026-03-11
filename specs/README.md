@@ -15,8 +15,8 @@ Keywords: Granger causality, pairwise, directed pairs, F-test, ssr_ftest, p-valu
 Keywords: Hidden Markov Model, HMM, Gaussian, hmmlearn, 3 states, boom, stagnation, correction, Viterbi, transition matrix, regime labels, mean return, covariance, EM algorithm, timeline chart, regime bands, green/amber/red, city selector, hmm.json
 
 ## xgboost-features.md
-**Macro feature importance for price prediction**
-Keywords: XGBoost, XGBRegressor, feature importance, gain-based, feature engineering, lagged features, cross-city returns, cash_rate_change, unemployment_change, CPI, R-squared, RMSE, horizontal bar chart, feature groups, Interest Rates, Employment, Inflation, Cross-City, xgboost.json
+**Macro feature importance for price prediction (LightGBM)**
+Keywords: LightGBM, LGBMRegressor, feature importance, gain-based, feature engineering, lagged features, cross-city returns, cash_rate_change, unemployment_change, CPI, R-squared, RMSE, horizontal bar chart, feature groups, Interest Rates, Employment, Inflation, Cross-City, xgboost.json, migration from XGBoost
 
 ## frontend.md
 **React + D3 single-page application**

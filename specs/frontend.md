@@ -30,7 +30,7 @@ The page reads as a top-to-bottom data story:
 │  Timeline with regime bands      │
 ├──────────────────────────────────┤
 │  Section 3: What Drives Prices   │
-│  (XGBoost)                       │
+│  (LightGBM)                      │
 │  Feature importance bars         │
 ├──────────────────────────────────┤
 │           Footer                 │
@@ -63,7 +63,8 @@ The page reads as a top-to-bottom data story:
 - See `specs/hmm-regimes.md` for visualisation details
 
 ### `XGBoostSection.jsx`
-- Section heading + plain-language explanation of feature importance
+- Section heading + plain-language explanation of feature importance (LightGBM)
+- User-facing text references "LightGBM", not "XGBoost"
 - City selector (shared or independent from HMM section)
 - Embeds `FeatureImportanceChart` (D3 component)
 - See `specs/xgboost-features.md` for visualisation details

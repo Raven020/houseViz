@@ -20,9 +20,9 @@ export default function XGBoostSection({ data, prices }) {
 
   return (
     <section className="section" id="xgboost">
-      <h2 className="section__title">What Drives Prices: XGBoost Feature Importance</h2>
+      <h2 className="section__title">What Drives Prices: LightGBM Feature Importance</h2>
       <p className="section__explanation">
-        An XGBoost model trained on macroeconomic indicators reveals which factors
+        A LightGBM model trained on macroeconomic indicators reveals which factors
         matter most for predicting each city's quarterly price movements. Features
         include interest rate changes, unemployment levels, inflation, and price
         spillovers from other cities. The bars below show each feature's contribution
@@ -52,7 +52,7 @@ export default function XGBoostSection({ data, prices }) {
       <div className="chart-container">
         <svg
           ref={svgRef}
-          aria-label={`XGBoost feature importance chart for ${CITY_NAMES[selectedCity] || selectedCity}`}
+          aria-label={`LightGBM feature importance chart for ${CITY_NAMES[selectedCity] || selectedCity}`}
           role="img"
         />
       </div>

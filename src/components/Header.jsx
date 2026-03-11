@@ -11,7 +11,7 @@ export default function Header() {
         This project applies three econometric techniques to quarterly housing price data
         from the Australian Bureau of Statistics: Granger causality testing to uncover
         lead-lag relationships between cities, Hidden Markov Models to identify boom,
-        stagnation, and correction regimes, and XGBoost to quantify the macroeconomic
+        stagnation, and correction regimes, and LightGBM to quantify the macroeconomic
         drivers behind price movements.
       </p>
     </header>

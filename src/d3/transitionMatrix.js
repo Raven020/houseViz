@@ -1,25 +1,39 @@
 import * as d3 from 'd3';
 import { CITY_NAMES } from '../utils/constants.js';
 
-// State order matches meta.regime_labels: ["correction", "stagnation", "boom"]
-const STATES = ['Correction', 'Stagnation', 'Boom'];
+// Default 3-state labels; overridden per-city when the HMM fell back to 2 states
+const DEFAULT_STATES = ['correction', 'stagnation', 'boom'];
+
+function getStateLabels(cityHMM, hmmMeta) {
+  // Per-city override (set when HMM fell back to fewer states)
+  if (cityHMM.regime_labels) return cityHMM.regime_labels;
+  // Top-level meta labels
+  if (hmmMeta?.regime_labels) return hmmMeta.regime_labels;
+  return DEFAULT_STATES;
+}
+
+function capitalize(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
 
 export function renderTransitionMatrix(svgEl, hmmData, city) {
   const cityHMM = hmmData?.cities?.[city];
   if (!cityHMM || !cityHMM.transition_matrix) return;
 
-  const matrix = cityHMM.transition_matrix; // 3×3 array, row = from, col = to
+  const matrix = cityHMM.transition_matrix; // NxN array, row = from, col = to
+  const nStates = matrix.length;
+  const stateLabels = getStateLabels(cityHMM, hmmData.meta);
   const cityLabel = CITY_NAMES[city] || city;
 
-  // Layout constants
+  // Layout constants — adapt to state count
   const cellSize = 72;
   const headerWidth = 84;   // left header column width
   const headerHeight = 48;  // top header row height
   const titleHeight = 32;
   const padding = { top: titleHeight + headerHeight, left: headerWidth, right: 16, bottom: 16 };
 
-  const innerWidth = cellSize * 3;
-  const innerHeight = cellSize * 3;
+  const innerWidth = cellSize * nStates;
+  const innerHeight = cellSize * nStates;
   const totalWidth = padding.left + innerWidth + padding.right;
   const totalHeight = padding.top + innerHeight + padding.bottom;
 
@@ -68,7 +82,7 @@ export function renderTransitionMatrix(svgEl, hmmData, city) {
     .attr('fill', '#6b7280')
     .text('To →');
 
-  STATES.forEach((state, j) => {
+  stateLabels.forEach((state, j) => {
     colHeader.append('text')
       .attr('x', j * cellSize + cellSize / 2)
       .attr('y', headerHeight - 6)
@@ -76,7 +90,7 @@ export function renderTransitionMatrix(svgEl, hmmData, city) {
       .attr('font-size', '0.72rem')
       .attr('font-weight', '600')
       .attr('fill', '#374151')
-      .text(state);
+      .text(capitalize(state));
   });
 
   // --- Row headers ("From" state) ---
@@ -92,7 +106,7 @@ export function renderTransitionMatrix(svgEl, hmmData, city) {
     .attr('fill', '#6b7280')
     .text('↓ From');
 
-  STATES.forEach((state, i) => {
+  stateLabels.forEach((state, i) => {
     rowHeader.append('text')
       .attr('x', headerWidth - 8)
       .attr('y', i * cellSize + cellSize / 2 + 4)
@@ -100,7 +114,7 @@ export function renderTransitionMatrix(svgEl, hmmData, city) {
       .attr('font-size', '0.72rem')
       .attr('font-weight', '600')
       .attr('fill', '#374151')
-      .text(state);
+      .text(capitalize(state));
   });
 
   // --- Cells ---
@@ -112,8 +126,8 @@ export function renderTransitionMatrix(svgEl, hmmData, city) {
       const x = j * cellSize;
       const y = i * cellSize;
       const pct = Math.round(prob * 100);
-      const fromState = STATES[i];
-      const toState = STATES[j];
+      const fromState = capitalize(stateLabels[i] || `State ${i}`);
+      const toState = capitalize(stateLabels[j] || `State ${j}`);
       const ariaLabel = `From ${fromState} to ${toState}: ${(prob * 100).toFixed(1)}% probability`;
 
       const cell = cellGroup.append('g')

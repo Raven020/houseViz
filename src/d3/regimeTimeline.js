@@ -193,8 +193,13 @@ export function renderRegimeTimeline(svgEl, hmmData, pricesData, city) {
     .attr('fill', '#6b7280')
     .text('Price Index');
 
-  // Legend
-  const legendData = ['boom', 'stagnation', 'correction'];
+  // Legend — derive from actual regimes present in this city's data
+  const legendData = cityHMM.regime_labels
+    ? [...cityHMM.regime_labels].reverse()
+    : [...new Set(cityHMM.regimes)].sort((a, b) => {
+        const order = { boom: 0, stagnation: 1, correction: 2 };
+        return (order[a] ?? 3) - (order[b] ?? 3);
+      });
   const legend = g.append('g')
     .attr('transform', `translate(${margin.left + 10}, ${margin.top + 5})`);
 
