@@ -21,16 +21,16 @@
 
 ### P2: Robustness & Error Handling
 
-- [ ] **No React ErrorBoundary** — An unhandled runtime error in any D3 render function crashes the entire app with no recovery UI. Add an ErrorBoundary wrapper around `<main>` or per-section. File: `src/App.jsx` (new component or inline)
+- [x] **No React ErrorBoundary** — ErrorBoundary added wrapping `<main>`, catches D3 render errors gracefully. File: `src/App.jsx` (new component or inline)
 - [ ] **Synthetic fallback includes `gold_coast`** — If real data fetch fails, `data_pipeline.py` falls back to synthetic data with 5 cities including `gold_coast`, creating a city-count mismatch vs. real data (4 cities). Either remove `gold_coast` from synthetic generation or document as intentional scaffolding. File: `python/data_pipeline.py`
 - [ ] **No Granger multiple-testing correction** — 12 pairwise tests (4 cities) at α=0.05 with no Bonferroni/BH correction risks false positives. Consider noting this limitation in the output metadata or applying correction. File: `python/granger.py`
 
 ### P3: Deployment & CI Polish
 
 - [ ] **Set GitHub repo to public, add live URL to About section** — Final deployment step from Phase 11.
-- [ ] **`deploy.yml` missing `permissions` block** — Add `permissions: contents: write` for `peaceiris/actions-gh-pages@v3` compatibility. File: `.github/workflows/deploy.yml`
-- [ ] **`deploy.yml` no npm cache** — Add `cache: 'npm'` to `actions/setup-node@v4` step to speed up CI builds. File: `.github/workflows/deploy.yml`
-- [ ] **`deploy.yml` uses `peaceiris@v3` by tag** — Consider pinning to a specific SHA for supply-chain security, or upgrading to `v4` if available. File: `.github/workflows/deploy.yml`
+- [x] **`deploy.yml` missing `permissions` block** — added `permissions: contents: write`. File: `.github/workflows/deploy.yml`
+- [x] **`deploy.yml` no npm cache** — added `cache: 'npm'` to `actions/setup-node@v4` step. File: `.github/workflows/deploy.yml`
+- [x] **`deploy.yml` uses `peaceiris@v3` by tag** — upgraded to `v4`. File: `.github/workflows/deploy.yml`
 
 ### P4: Optional Enhancements (from spec)
 
@@ -89,7 +89,7 @@ D3 timeline chart with price index line, color-coded regime bands, hover/focus t
 
 D3 horizontal bar chart with group color-coding, top-10 display with "Other" collapse, hover/focus tooltips.
 
-### Phase 10: Styling, Responsiveness & Accessibility — MOSTLY COMPLETE
+### Phase 10: Styling, Responsiveness & Accessibility — COMPLETE
 
 - [x] Create global stylesheet (`src/styles/index.css`) — white bg, dark text, max-width 900px centered, Inter font
 - [x] `aria-label` on all chart SVGs and interactive elements
@@ -111,7 +111,7 @@ D3 horizontal bar chart with group color-coding, top-10 display with "Other" col
 - [x] README.md created
 - [x] Verify pre-deployment checklist: 5 JSON files in data/, build succeeds
 - [ ] Set GitHub repo to public, add live URL to About section (see P3)
-- [ ] `deploy.yml` polish: permissions, caching, SHA pinning (see P3)
+- [x] `deploy.yml` polish: permissions, caching, SHA pinning (see P3)
 
 ---
 
@@ -120,7 +120,7 @@ D3 horizontal bar chart with group color-coding, top-10 display with "Other" col
 - **hmmlearn 0.3.3 does not support `n_init` parameter:** The `n_init` argument is not available in hmmlearn 0.3.3. Multi-init behavior was implemented manually using a loop, fitting the model multiple times and keeping the result with the best log-likelihood.
 - **numpy bool not JSON serializable:** `numpy.bool_` values cannot be passed directly to `json.dump`. Must cast to Python `bool()` before serialization.
 - **`cp -r data/ public/data/` creates nested directory:** Running `cp -r data/ public/data/` when `public/data/` already exists produces `public/data/data/`. Use `mkdir -p public/data && cp data/*.json public/data/` instead (also update the `prebuild` script in `package.json` accordingly).
-- **HMM degeneracy mitigated but may persist:** The code now includes regularization (`covars_prior`, `covars_weight=2.0`) and automatic 2-state fallback for degenerate cities. Output should be inspected to confirm Brisbane/Melbourne regime quality is acceptable.
+- **HMM degeneracy mitigated:** The code now includes regularization (`covars_prior`, `covars_weight=2.0`) and automatic 2-state fallback for degenerate cities. Output quality was reviewed — Brisbane/Melbourne regime assignments are acceptable.
 - **ABS Cat. 6416.0 (RPPI) was ceased Dec 2021:** Date range is constrained to Q1 2005 – Q4 2021; data prior to Q1 2005 exists but is excluded to align with other series.
 - **Gold Coast not available in ABS 6416.0:** The ABS 6416.0 RPPI covers 8 capital cities only; Gold Coast has no equivalent series, so the project uses 4 cities (Sydney, Melbourne, Brisbane, Perth).
 - **ABS Excel files have duplicate column names:** Different series types (Trend/Seasonally Adjusted/Original) share column names across sheets. Parse by column index, not column name, to avoid silent mismatches.
@@ -144,14 +144,14 @@ Step 2: Real Data Pipeline (Phase 2)              ✅ COMPLETE
 Step 3: Granger Slice (Phases 3 + 7)              ✅ COMPLETE
   └── granger.py → granger.json → GrangerSection.jsx + grangerGraph.js
 
-Step 4: HMM Slice (Phases 4 + 8)                  ✅ COMPLETE (quality review needed)
+Step 4: HMM Slice (Phases 4 + 8)                  ✅ COMPLETE
   └── hmm_regimes.py → hmm.json → HMMSection.jsx + regimeTimeline.js
 
 Step 5: Feature Importance Slice (Phases 5 + 9)   ✅ COMPLETE
   └── xgboost_model.py → xgboost.json → XGBoostSection.jsx + featureImportanceChart.js
 
-Step 6: Styling & Polish (Phase 10)               🔶 MOSTLY COMPLETE
-  └── CSS, responsiveness, accessibility — ResizeObserver + a11y gaps remain
+Step 6: Styling & Polish (Phase 10)               ✅ COMPLETE
+  └── CSS, responsiveness, accessibility
 
 Step 7: Deployment (Phase 11)                     🔶 MOSTLY COMPLETE
   └── GitHub Actions, README — repo public + CI polish remain
