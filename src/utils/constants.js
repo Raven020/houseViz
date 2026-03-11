@@ -30,3 +30,12 @@ export const FEATURE_GROUP_COLORS = {
   'Inflation': '#B45309',
   'Cross-City': '#047857',
 };
+
+export function humanReadableName(name) {
+  return name
+    .replace(/_lag(\d+)/, ' (lag $1Q)')
+    .replace(/_return/, ' return')
+    .replace(/_change/, ' change')
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase());
+}

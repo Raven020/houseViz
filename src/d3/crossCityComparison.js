@@ -1,14 +1,5 @@
 import * as d3 from 'd3';
-import { CITY_COLORS, CITY_NAMES } from '../utils/constants.js';
-
-function humanReadableName(name) {
-  return name
-    .replace(/_lag(\d+)/, ' (lag $1Q)')
-    .replace(/_return/, ' return')
-    .replace(/_change/, ' change')
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, c => c.toUpperCase());
-}
+import { CITY_COLORS, CITY_NAMES, humanReadableName } from '../utils/constants.js';
 
 /**
  * Render a grouped bar chart showing the #1 most important feature per city.

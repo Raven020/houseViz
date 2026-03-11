@@ -496,7 +496,6 @@ def generate_synthetic_prices(dates, cities):
         "melbourne":  (100.0, 0.014, 0.018, 0.6),
         "brisbane":   (100.0, 0.012, 0.022, 0.8),
         "perth":      (100.0, 0.010, 0.025, 0.9),
-        "gold_coast": (100.0, 0.011, 0.024, 0.85),
     }
     series = {}
     for city in cities:
