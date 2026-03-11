@@ -8,7 +8,7 @@ Single-page React application with three D3.js visualisations, reading pre-compu
 |---|---|
 | Framework | React 18 (Vite) |
 | Charting | D3.js v7 (direct SVG bindings, not a wrapper) |
-| Styling | CSS Modules or Tailwind CSS |
+| Styling | CSS (global stylesheet) |
 | Routing | None — single scrollable page with section anchors |
 | Build | Vite → static output to `dist/` |
 
@@ -72,6 +72,7 @@ The page reads as a top-to-bottom data story:
 ### `Footer.jsx`
 - Data sources with links (ABS, RBA)
 - Methodology summary (link to GitHub README for detail)
+- GitHub repository link
 - Author name + LinkedIn link
 
 ## D3 Integration Pattern
@@ -82,7 +83,7 @@ The page reads as a top-to-bottom data story:
 ## Data Loading
 - All JSON in `public/data/` (copied from `data/` at build time or symlinked)
 - Fetch on mount in `App.jsx`, store in state
-- Show a simple loading spinner until all 3 JSON files are loaded
+- Show a simple loading spinner until all 4 JSON files are loaded (prices, granger, hmm, xgboost)
 - Handle fetch errors with a user-friendly message
 
 ## Styling Guidelines

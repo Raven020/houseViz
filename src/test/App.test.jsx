@@ -20,14 +20,13 @@ import { loadAllData } from '../utils/dataLoader.js';
 
 const mockData = {
   prices: {
-    cities: ['sydney', 'melbourne', 'brisbane', 'perth', 'gold_coast'],
+    cities: ['sydney', 'melbourne', 'brisbane', 'perth'],
     dates: ['2005-Q1', '2005-Q2'],
     series: {
       sydney: { index: [100, 102], returns: [null, 0.02] },
       melbourne: { index: [100, 101], returns: [null, 0.01] },
       brisbane: { index: [100, 103], returns: [null, 0.03] },
       perth: { index: [100, 99], returns: [null, -0.01] },
-      gold_coast: { index: [100, 101.5], returns: [null, 0.015] },
     },
   },
   granger: {

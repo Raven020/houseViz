@@ -15,24 +15,15 @@
 
 ## Remaining Work — Prioritized
 
-All priorities (P0-P7) are fully resolved. Full spec compliance audit completed at v0.0.9.
+All priorities (P0-P8) are fully resolved. Full spec compliance audit completed at v0.0.9. Test/spec hygiene pass at v0.0.10.
 
-### P7: Spec Compliance Audit & Fixes (v0.0.9)
+### P8: Test & Spec Hygiene (v0.0.10)
 
-- [x] **Feature importance normalization bug** — Walk-forward CV counted all folds in the denominator but only accumulated importances from folds with non-zero gains. This caused importances to sum to ~0.535 instead of 1.0, making all displayed percentages roughly half their correct values. Fixed by counting only valid folds and adding a final normalization step.
-- [x] **Dead `gold_coast` in grangerGraph.js** — Removed unused `gold_coast` entry from `GEO_POSITIONS` object.
-- [x] **README `<username>` placeholder** — Replaced with `Raven020` in the Live Demo URL.
-- [x] **README Gold Coast reference** — Removed Gold Coast from overview text (only 4 cities in dataset).
-- [x] **README "CSS Modules" claim** — Corrected to "CSS (global stylesheet)" since the project uses plain CSS.
-- [x] **Specs updated for 4 cities** — All spec files updated to reflect 4 cities (Gold Coast dropped) instead of 5.
-- [x] **Data pipeline returns validation** — Added `validate_no_nan` for `returns[1:]` arrays (previously only `index` arrays were validated).
-- [x] **xgboost.json regenerated** — Feature importances now correctly sum to 1.0 per city.
+- [x] **Test mock data included `gold_coast`** — `App.test.jsx` mock had 5 cities including gold_coast, but actual data only has 4 cities. Removed gold_coast from mock to match real dataset shape.
+- [x] **Frontend spec said "CSS Modules or Tailwind CSS"** — Corrected to "CSS (global stylesheet)" to match implementation.
+- [x] **Frontend spec said "3 JSON files"** — Corrected to "4 JSON files (prices, granger, hmm, xgboost)".
+- [x] **Frontend spec missing Footer GitHub link** — Added GitHub repository link to Footer.jsx spec.
 - [n/a] **Footer author/LinkedIn placeholders** — Contain "Developer" / `linkedin.com/in/developer`. Cannot fix without knowing real author identity. Noted for manual update.
-
-### P6: Spec Compliance Fixes (v0.0.8)
-
-- [x] **Footer GitHub URL was placeholder** — Fixed to point to real repo `github.com/Raven020/houseViz`.
-- [x] **Spec color inconsistency resolved** — Updated spec to match WCAG-compliant values in code (`#B45309`, `#047857`).
 
 ---
 
