@@ -1,9 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { renderRegimeTimeline } from '../d3/regimeTimeline.js';
+import { renderTransitionMatrix } from '../d3/transitionMatrix.js';
 import { CITY_NAMES } from '../utils/constants.js';
 
 export default function HMMSection({ data, prices }) {
   const svgRef = useRef(null);
+  const matrixSvgRef = useRef(null);
   const [selectedCity, setSelectedCity] = useState('sydney');
 
   const cities = prices ? prices.cities : [];
@@ -13,6 +15,12 @@ export default function HMMSection({ data, prices }) {
       renderRegimeTimeline(svgRef.current, data, prices, selectedCity);
     }
   }, [data, prices, selectedCity]);
+
+  useEffect(() => {
+    if (data && matrixSvgRef.current) {
+      renderTransitionMatrix(matrixSvgRef.current, data, selectedCity);
+    }
+  }, [data, selectedCity]);
 
   if (!data || !prices) return null;
 
@@ -46,6 +54,18 @@ export default function HMMSection({ data, prices }) {
         <svg
           ref={svgRef}
           aria-label={`HMM regime timeline for ${CITY_NAMES[selectedCity] || selectedCity}`}
+          role="img"
+        />
+      </div>
+      <div className="chart-container chart-container--matrix">
+        <h3 className="chart-container__label">Transition Probabilities</h3>
+        <p className="chart-container__sublabel">
+          Each cell shows the probability of moving from one market regime (row) to
+          another (column) in the next quarter.
+        </p>
+        <svg
+          ref={matrixSvgRef}
+          aria-label={`Transition probability matrix for ${CITY_NAMES[selectedCity] || selectedCity}`}
           role="img"
         />
       </div>

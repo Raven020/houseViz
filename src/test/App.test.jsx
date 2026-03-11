@@ -10,7 +10,9 @@ vi.mock('../utils/dataLoader.js', () => ({
 
 // Mock D3 modules to avoid SVG rendering issues in jsdom
 vi.mock('../d3/grangerGraph.js', () => ({ renderGrangerGraph: vi.fn() }));
+vi.mock('../d3/grangerHeatmap.js', () => ({ renderGrangerHeatmap: vi.fn() }));
 vi.mock('../d3/regimeTimeline.js', () => ({ renderRegimeTimeline: vi.fn() }));
+vi.mock('../d3/transitionMatrix.js', () => ({ renderTransitionMatrix: vi.fn() }));
 vi.mock('../d3/featureImportanceChart.js', () => ({ renderFeatureImportanceChart: vi.fn() }));
 
 import { loadAllData } from '../utils/dataLoader.js';
