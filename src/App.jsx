@@ -6,6 +6,30 @@ import XGBoostSection from './components/XGBoostSection.jsx';
 import Footer from './components/Footer.jsx';
 import { loadAllData } from './utils/dataLoader.js';
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="error">
+          <h2>Something went wrong</h2>
+          <p>{this.state.error?.message || 'An unexpected error occurred while rendering a chart.'}</p>
+          <p>Try refreshing the page.</p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
@@ -46,11 +70,13 @@ export default function App() {
   return (
     <div className="app">
       <Header />
-      <main>
-        <GrangerSection data={data.granger} prices={data.prices} />
-        <HMMSection data={data.hmm} prices={data.prices} />
-        <XGBoostSection data={data.xgboost} prices={data.prices} />
-      </main>
+      <ErrorBoundary>
+        <main>
+          <GrangerSection data={data.granger} prices={data.prices} />
+          <HMMSection data={data.hmm} prices={data.prices} />
+          <XGBoostSection data={data.xgboost} prices={data.prices} />
+        </main>
+      </ErrorBoundary>
       <Footer />
     </div>
   );
