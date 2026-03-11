@@ -90,9 +90,9 @@ The page reads as a top-to-bottom data story:
 - Accent colour palette for the 5 cities (consistent across all charts):
   - Sydney: `#2563EB` (blue)
   - Melbourne: `#7C3AED` (purple)
-  - Brisbane: `#D97706` (amber)
+  - Brisbane: `#B45309` (dark amber — WCAG AA compliant; original `#D97706` fails 4.5:1 contrast)
   - Perth: `#DC2626` (red)
-  - Gold Coast: `#059669` (teal)
+  - Gold Coast: `#047857` (dark teal — WCAG AA compliant; original `#059669` fails 4.5:1 contrast)
 - Typography: system font stack or Inter/DM Sans from Google Fonts
 - Max content width: 900px, centred
 - Generous whitespace between sections

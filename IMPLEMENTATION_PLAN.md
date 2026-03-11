@@ -15,18 +15,14 @@
 
 ## Remaining Work — Prioritized
 
-All priorities (P0-P5) are fully resolved. Full spec compliance audit completed at v0.0.7.
+All priorities (P0-P6) are fully resolved. Full spec compliance audit completed at v0.0.8.
 
-### P4: Optional Enhancements (from spec) — ALL COMPLETE
+### P6: Spec Compliance Fixes (v0.0.8)
 
-- [x] Walk-forward cross-validation for LightGBM
-- [x] HMM multi-city overlay
-- [x] LightGBM cross-city comparison viz
-- [x] LightGBM category aggregation toggle
-
-### P5: Spec Compliance Audit (v0.0.7)
-
-- [x] **Footer: GitHub link + author attribution** — Added GitHub README link to methodology section and author name with LinkedIn link to meta section, per `specs/frontend.md` lines 73-75. Previously the only unimplemented spec requirement.
+- [x] **Footer GitHub URL was placeholder** — `Footer.jsx` linked to `github.com/developer/aus-housing-econometrics` (placeholder). Fixed to point to real repo `github.com/Raven020/houseViz`.
+- [x] **Spec color inconsistency resolved** — `specs/frontend.md` specified Brisbane `#D97706` and Gold Coast `#059669`, but these fail the spec's own WCAG AA 4.5:1 contrast requirement. Updated spec to match the WCAG-compliant values already in code (`#B45309`, `#047857`).
+- [n/a] **Footer author/LinkedIn placeholders** — Contain "Developer" / `linkedin.com/in/developer`. Cannot fix without knowing real author identity. Noted for manual update.
+- [n/a] **Header subtitle** — Says "across major Australian cities" vs spec's "across 5 cities". Current wording is more accurate (4 cities, not 5). Intentional adaptation.
 
 ---
 
