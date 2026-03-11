@@ -20,7 +20,7 @@ P1, P2, and P3 are fully resolved. Only optional enhancements remain.
 ### P4: Optional Enhancements (from spec)
 
 - [x] **Walk-forward cross-validation for LightGBM** — Implemented expanding-window walk-forward CV (min 20 obs, ~43 folds). Replaces single 75/25 split with robust OOF metrics. Feature importances averaged across all folds for stability. Frontend updated to show OOF R², Train R², and fold count. Brisbane OOF R² improved from -0.098 to 0.23.
-- [ ] **HMM multi-city overlay** — `specs/hmm-regimes.md` optional: overlay multiple cities on the same timeline chart for comparison. Files: `src/d3/regimeTimeline.js`, `src/components/HMMSection.jsx`
+- [x] **HMM multi-city overlay** — Implemented "Compare all cities" checkbox toggle in HMMSection. When enabled, overlays all cities' normalised price index lines (base 100) on a single chart with crosshair tooltip showing all values at each quarter. Regime bands and transition matrix are hidden in compare mode to avoid clutter. New `renderRegimeTimelineOverlay()` function in `regimeTimeline.js`. Test added for toggle behaviour.
 - [ ] **LightGBM cross-city comparison viz** — `specs/xgboost-features.md` optional: small multiples or grouped bars showing #1 feature per city side by side. Files: new `src/d3/` module, `src/components/XGBoostSection.jsx`
 - [ ] **LightGBM category aggregation toggle** — `specs/xgboost-features.md` mentions an optional toggle to aggregate lagged variants of the same base feature into one bar. Files: `src/d3/featureImportanceChart.js`, `src/components/XGBoostSection.jsx`
 
