@@ -5,8 +5,9 @@ LightGBM feature importance analysis for Australian housing markets.
 Trains one LGBMRegressor per city to predict quarterly price returns
 from macroeconomic features. Outputs gain-based feature importances.
 
-Uses a time-series-aware train/test split (first 75% train, last 25% test)
-to produce honest out-of-sample metrics and avoid overfitting on ~60 samples.
+Uses walk-forward cross-validation: an expanding training window predicts
+one quarter ahead at each step, collecting true out-of-sample predictions
+across the full evaluation period for robust metrics.
 
 Usage:
     python xgboost_model.py
@@ -32,10 +33,10 @@ MODEL_PARAMS = {
     "importance_type": "gain",
 }
 
-# Fraction of data used for training (remainder is test).
-# Time-series split: first TRAIN_FRACTION chronologically for training,
-# the rest for out-of-sample evaluation.
-TRAIN_FRACTION = 0.75
+# Minimum number of observations required before the first walk-forward fold.
+# Walk-forward CV trains on observations 0..t and predicts t+1,
+# expanding from MIN_TRAIN_SIZE to n-1.
+MIN_TRAIN_SIZE = 20
 
 FEATURE_GROUPS = {
     "cash_rate": "Interest Rates",
@@ -112,6 +113,47 @@ def get_feature_group(feature_name):
     return FEATURE_GROUPS.get(base, "Other")
 
 
+def walk_forward_cv(X, y, feature_cols, min_train_size):
+    """Walk-forward cross-validation with expanding window.
+
+    For each fold t (from min_train_size to n-1):
+      - Train on observations 0..t-1
+      - Predict observation t
+    Returns aggregated out-of-sample predictions and per-fold importances.
+
+    Why walk-forward: unlike a single train/test split, this evaluates every
+    observation from MIN_TRAIN_SIZE onward as a true out-of-sample prediction,
+    giving ~40+ test points instead of ~16 for more robust metrics.
+    """
+    from lightgbm import LGBMRegressor
+
+    n = len(X)
+    oof_preds = np.full(n, np.nan)
+    importance_accum = np.zeros(len(feature_cols))
+    n_folds = 0
+
+    for t in range(min_train_size, n):
+        X_train, y_train = X.iloc[:t], y.iloc[:t]
+        model = LGBMRegressor(**MODEL_PARAMS)
+        model.fit(X_train, y_train)
+        oof_preds[t] = model.predict(X.iloc[[t]])[0]
+
+        # Accumulate gain-based importances
+        imp = model.feature_importances_
+        total = imp.sum()
+        if total > 0:
+            importance_accum += imp / total
+        n_folds += 1
+
+    # Average importances across all folds
+    if n_folds > 0:
+        importance_accum /= n_folds
+
+    # Mask: only indices where we have OOF predictions
+    mask = ~np.isnan(oof_preds)
+    return oof_preds, mask, importance_accum, n_folds
+
+
 def main():
     from lightgbm import LGBMRegressor
     from sklearn.metrics import r2_score, mean_squared_error
@@ -121,14 +163,15 @@ def main():
 
     print(f"Training LightGBM models for {len(cities)} cities...")
     print(f"Parameters: {MODEL_PARAMS}")
-    print(f"Train/test split: {TRAIN_FRACTION*100:.0f}% / {(1-TRAIN_FRACTION)*100:.0f}% (chronological)")
+    print(f"Validation: walk-forward CV (min training window = {MIN_TRAIN_SIZE})")
 
     output = {
         "meta": {
             "method": "LightGBM Regressor",
             "n_estimators": MODEL_PARAMS["n_estimators"],
             "max_depth": MODEL_PARAMS["max_depth"],
-            "train_fraction": TRAIN_FRACTION,
+            "validation": "walk-forward CV",
+            "min_train_size": MIN_TRAIN_SIZE,
         },
         "cities": {},
     }
@@ -137,38 +180,33 @@ def main():
         print(f"\n  {city}:")
         X, y, feature_cols = build_features(prices, macro, city)
         n = len(X)
-        split_idx = int(n * TRAIN_FRACTION)
 
-        X_train, X_test = X.iloc[:split_idx], X.iloc[split_idx:]
-        y_train, y_test = y.iloc[:split_idx], y.iloc[split_idx:]
+        print(f"    Features: {len(feature_cols)}, Observations: {n}")
+        print(f"    Walk-forward folds: {n - MIN_TRAIN_SIZE}")
 
-        print(f"    Features: {len(feature_cols)}, "
-              f"Train: {len(X_train)}, Test: {len(X_test)}")
+        # Walk-forward CV for robust out-of-sample metrics
+        oof_preds, mask, avg_importances, n_folds = walk_forward_cv(
+            X, y, feature_cols, MIN_TRAIN_SIZE
+        )
 
-        model = LGBMRegressor(**MODEL_PARAMS)
-        model.fit(X_train, y_train)
+        y_oof = y.values[mask]
+        preds_oof = oof_preds[mask]
+        r2_oof = r2_score(y_oof, preds_oof)
+        rmse_oof = float(np.sqrt(mean_squared_error(y_oof, preds_oof)))
 
-        # In-sample metrics (train set)
-        y_train_pred = model.predict(X_train)
-        r2_train = r2_score(y_train, y_train_pred)
-        rmse_train = float(np.sqrt(mean_squared_error(y_train, y_train_pred)))
+        # Full-sample model for in-sample metrics and final feature importances
+        full_model = LGBMRegressor(**MODEL_PARAMS)
+        full_model.fit(X, y)
+        y_full_pred = full_model.predict(X)
+        r2_train = r2_score(y, y_full_pred)
+        rmse_train = float(np.sqrt(mean_squared_error(y, y_full_pred)))
 
-        # Out-of-sample metrics (test set)
-        y_test_pred = model.predict(X_test)
-        r2_test = r2_score(y_test, y_test_pred)
-        rmse_test = float(np.sqrt(mean_squared_error(y_test, y_test_pred)))
+        print(f"    Full-sample — R² = {r2_train:.4f}, RMSE = {rmse_train:.6f}")
+        print(f"    Walk-forward OOF — R² = {r2_oof:.4f}, RMSE = {rmse_oof:.6f} ({n_folds} folds)")
 
-        print(f"    Train — R² = {r2_train:.4f}, RMSE = {rmse_train:.6f}")
-        print(f"    Test  — R² = {r2_test:.4f}, RMSE = {rmse_test:.6f}")
-
-        # Feature importances (gain-based) from train-set model
-        importances = model.feature_importances_
-        total = importances.sum()
-        if total > 0:
-            importances = importances / total  # Normalise to sum=1
-
+        # Use average walk-forward importances (more stable than single-model)
         features_list = []
-        for feat, imp in sorted(zip(feature_cols, importances), key=lambda x: -x[1]):
+        for feat, imp in sorted(zip(feature_cols, avg_importances), key=lambda x: -x[1]):
             features_list.append({
                 "name": feat,
                 "importance": round(float(imp), 6),
@@ -180,12 +218,12 @@ def main():
             print(f"    {f['name']}: {f['importance']:.4f} ({f['group']})")
 
         output["cities"][city] = {
-            "r_squared": round(float(r2_test), 4),
-            "rmse": round(float(rmse_test), 6),
+            "r_squared": round(float(r2_oof), 4),
+            "rmse": round(float(rmse_oof), 6),
             "r_squared_train": round(float(r2_train), 4),
             "rmse_train": round(float(rmse_train), 6),
-            "n_train": len(X_train),
-            "n_test": len(X_test),
+            "n_train": n,
+            "n_folds": n_folds,
             "features": features_list,
         }
 

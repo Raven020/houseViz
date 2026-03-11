@@ -58,8 +58,22 @@ export default function XGBoostSection({ data, prices }) {
         </select>
         {cityData && (
           <div className="model-metrics">
-            <span className="metric">R² = {cityData.r_squared.toFixed(3)}</span>
-            <span className="metric">RMSE = {cityData.rmse.toFixed(4)}</span>
+            <span className="metric" title="Out-of-sample R² from walk-forward cross-validation">
+              OOF R² = {cityData.r_squared.toFixed(3)}
+            </span>
+            <span className="metric" title="Out-of-sample RMSE from walk-forward cross-validation">
+              OOF RMSE = {cityData.rmse.toFixed(4)}
+            </span>
+            {cityData.r_squared_train != null && (
+              <span className="metric" title="In-sample R² (full training set)">
+                Train R² = {cityData.r_squared_train.toFixed(3)}
+              </span>
+            )}
+            {cityData.n_folds && (
+              <span className="metric" title="Number of walk-forward cross-validation folds">
+                {cityData.n_folds} CV folds
+              </span>
+            )}
           </div>
         )}
       </div>

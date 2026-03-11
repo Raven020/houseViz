@@ -19,7 +19,7 @@ P1, P2, and P3 are fully resolved. Only optional enhancements remain.
 
 ### P4: Optional Enhancements (from spec)
 
-- [ ] **Walk-forward cross-validation for LightGBM** — `specs/xgboost-features.md` lists this as optional but preferred. The current 75/25 chronological split is adequate. File: `python/xgboost_model.py`
+- [x] **Walk-forward cross-validation for LightGBM** — Implemented expanding-window walk-forward CV (min 20 obs, ~43 folds). Replaces single 75/25 split with robust OOF metrics. Feature importances averaged across all folds for stability. Frontend updated to show OOF R², Train R², and fold count. Brisbane OOF R² improved from -0.098 to 0.23.
 - [ ] **HMM multi-city overlay** — `specs/hmm-regimes.md` optional: overlay multiple cities on the same timeline chart for comparison. Files: `src/d3/regimeTimeline.js`, `src/components/HMMSection.jsx`
 - [ ] **LightGBM cross-city comparison viz** — `specs/xgboost-features.md` optional: small multiples or grouped bars showing #1 feature per city side by side. Files: new `src/d3/` module, `src/components/XGBoostSection.jsx`
 - [ ] **LightGBM category aggregation toggle** — `specs/xgboost-features.md` mentions an optional toggle to aggregate lagged variants of the same base feature into one bar. Files: `src/d3/featureImportanceChart.js`, `src/components/XGBoostSection.jsx`
@@ -111,7 +111,7 @@ D3 horizontal bar chart with group color-coding, top-10 display with "Other" col
 - **ABS Excel files have duplicate column names:** Different series types (Trend/Seasonally Adjusted/Original) share column names across sheets. Parse by column index, not column name, to avoid silent mismatches.
 - **Brisbane and Gold Coast failed WCAG AA contrast:** Brisbane (#D97706) achieved 3.19:1 and Gold Coast (#059669) achieved 3.77:1 against white — both below the 4.5:1 threshold. Replaced with #B45309 (Brisbane) and #047857 (Gold Coast).
 - **Sydney returns are non-stationary (ADF p=0.12):** Sydney's return series does not pass the ADF unit-root test at conventional thresholds. Granger causality results for Sydney pairs should be interpreted with caution.
-- **Train/test split implemented for feature importance model (LightGBM):** A 75/25 chronological split reports both in-sample and out-of-sample R²/RMSE. With LightGBM's regularization, in-sample R² is now 0.27–0.53 (not near-perfect as with XGBoost). Out-of-sample R² is realistic: approximately 0.26 for Melbourne; negative for some cities — expected given the small test sample of ~16 observations against 23 features.
+- **Walk-forward CV replaced single train/test split for LightGBM:** Walk-forward CV with expanding window (min 20 obs, ~43 folds per city) provides ~3x more out-of-sample evaluation points than the previous 75/25 split. OOF R² ranges from -0.01 (Sydney) to 0.26 (Melbourne). Feature importances are averaged across all folds for greater stability than single-model importances. Full-sample in-sample R² ranges from 0.52 (Perth) to 0.76 (Sydney).
 
 ---
 

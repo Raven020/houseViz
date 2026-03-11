@@ -52,6 +52,10 @@ const mockData = {
       sydney: {
         r_squared: 0.45,
         rmse: 0.012,
+        r_squared_train: 0.78,
+        rmse_train: 0.008,
+        n_train: 45,
+        n_folds: 25,
         features: [
           { name: 'cash_rate_change_lag1', importance: 0.22, group: 'Interest Rates' },
         ],
