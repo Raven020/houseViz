@@ -131,6 +131,34 @@ body {
   display: block;
 }
 
+/* Transition Matrix container — fixed-width SVG, centred */
+.chart-container--matrix {
+  min-height: auto;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.chart-container--matrix svg {
+  width: auto;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.chart-container__label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+}
+
+.chart-container__sublabel {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0 0 0.75rem 0;
+}
+
 /* D3 Tooltip */
 .d3-tooltip {
   position: absolute;
