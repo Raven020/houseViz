@@ -36,7 +36,7 @@ export default function Footer() {
           Feature importance uses LightGBM (gain-based, normalised).
           All analysis runs on quarterly data from Q1 2005 to Q4 2021.
           See the{' '}
-          <a href="https://github.com/developer/aus-housing-econometrics" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/Raven020/houseViz" target="_blank" rel="noopener noreferrer">
             GitHub README
           </a>{' '}
           for full methodology details.
