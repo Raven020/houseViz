@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { FEATURE_GROUP_COLORS } from '../utils/constants.js';
+import { FEATURE_GROUP_COLORS, humanReadableName } from '../utils/constants.js';
 
 const FEATURE_DESCRIPTIONS = {
   cash_rate: 'RBA cash rate level',
@@ -8,15 +8,6 @@ const FEATURE_DESCRIPTIONS = {
   unemployment: 'Unemployment rate level',
   unemployment_change: 'Quarter-on-quarter change in unemployment',
 };
-
-function humanReadableName(name) {
-  return name
-    .replace(/_lag(\d+)/, ' (lag $1Q)')
-    .replace(/_return/, ' return')
-    .replace(/_change/, ' change')
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, c => c.toUpperCase());
-}
 
 function getDescription(name) {
   const base = name.replace(/_lag\d+$/, '');

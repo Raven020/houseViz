@@ -48,6 +48,9 @@
 - **Sydney returns are non-stationary (ADF p=0.12):** Sydney's return series does not pass the ADF unit-root test at conventional thresholds. Granger causality results for Sydney pairs should be interpreted with caution.
 - **Walk-forward CV replaced single train/test split for LightGBM:** Walk-forward CV with expanding window (min 20 obs, 23 valid folds per city out of 43 total) provides robust out-of-sample evaluation. OOF R² ranges from -0.01 (Sydney) to 0.26 (Melbourne). Feature importances are averaged across valid folds (those with non-zero gains) and normalized to sum to 1.0. Full-sample in-sample R² ranges from 0.52 (Perth) to 0.76 (Sydney).
 - **Walk-forward fold counting bug (fixed v0.0.9):** Early folds with few training observations produced all-zero feature importances from LightGBM. The original code counted these zero-gain folds in the denominator, deflating all importances to ~0.535 total. Fixed by only incrementing `n_folds` when gains are non-zero, plus a final normalization to 1.0.
+- **City ordering mismatch (fixed v0.0.14):** `data_pipeline.py` used `sorted(price_data.keys())` producing alphabetical order `["brisbane","melbourne","perth","sydney"]`, but the spec requires `["sydney","melbourne","brisbane","perth"]`. This affected Granger heatmap row/column layout and dropdown ordering. Fixed by replacing `sorted()` with a spec-defined `CITY_ORDER` list.
+- **Dead `gold_coast` in synthetic data (fixed v0.0.15):** `generate_synthetic_prices()` still had a `gold_coast` entry in its `city_params` dict — unreachable dead code since the cities list never includes it. Removed.
+- **Duplicated `humanReadableName` (fixed v0.0.15):** Identical function was defined in both `featureImportanceChart.js` and `crossCityComparison.js`. Extracted to `src/utils/constants.js` as a single source of truth with unit test coverage (15 tests now, up from 14).
 
 ---
 
