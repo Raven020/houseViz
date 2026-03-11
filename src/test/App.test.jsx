@@ -14,6 +14,7 @@ vi.mock('../d3/grangerHeatmap.js', () => ({ renderGrangerHeatmap: vi.fn() }));
 vi.mock('../d3/regimeTimeline.js', () => ({ renderRegimeTimeline: vi.fn(), renderRegimeTimelineOverlay: vi.fn() }));
 vi.mock('../d3/transitionMatrix.js', () => ({ renderTransitionMatrix: vi.fn() }));
 vi.mock('../d3/featureImportanceChart.js', () => ({ renderFeatureImportanceChart: vi.fn() }));
+vi.mock('../d3/crossCityComparison.js', () => ({ renderCrossCityComparison: vi.fn() }));
 
 import { loadAllData } from '../utils/dataLoader.js';
 
