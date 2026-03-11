@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CITY_COLORS, CITY_NAMES, REGIME_COLORS, FEATURE_GROUP_COLORS, humanReadableName } from '../utils/constants.js';
+import { CITY_COLORS, CITY_NAMES, REGIME_COLORS, REGIME_COLORS_SOLID, FEATURE_GROUP_COLORS, humanReadableName } from '../utils/constants.js';
 
 describe('constants', () => {
   it('defines colors for all 4 cities', () => {
@@ -23,6 +23,12 @@ describe('constants', () => {
     expect(REGIME_COLORS.boom).toBeDefined();
     expect(REGIME_COLORS.stagnation).toBeDefined();
     expect(REGIME_COLORS.correction).toBeDefined();
+  });
+
+  it('defines solid regime colors for all 3 regimes', () => {
+    expect(REGIME_COLORS_SOLID.boom).toBe('#22c55e');
+    expect(REGIME_COLORS_SOLID.stagnation).toBe('#f59e0b');
+    expect(REGIME_COLORS_SOLID.correction).toBe('#ef4444');
   });
 
   it('defines feature group colors', () => {

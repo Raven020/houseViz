@@ -68,7 +68,7 @@ export default function XGBoostSection({ data, prices }) {
             checked={aggregateLags}
             onChange={(e) => setAggregateLags(e.target.checked)}
           />
-          Group lag variants
+          Group by category
         </label>
         {cityData && (
           <div className="model-metrics">
