@@ -59,6 +59,32 @@ export function renderRegimeTimeline(svgEl, hmmData, pricesData, city) {
         .filter(v => v !== null)
         .reduce((a, b) => a + b, 0) / Math.max(1, i - bandStart);
 
+      const durationQ = i - bandStart;
+      const bandLabel = `${regime.charAt(0).toUpperCase() + regime.slice(1)} regime, duration ${durationQ} quarter${durationQ !== 1 ? 's' : ''}, average return ${(avgReturn * 100).toFixed(2)}%`;
+
+      function showBandTooltip(event) {
+        tooltip.transition().duration(150).style('opacity', 1);
+        tooltip.html(
+          `<strong style="color:${REGIME_COLORS_SOLID[regime]}">${regime.charAt(0).toUpperCase() + regime.slice(1)}</strong><br/>` +
+          `Duration: ${durationQ} quarter${durationQ !== 1 ? 's' : ''}<br/>` +
+          `Avg return: ${(avgReturn * 100).toFixed(2)}%`
+        )
+          .style('left', (event.pageX + 12) + 'px')
+          .style('top', (event.pageY - 12) + 'px');
+      }
+
+      function showBandTooltipFromFocus(event) {
+        tooltip.transition().duration(150).style('opacity', 1);
+        const rect = event.target.getBoundingClientRect();
+        tooltip.html(
+          `<strong style="color:${REGIME_COLORS_SOLID[regime]}">${regime.charAt(0).toUpperCase() + regime.slice(1)}</strong><br/>` +
+          `Duration: ${durationQ} quarter${durationQ !== 1 ? 's' : ''}<br/>` +
+          `Avg return: ${(avgReturn * 100).toFixed(2)}%`
+        )
+          .style('left', (rect.left + rect.width / 2 + window.scrollX + 12) + 'px')
+          .style('top', (rect.top + window.scrollY - 12) + 'px');
+      }
+
       g.append('rect')
         .attr('x', x0)
         .attr('y', margin.top)
@@ -66,19 +92,16 @@ export function renderRegimeTimeline(svgEl, hmmData, pricesData, city) {
         .attr('height', height - margin.top - margin.bottom)
         .attr('fill', REGIME_COLORS[regime] || 'transparent')
         .attr('class', 'regime-band')
+        .attr('tabindex', '0')
+        .attr('role', 'img')
+        .attr('aria-label', bandLabel)
         .style('cursor', 'pointer')
-        .on('mouseover', (event) => {
-          tooltip.transition().duration(150).style('opacity', 1);
-          const durationQ = i - bandStart;
-          tooltip.html(
-            `<strong style="color:${REGIME_COLORS_SOLID[regime]}">${regime.charAt(0).toUpperCase() + regime.slice(1)}</strong><br/>` +
-            `Duration: ${durationQ} quarter${durationQ !== 1 ? 's' : ''}<br/>` +
-            `Avg return: ${(avgReturn * 100).toFixed(2)}%`
-          )
-            .style('left', (event.pageX + 12) + 'px')
-            .style('top', (event.pageY - 12) + 'px');
-        })
+        .on('mouseover', showBandTooltip)
         .on('mouseout', () => {
+          tooltip.transition().duration(150).style('opacity', 0);
+        })
+        .on('focus', showBandTooltipFromFocus)
+        .on('blur', () => {
           tooltip.transition().duration(150).style('opacity', 0);
         });
 
@@ -99,7 +122,7 @@ export function renderRegimeTimeline(svgEl, hmmData, pricesData, city) {
     .attr('stroke-width', 2)
     .attr('d', line);
 
-  // Price dots for hover
+  // Price dots for hover and focus
   g.selectAll('.price-dot')
     .data(indexValues)
     .join('circle')
@@ -109,6 +132,9 @@ export function renderRegimeTimeline(svgEl, hmmData, pricesData, city) {
     .attr('r', 3)
     .attr('fill', 'transparent')
     .attr('stroke', 'transparent')
+    .attr('tabindex', '0')
+    .attr('role', 'img')
+    .attr('aria-label', (d, i) => `${CITY_NAMES[city]}, ${pricesData.dates[i]}, index ${d.toFixed(1)}`)
     .style('cursor', 'pointer')
     .on('mouseover', (event, d) => {
       const i = indexValues.indexOf(d);
@@ -125,6 +151,23 @@ export function renderRegimeTimeline(svgEl, hmmData, pricesData, city) {
     .on('mouseout', (event) => {
       tooltip.transition().duration(150).style('opacity', 0);
       d3.select(event.target).attr('r', 3).attr('fill', 'transparent');
+    })
+    .on('focus', (event, d) => {
+      const i = indexValues.indexOf(d);
+      const domRect = event.target.getBoundingClientRect();
+      tooltip.transition().duration(150).style('opacity', 1);
+      tooltip.html(
+        `<strong>${CITY_NAMES[city]}</strong><br/>` +
+        `${pricesData.dates[i]}<br/>` +
+        `Index: ${d.toFixed(1)}`
+      )
+        .style('left', (domRect.left + window.scrollX + 12) + 'px')
+        .style('top', (domRect.top + window.scrollY - 12) + 'px');
+      d3.select(event.target).attr('r', 5).attr('fill', CITY_COLORS[city]).attr('stroke', CITY_COLORS[city]);
+    })
+    .on('blur', (event) => {
+      tooltip.transition().duration(150).style('opacity', 0);
+      d3.select(event.target).attr('r', 3).attr('fill', 'transparent').attr('stroke', 'transparent');
     });
 
   // Axes

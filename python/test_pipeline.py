@@ -84,8 +84,13 @@ def test_granger_json():
     assert data["meta"]["max_lag"] == 8
     assert data["meta"]["significance"] == 0.05
 
-    # Should have 20 directed pairs (5 cities * 4 others)
-    assert len(data["results"]) == 20, f"Expected 20 pairs, got {len(data['results'])}"
+    # Should have n*(n-1) directed pairs where n = number of cities
+    with open(DATA_DIR / "prices.json") as pf:
+        prices = json.load(pf)
+    n_cities = len(prices["cities"])
+    expected_pairs = n_cities * (n_cities - 1)
+    assert len(data["results"]) == expected_pairs, \
+        f"Expected {expected_pairs} pairs ({n_cities} cities), got {len(data['results'])}"
 
     for r in data["results"]:
         assert "from" in r

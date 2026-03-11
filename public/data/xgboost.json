@@ -5,633 +5,487 @@
     "max_depth": 4
   },
   "cities": {
-    "sydney": {
-      "r_squared": 0.9985,
-      "rmse": 0.000692,
+    "brisbane": {
+      "r_squared": 0.9991,
+      "rmse": 0.000683,
       "features": [
         {
-          "name": "cash_rate_lag2",
-          "importance": 0.097585,
-          "group": "Interest Rates"
-        },
-        {
           "name": "cash_rate_lag4",
-          "importance": 0.072337,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cash_rate_lag1",
-          "importance": 0.061469,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "unemployment_lag2",
-          "importance": 0.060979,
-          "group": "Employment"
-        },
-        {
-          "name": "unemployment_change_lag1",
-          "importance": 0.054626,
-          "group": "Employment"
-        },
-        {
-          "name": "cash_rate",
-          "importance": 0.049243,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cpi_lag4",
-          "importance": 0.047951,
-          "group": "Inflation"
-        },
-        {
-          "name": "cash_rate_change_lag4",
-          "importance": 0.047848,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cash_rate_change_lag2",
-          "importance": 0.046933,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cpi_lag1",
-          "importance": 0.044489,
-          "group": "Inflation"
-        },
-        {
-          "name": "unemployment_lag1",
-          "importance": 0.042476,
-          "group": "Employment"
-        },
-        {
-          "name": "unemployment",
-          "importance": 0.041653,
-          "group": "Employment"
-        },
-        {
-          "name": "gold_coast_return_lag1",
-          "importance": 0.037532,
-          "group": "Cross-City"
-        },
-        {
-          "name": "unemployment_change_lag4",
-          "importance": 0.035011,
-          "group": "Employment"
-        },
-        {
-          "name": "cash_rate_change_lag1",
-          "importance": 0.034298,
+          "importance": 0.095099,
           "group": "Interest Rates"
         },
         {
           "name": "perth_return_lag1",
-          "importance": 0.034291,
+          "importance": 0.088604,
           "group": "Cross-City"
-        },
-        {
-          "name": "brisbane_return_lag1",
-          "importance": 0.032154,
-          "group": "Cross-City"
-        },
-        {
-          "name": "unemployment_change",
-          "importance": 0.030897,
-          "group": "Employment"
-        },
-        {
-          "name": "cash_rate_change",
-          "importance": 0.026222,
-          "group": "Interest Rates"
         },
         {
           "name": "melbourne_return_lag1",
-          "importance": 0.023166,
+          "importance": 0.075411,
           "group": "Cross-City"
         },
         {
-          "name": "unemployment_change_lag2",
-          "importance": 0.022167,
+          "name": "cash_rate_lag1",
+          "importance": 0.071094,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "unemployment_lag1",
+          "importance": 0.07092,
+          "group": "Employment"
+        },
+        {
+          "name": "unemployment",
+          "importance": 0.063454,
+          "group": "Employment"
+        },
+        {
+          "name": "cash_rate",
+          "importance": 0.058163,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "cash_rate_lag2",
+          "importance": 0.05055,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "cash_rate_change",
+          "importance": 0.049693,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "cpi_lag4",
+          "importance": 0.048597,
+          "group": "Inflation"
+        },
+        {
+          "name": "unemployment_change",
+          "importance": 0.046119,
           "group": "Employment"
         },
         {
           "name": "cpi_lag2",
-          "importance": 0.02134,
+          "importance": 0.03772,
           "group": "Inflation"
         },
         {
-          "name": "cpi",
-          "importance": 0.018561,
-          "group": "Inflation"
+          "name": "cash_rate_change_lag1",
+          "importance": 0.036591,
+          "group": "Interest Rates"
         },
         {
           "name": "unemployment_lag4",
-          "importance": 0.016772,
+          "importance": 0.033233,
           "group": "Employment"
+        },
+        {
+          "name": "unemployment_lag2",
+          "importance": 0.032172,
+          "group": "Employment"
+        },
+        {
+          "name": "unemployment_change_lag4",
+          "importance": 0.028786,
+          "group": "Employment"
+        },
+        {
+          "name": "cash_rate_change_lag2",
+          "importance": 0.028218,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "unemployment_change_lag2",
+          "importance": 0.022746,
+          "group": "Employment"
+        },
+        {
+          "name": "unemployment_change_lag1",
+          "importance": 0.017553,
+          "group": "Employment"
+        },
+        {
+          "name": "cash_rate_change_lag4",
+          "importance": 0.014758,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "cpi_lag1",
+          "importance": 0.014503,
+          "group": "Inflation"
+        },
+        {
+          "name": "sydney_return_lag1",
+          "importance": 0.008514,
+          "group": "Cross-City"
+        },
+        {
+          "name": "cpi",
+          "importance": 0.007498,
+          "group": "Inflation"
         }
       ]
     },
     "melbourne": {
-      "r_squared": 0.998,
-      "rmse": 0.000787,
+      "r_squared": 0.9994,
+      "rmse": 0.000666,
       "features": [
         {
-          "name": "unemployment_lag1",
-          "importance": 0.094931,
-          "group": "Employment"
-        },
-        {
-          "name": "unemployment_lag2",
-          "importance": 0.087405,
-          "group": "Employment"
-        },
-        {
-          "name": "unemployment_change_lag4",
-          "importance": 0.078336,
-          "group": "Employment"
-        },
-        {
-          "name": "cash_rate_lag4",
-          "importance": 0.066852,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cpi_lag4",
-          "importance": 0.050738,
-          "group": "Inflation"
-        },
-        {
-          "name": "gold_coast_return_lag1",
-          "importance": 0.04366,
-          "group": "Cross-City"
-        },
-        {
-          "name": "unemployment_lag4",
-          "importance": 0.043591,
-          "group": "Employment"
-        },
-        {
-          "name": "unemployment",
-          "importance": 0.039635,
-          "group": "Employment"
-        },
-        {
           "name": "sydney_return_lag1",
-          "importance": 0.038523,
+          "importance": 0.131012,
           "group": "Cross-City"
         },
         {
-          "name": "unemployment_change_lag2",
-          "importance": 0.036609,
+          "name": "unemployment_lag1",
+          "importance": 0.122744,
           "group": "Employment"
-        },
-        {
-          "name": "cpi_lag1",
-          "importance": 0.035226,
-          "group": "Inflation"
-        },
-        {
-          "name": "cash_rate_change_lag1",
-          "importance": 0.035028,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cpi_lag2",
-          "importance": 0.034408,
-          "group": "Inflation"
-        },
-        {
-          "name": "cpi",
-          "importance": 0.03437,
-          "group": "Inflation"
-        },
-        {
-          "name": "perth_return_lag1",
-          "importance": 0.033679,
-          "group": "Cross-City"
-        },
-        {
-          "name": "cash_rate_change_lag2",
-          "importance": 0.033483,
-          "group": "Interest Rates"
         },
         {
           "name": "brisbane_return_lag1",
-          "importance": 0.031872,
+          "importance": 0.118639,
           "group": "Cross-City"
-        },
-        {
-          "name": "unemployment_change_lag1",
-          "importance": 0.030431,
-          "group": "Employment"
-        },
-        {
-          "name": "cash_rate_change",
-          "importance": 0.030361,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cash_rate_lag2",
-          "importance": 0.027767,
-          "group": "Interest Rates"
         },
         {
           "name": "unemployment_change",
-          "importance": 0.024917,
-          "group": "Employment"
-        },
-        {
-          "name": "cash_rate",
-          "importance": 0.024379,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cash_rate_change_lag4",
-          "importance": 0.023041,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cash_rate_lag1",
-          "importance": 0.020759,
-          "group": "Interest Rates"
-        }
-      ]
-    },
-    "brisbane": {
-      "r_squared": 0.999,
-      "rmse": 0.000797,
-      "features": [
-        {
-          "name": "cpi_lag1",
-          "importance": 0.08106,
-          "group": "Inflation"
-        },
-        {
-          "name": "perth_return_lag1",
-          "importance": 0.072572,
-          "group": "Cross-City"
-        },
-        {
-          "name": "unemployment_change_lag4",
-          "importance": 0.064245,
-          "group": "Employment"
-        },
-        {
-          "name": "sydney_return_lag1",
-          "importance": 0.062615,
-          "group": "Cross-City"
-        },
-        {
-          "name": "gold_coast_return_lag1",
-          "importance": 0.057693,
-          "group": "Cross-City"
-        },
-        {
-          "name": "cpi_lag4",
-          "importance": 0.055349,
-          "group": "Inflation"
-        },
-        {
-          "name": "unemployment_lag2",
-          "importance": 0.052963,
-          "group": "Employment"
-        },
-        {
-          "name": "cash_rate_change",
-          "importance": 0.051523,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "unemployment_change_lag2",
-          "importance": 0.050472,
-          "group": "Employment"
-        },
-        {
-          "name": "unemployment_change_lag1",
-          "importance": 0.048667,
-          "group": "Employment"
-        },
-        {
-          "name": "cpi",
-          "importance": 0.043602,
-          "group": "Inflation"
-        },
-        {
-          "name": "melbourne_return_lag1",
-          "importance": 0.039135,
-          "group": "Cross-City"
-        },
-        {
-          "name": "unemployment_lag1",
-          "importance": 0.038027,
+          "importance": 0.08349,
           "group": "Employment"
         },
         {
           "name": "cash_rate_lag4",
-          "importance": 0.0353,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cash_rate_change_lag2",
-          "importance": 0.035032,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "unemployment",
-          "importance": 0.034601,
-          "group": "Employment"
-        },
-        {
-          "name": "cpi_lag2",
-          "importance": 0.03263,
-          "group": "Inflation"
-        },
-        {
-          "name": "cash_rate_lag2",
-          "importance": 0.030799,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cash_rate",
-          "importance": 0.023,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cash_rate_change_lag1",
-          "importance": 0.022939,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cash_rate_lag1",
-          "importance": 0.020295,
+          "importance": 0.056344,
           "group": "Interest Rates"
         },
         {
           "name": "unemployment_lag4",
-          "importance": 0.018766,
+          "importance": 0.050268,
           "group": "Employment"
         },
         {
-          "name": "unemployment_change",
-          "importance": 0.01516,
+          "name": "cpi_lag2",
+          "importance": 0.046547,
+          "group": "Inflation"
+        },
+        {
+          "name": "unemployment_lag2",
+          "importance": 0.045091,
           "group": "Employment"
+        },
+        {
+          "name": "cash_rate_change_lag1",
+          "importance": 0.04247,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "cash_rate_lag2",
+          "importance": 0.037118,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "cash_rate_change_lag2",
+          "importance": 0.036175,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "cash_rate_change",
+          "importance": 0.035505,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "unemployment",
+          "importance": 0.031657,
+          "group": "Employment"
+        },
+        {
+          "name": "perth_return_lag1",
+          "importance": 0.030834,
+          "group": "Cross-City"
+        },
+        {
+          "name": "unemployment_change_lag2",
+          "importance": 0.021494,
+          "group": "Employment"
+        },
+        {
+          "name": "cash_rate_lag1",
+          "importance": 0.020956,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "cash_rate",
+          "importance": 0.020699,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "cpi",
+          "importance": 0.015326,
+          "group": "Inflation"
+        },
+        {
+          "name": "cpi_lag4",
+          "importance": 0.015115,
+          "group": "Inflation"
+        },
+        {
+          "name": "unemployment_change_lag4",
+          "importance": 0.014344,
+          "group": "Employment"
+        },
+        {
+          "name": "cpi_lag1",
+          "importance": 0.009966,
+          "group": "Inflation"
         },
         {
           "name": "cash_rate_change_lag4",
-          "importance": 0.013554,
+          "importance": 0.007697,
           "group": "Interest Rates"
+        },
+        {
+          "name": "unemployment_change_lag1",
+          "importance": 0.00651,
+          "group": "Employment"
         }
       ]
     },
     "perth": {
-      "r_squared": 0.999,
-      "rmse": 0.000968,
+      "r_squared": 0.9993,
+      "rmse": 0.000756,
       "features": [
         {
-          "name": "gold_coast_return_lag1",
-          "importance": 0.08346,
-          "group": "Cross-City"
-        },
-        {
-          "name": "cash_rate_change_lag1",
-          "importance": 0.073762,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "melbourne_return_lag1",
-          "importance": 0.067335,
-          "group": "Cross-City"
-        },
-        {
-          "name": "unemployment_lag1",
-          "importance": 0.064441,
-          "group": "Employment"
-        },
-        {
-          "name": "cash_rate_change_lag2",
-          "importance": 0.058606,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "cash_rate_lag2",
-          "importance": 0.053629,
-          "group": "Interest Rates"
-        },
-        {
           "name": "cash_rate_change",
-          "importance": 0.047953,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "sydney_return_lag1",
-          "importance": 0.047201,
-          "group": "Cross-City"
-        },
-        {
-          "name": "cpi",
-          "importance": 0.046436,
-          "group": "Inflation"
-        },
-        {
-          "name": "cash_rate_change_lag4",
-          "importance": 0.0455,
+          "importance": 0.238174,
           "group": "Interest Rates"
         },
         {
           "name": "cash_rate_lag1",
-          "importance": 0.040426,
+          "importance": 0.07725,
           "group": "Interest Rates"
         },
         {
-          "name": "cpi_lag2",
-          "importance": 0.037391,
+          "name": "cash_rate_change_lag4",
+          "importance": 0.072399,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "cpi",
+          "importance": 0.063686,
           "group": "Inflation"
         },
         {
           "name": "cpi_lag4",
-          "importance": 0.036595,
+          "importance": 0.056498,
           "group": "Inflation"
         },
         {
-          "name": "unemployment_change_lag2",
-          "importance": 0.035557,
-          "group": "Employment"
-        },
-        {
-          "name": "unemployment_change_lag4",
-          "importance": 0.030774,
-          "group": "Employment"
-        },
-        {
-          "name": "unemployment_lag4",
-          "importance": 0.029382,
-          "group": "Employment"
-        },
-        {
-          "name": "brisbane_return_lag1",
-          "importance": 0.029084,
-          "group": "Cross-City"
-        },
-        {
-          "name": "cash_rate_lag4",
-          "importance": 0.027641,
+          "name": "cash_rate_change_lag2",
+          "importance": 0.053947,
           "group": "Interest Rates"
         },
         {
-          "name": "unemployment_change_lag1",
-          "importance": 0.026757,
+          "name": "brisbane_return_lag1",
+          "importance": 0.049749,
+          "group": "Cross-City"
+        },
+        {
+          "name": "cash_rate",
+          "importance": 0.040578,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "cash_rate_lag4",
+          "importance": 0.039749,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "unemployment_change_lag2",
+          "importance": 0.037832,
+          "group": "Employment"
+        },
+        {
+          "name": "cash_rate_lag2",
+          "importance": 0.032842,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "unemployment_change_lag4",
+          "importance": 0.032834,
           "group": "Employment"
         },
         {
           "name": "cpi_lag1",
-          "importance": 0.026634,
+          "importance": 0.028465,
           "group": "Inflation"
         },
         {
-          "name": "cash_rate",
-          "importance": 0.025246,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "unemployment_change",
-          "importance": 0.024938,
-          "group": "Employment"
+          "name": "cpi_lag2",
+          "importance": 0.028321,
+          "group": "Inflation"
         },
         {
           "name": "unemployment_lag2",
-          "importance": 0.022318,
+          "importance": 0.026614,
+          "group": "Employment"
+        },
+        {
+          "name": "unemployment_change_lag1",
+          "importance": 0.021069,
+          "group": "Employment"
+        },
+        {
+          "name": "melbourne_return_lag1",
+          "importance": 0.017923,
+          "group": "Cross-City"
+        },
+        {
+          "name": "unemployment_lag4",
+          "importance": 0.017406,
+          "group": "Employment"
+        },
+        {
+          "name": "cash_rate_change_lag1",
+          "importance": 0.01416,
+          "group": "Interest Rates"
+        },
+        {
+          "name": "sydney_return_lag1",
+          "importance": 0.013403,
+          "group": "Cross-City"
+        },
+        {
+          "name": "unemployment_change",
+          "importance": 0.012506,
           "group": "Employment"
         },
         {
           "name": "unemployment",
-          "importance": 0.018935,
+          "importance": 0.01249,
+          "group": "Employment"
+        },
+        {
+          "name": "unemployment_lag1",
+          "importance": 0.012104,
           "group": "Employment"
         }
       ]
     },
-    "gold_coast": {
-      "r_squared": 0.9991,
-      "rmse": 0.000674,
+    "sydney": {
+      "r_squared": 0.9994,
+      "rmse": 0.000653,
       "features": [
         {
-          "name": "sydney_return_lag1",
-          "importance": 0.100927,
-          "group": "Cross-City"
+          "name": "unemployment_lag2",
+          "importance": 0.15319,
+          "group": "Employment"
         },
         {
-          "name": "cpi_lag1",
-          "importance": 0.087554,
-          "group": "Inflation"
+          "name": "unemployment_lag1",
+          "importance": 0.150328,
+          "group": "Employment"
         },
         {
-          "name": "cash_rate_change",
-          "importance": 0.078432,
+          "name": "cash_rate_change_lag1",
+          "importance": 0.05731,
           "group": "Interest Rates"
         },
         {
           "name": "perth_return_lag1",
-          "importance": 0.071214,
+          "importance": 0.05629,
           "group": "Cross-City"
         },
         {
-          "name": "cpi_lag4",
-          "importance": 0.06596,
-          "group": "Inflation"
+          "name": "melbourne_return_lag1",
+          "importance": 0.055013,
+          "group": "Cross-City"
         },
         {
-          "name": "cash_rate_change_lag2",
-          "importance": 0.059457,
-          "group": "Interest Rates"
-        },
-        {
-          "name": "unemployment_change",
-          "importance": 0.050581,
+          "name": "unemployment_change_lag4",
+          "importance": 0.042388,
           "group": "Employment"
         },
         {
-          "name": "cash_rate_lag2",
-          "importance": 0.049109,
+          "name": "cash_rate_lag4",
+          "importance": 0.042014,
           "group": "Interest Rates"
         },
         {
           "name": "unemployment_change_lag2",
-          "importance": 0.047516,
+          "importance": 0.041314,
           "group": "Employment"
         },
         {
-          "name": "unemployment_lag4",
-          "importance": 0.043636,
-          "group": "Employment"
-        },
-        {
-          "name": "melbourne_return_lag1",
-          "importance": 0.039681,
+          "name": "brisbane_return_lag1",
+          "importance": 0.040138,
           "group": "Cross-City"
         },
         {
-          "name": "unemployment_lag2",
-          "importance": 0.03858,
+          "name": "cpi_lag2",
+          "importance": 0.039506,
+          "group": "Inflation"
+        },
+        {
+          "name": "unemployment_change",
+          "importance": 0.037907,
           "group": "Employment"
         },
         {
-          "name": "cash_rate_change_lag4",
-          "importance": 0.035728,
+          "name": "cash_rate_change",
+          "importance": 0.035625,
           "group": "Interest Rates"
         },
         {
-          "name": "cash_rate_lag4",
-          "importance": 0.034784,
+          "name": "cash_rate_lag1",
+          "importance": 0.035551,
           "group": "Interest Rates"
         },
         {
-          "name": "unemployment_change_lag1",
-          "importance": 0.033516,
-          "group": "Employment"
+          "name": "cash_rate_change_lag2",
+          "importance": 0.033673,
+          "group": "Interest Rates"
         },
         {
           "name": "cpi",
-          "importance": 0.026158,
+          "importance": 0.031565,
           "group": "Inflation"
         },
         {
-          "name": "unemployment",
-          "importance": 0.025275,
-          "group": "Employment"
-        },
-        {
-          "name": "cpi_lag2",
-          "importance": 0.021828,
-          "group": "Inflation"
-        },
-        {
-          "name": "cash_rate_change_lag1",
-          "importance": 0.020362,
+          "name": "cash_rate_lag2",
+          "importance": 0.025938,
           "group": "Interest Rates"
         },
         {
-          "name": "unemployment_change_lag4",
-          "importance": 0.019966,
+          "name": "unemployment",
+          "importance": 0.02326,
+          "group": "Employment"
+        },
+        {
+          "name": "cpi_lag4",
+          "importance": 0.020321,
+          "group": "Inflation"
+        },
+        {
+          "name": "unemployment_lag4",
+          "importance": 0.01925,
+          "group": "Employment"
+        },
+        {
+          "name": "unemployment_change_lag1",
+          "importance": 0.019034,
           "group": "Employment"
         },
         {
           "name": "cash_rate",
-          "importance": 0.016298,
+          "importance": 0.017402,
           "group": "Interest Rates"
         },
         {
-          "name": "brisbane_return_lag1",
-          "importance": 0.015534,
-          "group": "Cross-City"
-        },
-        {
-          "name": "unemployment_lag1",
-          "importance": 0.011855,
-          "group": "Employment"
-        },
-        {
-          "name": "cash_rate_lag1",
-          "importance": 0.006052,
+          "name": "cash_rate_change_lag4",
+          "importance": 0.013857,
           "group": "Interest Rates"
+        },
+        {
+          "name": "cpi_lag1",
+          "importance": 0.009128,
+          "group": "Inflation"
         }
       ]
     }

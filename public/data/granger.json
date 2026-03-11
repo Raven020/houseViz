@@ -6,164 +6,100 @@
   },
   "results": [
     {
-      "from": "sydney",
+      "from": "brisbane",
       "to": "melbourne",
-      "optimal_lag": 7,
-      "p_value": 0.036091,
-      "f_statistic": 2.3239,
-      "significant": true
-    },
-    {
-      "from": "sydney",
-      "to": "brisbane",
-      "optimal_lag": 1,
-      "p_value": 0.089661,
-      "f_statistic": 2.9525,
-      "significant": false
-    },
-    {
-      "from": "sydney",
-      "to": "perth",
-      "optimal_lag": 2,
-      "p_value": 0.122928,
-      "f_statistic": 2.155,
-      "significant": false
-    },
-    {
-      "from": "sydney",
-      "to": "gold_coast",
-      "optimal_lag": 1,
-      "p_value": 0.292671,
-      "f_statistic": 1.1222,
-      "significant": false
-    },
-    {
-      "from": "melbourne",
-      "to": "sydney",
       "optimal_lag": 4,
-      "p_value": 0.013165,
-      "f_statistic": 3.4117,
-      "significant": true
-    },
-    {
-      "from": "melbourne",
-      "to": "brisbane",
-      "optimal_lag": 8,
-      "p_value": 0.085833,
-      "f_statistic": 1.8509,
+      "p_value": 0.054375,
+      "f_statistic": 2.4836,
       "significant": false
     },
     {
-      "from": "melbourne",
+      "from": "brisbane",
       "to": "perth",
-      "optimal_lag": 1,
-      "p_value": 0.19246,
-      "f_statistic": 1.7281,
-      "significant": false
-    },
-    {
-      "from": "melbourne",
-      "to": "gold_coast",
-      "optimal_lag": 2,
-      "p_value": 0.773685,
-      "f_statistic": 0.2575,
-      "significant": false
+      "optimal_lag": 6,
+      "p_value": 0.010542,
+      "f_statistic": 3.1736,
+      "significant": true
     },
     {
       "from": "brisbane",
       "to": "sydney",
-      "optimal_lag": 1,
-      "p_value": 0.441451,
-      "f_statistic": 0.5985,
-      "significant": false
-    },
-    {
-      "from": "brisbane",
-      "to": "melbourne",
       "optimal_lag": 4,
-      "p_value": 0.725431,
-      "f_statistic": 0.5143,
+      "p_value": 0.094925,
+      "f_statistic": 2.089,
       "significant": false
     },
     {
-      "from": "brisbane",
-      "to": "perth",
-      "optimal_lag": 7,
-      "p_value": 0.457216,
-      "f_statistic": 0.9756,
-      "significant": false
-    },
-    {
-      "from": "brisbane",
-      "to": "gold_coast",
+      "from": "melbourne",
+      "to": "brisbane",
       "optimal_lag": 5,
-      "p_value": 0.0299,
-      "f_statistic": 2.6566,
-      "significant": true
-    },
-    {
-      "from": "perth",
-      "to": "sydney",
-      "optimal_lag": 1,
-      "p_value": 0.286695,
-      "f_statistic": 1.1506,
+      "p_value": 0.12886,
+      "f_statistic": 1.8032,
       "significant": false
     },
     {
-      "from": "perth",
-      "to": "melbourne",
-      "optimal_lag": 4,
-      "p_value": 0.085491,
-      "f_statistic": 2.1351,
-      "significant": false
-    },
-    {
-      "from": "perth",
-      "to": "brisbane",
-      "optimal_lag": 1,
-      "p_value": 0.339504,
-      "f_statistic": 0.9234,
-      "significant": false
-    },
-    {
-      "from": "perth",
-      "to": "gold_coast",
-      "optimal_lag": 1,
-      "p_value": 0.015687,
-      "f_statistic": 6.0984,
-      "significant": true
-    },
-    {
-      "from": "gold_coast",
-      "to": "sydney",
-      "optimal_lag": 2,
-      "p_value": 0.487141,
-      "f_statistic": 0.7261,
-      "significant": false
-    },
-    {
-      "from": "gold_coast",
-      "to": "melbourne",
-      "optimal_lag": 1,
-      "p_value": 0.552585,
-      "f_statistic": 0.3557,
-      "significant": false
-    },
-    {
-      "from": "gold_coast",
-      "to": "brisbane",
-      "optimal_lag": 2,
-      "p_value": 0.04219,
-      "f_statistic": 3.3012,
-      "significant": true
-    },
-    {
-      "from": "gold_coast",
+      "from": "melbourne",
       "to": "perth",
-      "optimal_lag": 1,
-      "p_value": 0.407441,
-      "f_statistic": 0.6936,
+      "optimal_lag": 5,
+      "p_value": 0.048891,
+      "f_statistic": 2.4105,
+      "significant": true
+    },
+    {
+      "from": "melbourne",
+      "to": "sydney",
+      "optimal_lag": 4,
+      "p_value": 0.157332,
+      "f_statistic": 1.7276,
       "significant": false
+    },
+    {
+      "from": "perth",
+      "to": "brisbane",
+      "optimal_lag": 3,
+      "p_value": 0.047762,
+      "f_statistic": 2.8051,
+      "significant": true
+    },
+    {
+      "from": "perth",
+      "to": "melbourne",
+      "optimal_lag": 6,
+      "p_value": 0.134946,
+      "f_statistic": 1.7275,
+      "significant": false
+    },
+    {
+      "from": "perth",
+      "to": "sydney",
+      "optimal_lag": 6,
+      "p_value": 0.52359,
+      "f_statistic": 0.8703,
+      "significant": false
+    },
+    {
+      "from": "sydney",
+      "to": "brisbane",
+      "optimal_lag": 3,
+      "p_value": 0.250492,
+      "f_statistic": 1.4057,
+      "significant": false
+    },
+    {
+      "from": "sydney",
+      "to": "melbourne",
+      "optimal_lag": 7,
+      "p_value": 0.088461,
+      "f_statistic": 1.9201,
+      "significant": false
+    },
+    {
+      "from": "sydney",
+      "to": "perth",
+      "optimal_lag": 3,
+      "p_value": 0.032667,
+      "f_statistic": 3.1271,
+      "significant": true
     }
   ]
 }

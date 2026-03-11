@@ -72,7 +72,14 @@ export function renderGrangerGraph(svgEl, data, prices, options = {}) {
   const edgeGroup = g.selectAll('.edge')
     .data(edges)
     .join('g')
-    .attr('class', 'edge');
+    .attr('class', 'edge')
+    .attr('tabindex', '0')
+    .attr('role', 'img')
+    .attr('aria-label', d =>
+      `${CITY_NAMES[d.from] || d.from} to ${CITY_NAMES[d.to] || d.to}, ` +
+      `p-value ${d.p_value.toFixed(4)}, F-statistic ${d.f_statistic.toFixed(2)}, ` +
+      `optimal lag ${d.optimal_lag} quarters, ${d.significant ? 'significant' : 'not significant'}`
+    );
 
   edgeGroup.append('line')
     .attr('x1', d => nodeMap[d.from].x)
@@ -94,9 +101,31 @@ export function renderGrangerGraph(svgEl, data, prices, options = {}) {
     .attr('fill', '#6b7280')
     .text(d => d.significant ? `${d.optimal_lag}Q` : '');
 
-  // Edge hover
+  function showEdgeTooltip(event, d) {
+    tooltip.transition().duration(150).style('opacity', 1);
+    tooltip.html(
+      `<strong>${CITY_NAMES[d.from] || d.from} → ${CITY_NAMES[d.to] || d.to}</strong><br/>` +
+      `p-value: ${d.p_value.toFixed(4)}<br/>` +
+      `F-statistic: ${d.f_statistic.toFixed(2)}<br/>` +
+      `Optimal lag: ${d.optimal_lag}Q<br/>` +
+      `${d.significant ? 'Significant' : 'Not significant'}`
+    )
+      .style('left', (event.pageX + 12) + 'px')
+      .style('top', (event.pageY - 12) + 'px');
+  }
+
+  function hideEdgeTooltip() {
+    tooltip.transition().duration(150).style('opacity', 0);
+  }
+
+  // Edge hover and focus
   edgeGroup
-    .on('mouseover', (event, d) => {
+    .on('mouseover', showEdgeTooltip)
+    .on('mouseout', hideEdgeTooltip)
+    .on('focus', (event, d) => {
+      const rect = event.target.closest('g')?.getBoundingClientRect?.() || event.target.getBoundingClientRect();
+      const pageX = rect.left + rect.width / 2 + window.scrollX;
+      const pageY = rect.top + window.scrollY;
       tooltip.transition().duration(150).style('opacity', 1);
       tooltip.html(
         `<strong>${CITY_NAMES[d.from] || d.from} → ${CITY_NAMES[d.to] || d.to}</strong><br/>` +
@@ -105,19 +134,20 @@ export function renderGrangerGraph(svgEl, data, prices, options = {}) {
         `Optimal lag: ${d.optimal_lag}Q<br/>` +
         `${d.significant ? 'Significant' : 'Not significant'}`
       )
-        .style('left', (event.pageX + 12) + 'px')
-        .style('top', (event.pageY - 12) + 'px');
+        .style('left', (pageX + 12) + 'px')
+        .style('top', (pageY - 12) + 'px');
     })
-    .on('mouseout', () => {
-      tooltip.transition().duration(150).style('opacity', 0);
-    });
+    .on('blur', hideEdgeTooltip);
 
   // Draw nodes
   const nodeGroup = g.selectAll('.node')
     .data(nodes)
     .join('g')
     .attr('class', 'node')
-    .attr('transform', d => `translate(${d.x},${d.y})`);
+    .attr('transform', d => `translate(${d.x},${d.y})`)
+    .attr('tabindex', '0')
+    .attr('role', 'img')
+    .attr('aria-label', d => `${CITY_NAMES[d.id] || d.id} node`);
 
   nodeGroup.append('circle')
     .attr('r', 20)
@@ -134,16 +164,22 @@ export function renderGrangerGraph(svgEl, data, prices, options = {}) {
     .attr('fill', '#374151')
     .text(d => CITY_NAMES[d.id] || d.id);
 
-  // Node hover: highlight edges
+  function highlightNodeEdges(d) {
+    edgeGroup.select('line')
+      .attr('opacity', e =>
+        (e.from === d.id || e.to === d.id) ? 1 : 0.1
+      );
+  }
+
+  function resetEdgeOpacity() {
+    edgeGroup.select('line')
+      .attr('opacity', e => e.significant ? 0.4 + (e.f_statistic / maxF) * 0.5 : 0.3);
+  }
+
+  // Node hover and focus: highlight edges
   nodeGroup
-    .on('mouseover', (event, d) => {
-      edgeGroup.select('line')
-        .attr('opacity', e =>
-          (e.from === d.id || e.to === d.id) ? 1 : 0.1
-        );
-    })
-    .on('mouseout', () => {
-      edgeGroup.select('line')
-        .attr('opacity', e => e.significant ? 0.4 + (e.f_statistic / maxF) * 0.5 : 0.3);
-    });
+    .on('mouseover', (event, d) => highlightNodeEdges(d))
+    .on('mouseout', resetEdgeOpacity)
+    .on('focus', (event, d) => highlightNodeEdges(d))
+    .on('blur', resetEdgeOpacity);
 }

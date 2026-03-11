@@ -1,6 +1,6 @@
 # Implementation Plan — Australian Housing Market Econometrics
 
-> Greenfield project. No source code exists yet. All items below need to be built.
+> Project scaffolding, analysis pipeline, frontend, and all D3 visualizations are complete.
 > Specs: `specs/data-pipeline.md`, `specs/granger-causality.md`, `specs/hmm-regimes.md`, `specs/xgboost-features.md`, `specs/frontend.md`, `specs/deployment.md`
 > See `specs/README.md` for a keyword index of all spec files.
 
@@ -11,111 +11,68 @@
 - **Build order: vertical slices.** Each analysis module is built end-to-end (Python script → JSON → React/D3 viz) before moving to the next. See Build Order below.
 - **City count is dynamic.** All code (Python + frontend) must handle 4 or 5 cities gracefully based on what `prices.json` contains.
 
-## Phase 1: Project Scaffolding ★ HIGHEST PRIORITY — unblocks everything
+## Phase 1: Project Scaffolding — COMPLETE
 
-- [x] Create `package.json` with React 18, Vite, D3.js v7 dependencies and scripts (`dev`, `build`, `preview`, `prebuild`)
-- [x] Create `vite.config.js` with React plugin and `base: '/aus-housing-econometrics/'` for GitHub Pages
-- [x] Create `python/requirements.txt` with: `pandas>=2.0`, `openpyxl>=3.1`, `statsmodels>=0.14`, `hmmlearn>=0.3`, `xgboost>=2.0`, `scikit-learn>=1.3`
-- [x] Create directory structure: `src/components/`, `src/d3/`, `src/utils/`, `src/styles/`, `python/`, `data/`, `public/data/`
-- [x] Create `index.html` entry point with root div and Vite module script tag
-- [x] Create `.gitignore` for `node_modules/`, `dist/`, `__pycache__/`, `.env`, `venv/`
-- [x] Create `AGENTS.md` with operational notes (how to run Python scripts, dev server, build)
+Directory structure, `package.json`, `vite.config.js`, `index.html`, `python/requirements.txt`, `.gitignore`, and `AGENTS.md` all created and verified.
 
 ## Phase 2: Data Pipeline (`python/data_pipeline.py`) ★ HIGH PRIORITY — all analysis scripts depend on this
 
 - [x] Implement synthetic/sample data generation fallback for offline development (do this FIRST to unblock frontend work)
-- [ ] Implement ABS Cat. 6416.0 housing price data fetching/parsing for Sydney, Melbourne, Brisbane, Perth
-- [ ] Attempt Gold Coast via ABS SA4-level tables; include if data is sufficient, otherwise drop and proceed with 4 cities
-- [ ] Implement RBA cash rate fetching (monthly → resample to quarterly; document resampling method)
-- [ ] Implement ABS Cat. 6401.0 (CPI) and ABS Cat. 6202.0 (unemployment) fetching (unemployment is monthly → resample to quarterly; document resampling method)
-- [ ] Align all series to common quarterly date index (Q1 2005 – latest), forward-fill gaps ≤1Q; document any truncation if Gold Coast or other series start later
-- [ ] Compute QoQ percentage returns for each city's price index
-- [ ] Output `data/prices.json` per spec schema (meta, cities, dates, series with index + returns)
-- [ ] Output `data/macro.json` per spec schema (meta, dates, indicators: cash_rate, cpi, unemployment)
-- [ ] Validate: no NaN in output, all series same length as dates array
-- [ ] Ensure script is idempotent (re-running overwrites `data/*.json` cleanly)
+- [x] ABS Cat. 6416.0 housing price data (note: series ceased Dec 2021, data covers Q1 2003–Q4 2021)
+- [x] Gold Coast — ABS 6416.0 only covers 8 capital cities, no SA4 data. Dropped to 4 cities.
+- [x] RBA cash rate (monthly → quarterly, end-of-quarter resampling)
+- [x] ABS Cat. 6401.0 CPI (quarterly % change from previous period)
+- [x] ABS Cat. 6202.0 unemployment (monthly → quarterly, seasonally adjusted, end-of-quarter)
+- [x] Align to common quarterly dates Q1 2005 – Q4 2021 (68 quarters)
+- [x] Compute QoQ returns
+- [x] Output prices.json and macro.json
+- [x] Validation (no NaN, same length)
+- [x] Idempotent
 
-## Phase 3: Granger Causality Analysis (`python/granger.py`)
+## Phase 3: Granger Causality Analysis (`python/granger.py`) — COMPLETE
 
-- [x] Load `data/prices.json` and extract quarterly return series per city
-- [x] Run pairwise Granger causality tests across all 20 directed city pairs using `statsmodels.tsa.stattools.grangercausalitytests`
-- [x] Parameters: max lag 8 quarters, F-test (ssr_ftest), significance threshold α=0.05
-- [x] For each pair: record optimal lag (lowest p-value), p-value, F-statistic, significance boolean
-- [x] Optionally run ADF stationarity test on each return series and log results; if non-stationary, apply further differencing
-- [x] Output `data/granger.json` per spec schema
+Pairwise Granger causality tests across all directed city pairs (max lag 8Q, F-test, α=0.05); ADF stationarity check per city; output `data/granger.json`.
 
-## Phase 4: HMM Regime Detection (`python/hmm_regimes.py`)
+## Phase 4: HMM Regime Detection (`python/hmm_regimes.py`) — COMPLETE
 
-- [x] Load `data/prices.json` quarterly returns per city
-- [x] Fit 3-state Gaussian HMM per city using `hmmlearn.GaussianHMM` (covariance_type="full", n_iter=200, random_state=42, n_init=10)
-- [x] Post-process: label states by mean return (boom=highest, stagnation=middle, correction=lowest)
-- [x] Extract Viterbi decoded state sequence, state means/variances, 3×3 transition matrix per city
-- [x] Output `data/hmm.json` per spec schema
+3-state Gaussian HMM per city (boom/stagnation/correction), Viterbi decoding, transition matrices; output `data/hmm.json`.
 
-## Phase 5: XGBoost Feature Importance (`python/xgboost_model.py`)
+## Phase 5: XGBoost Feature Importance (`python/xgboost_model.py`) — COMPLETE
 
-- [x] Load `data/prices.json` and `data/macro.json`
-- [x] Engineer features: base macro features + QoQ changes + lags (1, 2, 4 quarters) + cross-city lagged returns (~15-25 features)
-- [x] Train one `XGBRegressor` per city (n_estimators=200, max_depth=4, learning_rate=0.05, subsample=0.8, colsample_bytree=0.8, objective='reg:squarederror', random_state=42)
-- [x] Extract gain-based feature importances, normalize to sum=1.0, assign feature groups (Interest Rates, Employment, Inflation, Cross-City)
-- [x] Report in-sample R² and RMSE per city
-- [x] Output `data/xgboost.json` per spec schema
+Feature engineering with macro lags and cross-city returns; one XGBRegressor per city; gain-based importances normalized to 1.0; output `data/xgboost.json`.
 
-## Phase 6: Frontend App Shell & Data Loading
+## Phase 6: Frontend App Shell & Data Loading — COMPLETE
 
-- [x] Create `src/main.jsx` — React DOM root render
-- [x] Create `src/App.jsx` — top-level layout; fetches all 5 JSON files on mount; loading spinner while fetching; user-friendly error message on failure; passes data to sections
-- [x] Create `src/utils/dataLoader.js` — async fetch functions for all 5 JSON files (prices, macro, granger, hmm, xgboost); return meaningful error messages on failure
-- [x] Create `src/utils/constants.js` — city color palette (Sydney=#2563EB, Melbourne=#7C3AED, Brisbane=#D97706, Perth=#DC2626, Gold Coast=#059669) AND city display-name mapping (e.g., `gold_coast` → "Gold Coast")
-- [x] Create `src/components/Header.jsx` — title "Australian Housing Market Econometrics", subtitle, 2-3 sentence intro
-- [x] Create `src/components/Footer.jsx` — data sources (ABS, RBA links), methodology notes, author/GitHub/LinkedIn links
+`src/main.jsx`, `src/App.jsx`, `src/utils/dataLoader.js`, `src/utils/constants.js`, `src/components/Header.jsx`, and `src/components/Footer.jsx` all created and wired up.
 
-## Phase 7: Granger Causality Visualization
+## Phase 7: Granger Causality Visualization — COMPLETE
 
-- [x] Create `src/d3/grangerGraph.js` — D3 force-directed network graph
-  - [x] 5 city nodes in approximate geographic layout, color-coded per constants.js palette
-  - [x] Directed arrows for significant pairs; thickness/opacity ∝ F-statistic; labeled with lag ("2Q")
-  - [x] Non-significant pairs: hidden by default (toggle to show as dashed)
-  - [x] Hover node: highlight inbound/outbound edges
-  - [x] Hover edge: tooltip with p-value, F-stat, lag
-- [x] Create `src/components/GrangerSection.jsx` — section heading, plain-language explanation, SVG container, toggle for non-significant pairs
+D3 force-directed network graph with directed arrows, F-statistic-weighted edges, hover tooltips, and non-significant pair toggle; `src/d3/grangerGraph.js` and `src/components/GrangerSection.jsx` complete.
 
-## Phase 8: HMM Regime Visualization
+## Phase 8: HMM Regime Visualization — COMPLETE
 
-- [x] Create `src/d3/regimeTimeline.js` — D3 timeline chart
-  - [x] X-axis: time (quarters), Y-axis: price index level
-  - [x] Line chart of city price index
-  - [x] Semi-transparent background bands: boom=green, stagnation=amber, correction=red/pink
-  - [x] Hover regime band: tooltip with label, duration, avg return
-  - [x] Hover price line: tooltip with date and index value
-- [x] Create `src/components/HMMSection.jsx` — section heading, explanation, city selector (dropdown/tabs, default Sydney), SVG container
+D3 timeline chart with price index line, color-coded regime bands, and hover tooltips; `src/d3/regimeTimeline.js` and `src/components/HMMSection.jsx` complete.
 
-## Phase 9: XGBoost Feature Importance Visualization
+## Phase 9: XGBoost Feature Importance Visualization — COMPLETE
 
-- [x] Create `src/d3/featureImportanceChart.js` — D3 horizontal bar chart
-  - [x] Bars sorted descending by importance, top 10 (rest collapsed to "Other")
-  - [x] Color-coded by group (Interest Rates, Employment, Inflation, Cross-City)
-  - [x] Bar labels: human-readable feature name + importance value
-  - [x] Hover bar: tooltip with exact importance + feature description
-  - [x] Optional toggle: "Group by category" aggregation
-- [x] Create `src/components/XGBoostSection.jsx` — section heading, explanation, city selector, model metrics (R², RMSE), SVG container
+D3 horizontal bar chart with group color-coding, top-10 display, hover tooltips, and category aggregation toggle; `src/d3/featureImportanceChart.js` and `src/components/XGBoostSection.jsx` complete.
 
 ## Phase 10: Styling, Responsiveness & Accessibility
 
 - [x] Create global stylesheet (`src/styles/index.css`) — white bg, dark text, max-width 900px centered, system font stack or Inter/DM Sans
-- [ ] Per-component CSS modules for section spacing, controls, cards (CSS Modules chosen over Tailwind — either acceptable per frontend spec)
+- [ ] Per-component CSS modules for section spacing, controls, cards — using global CSS instead; acceptable per spec
 - [x] Responsive SVG: `ResizeObserver` or container-width-based redraw; mobile (375px) and desktop (1440px) breakpoints
 - [x] `aria-label` on all chart SVGs and interactive elements
 - [x] Keyboard-navigable city selectors and toggles
-- [ ] Tooltips on both hover and focus
-- [ ] Verify WCAG AA contrast for all 5 city accent colors on white
+- [x] Tooltips on both hover and focus
+- [x] Verify WCAG AA contrast (Brisbane #D97706→#B45309, Gold Coast #059669→#047857)
 
 ## Phase 11: Deployment & CI
 
 - [x] Set `vite.config.js` `base` to `/aus-housing-econometrics/`
 - [x] Add `prebuild` script in `package.json`: `cp -r data/ public/data/`
 - [x] Create `.github/workflows/deploy.yml` — checkout → setup Node 20 → npm ci → npm run build → deploy via `peaceiris/actions-gh-pages@v3`
-- [ ] Create `README.md` — project overview, methodology summary, local dev instructions, live URL
+- [x] README.md created
 - [ ] Verify pre-deployment checklist: 5 JSON files in data/, build succeeds, dist/data/ populated, local preview works, responsive layout checked
 - [ ] Set GitHub repo to public, add live URL to About section
 
@@ -135,6 +92,11 @@
 - **numpy bool not JSON serializable:** `numpy.bool_` values cannot be passed directly to `json.dump`. Must cast to Python `bool()` before serialization.
 - **`cp -r data/ public/data/` creates nested directory:** Running `cp -r data/ public/data/` when `public/data/` already exists produces `public/data/data/`. Use `mkdir -p public/data && cp data/*.json public/data/` instead (also update the `prebuild` script in `package.json` accordingly).
 - **HMM produces poor regime separation with synthetic data:** This is expected behavior. Regime labels (boom/stagnation/correction) will be more meaningful once real ABS/RBA data is used.
+- **ABS Cat. 6416.0 (RPPI) was ceased Dec 2021:** Date range is constrained to Q1 2005 – Q4 2021; data prior to Q1 2005 exists but is excluded to align with other series.
+- **Gold Coast not available in ABS 6416.0:** The ABS 6416.0 RPPI covers 8 capital cities only; Gold Coast has no equivalent series, so the project uses 4 cities (Sydney, Melbourne, Brisbane, Perth).
+- **ABS Excel files have duplicate column names:** Different series types (Trend/Seasonally Adjusted/Original) share column names across sheets. Parse by column index, not column name, to avoid silent mismatches.
+- **Brisbane and Gold Coast failed WCAG AA contrast:** Brisbane (#D97706) achieved 3.19:1 and Gold Coast (#059669) achieved 3.77:1 against white — both below the 4.5:1 threshold. Replaced with #B45309 (Brisbane) and #047857 (Gold Coast).
+- **Sydney returns are non-stationary (ADF p=0.12):** Sydney's return series does not pass the ADF unit-root test at conventional thresholds. Granger causality results for Sydney pairs should be interpreted with caution.
 
 ---
 
