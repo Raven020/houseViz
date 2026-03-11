@@ -13,10 +13,6 @@ export async function loadPrices() {
   return fetchJSON('prices.json');
 }
 
-export async function loadMacro() {
-  return fetchJSON('macro.json');
-}
-
 export async function loadGranger() {
   return fetchJSON('granger.json');
 }
@@ -30,12 +26,11 @@ export async function loadXGBoost() {
 }
 
 export async function loadAllData() {
-  const [prices, macro, granger, hmm, xgboost] = await Promise.all([
+  const [prices, granger, hmm, xgboost] = await Promise.all([
     loadPrices(),
-    loadMacro(),
     loadGranger(),
     loadHMM(),
     loadXGBoost(),
   ]);
-  return { prices, macro, granger, hmm, xgboost };
+  return { prices, granger, hmm, xgboost };
 }

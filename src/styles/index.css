@@ -277,6 +277,15 @@ body {
   border: 0;
 }
 
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+    border-top-color: #2563EB;
+    opacity: 0.7;
+  }
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   .app {

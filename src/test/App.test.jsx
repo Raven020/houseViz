@@ -29,7 +29,6 @@ const mockData = {
       gold_coast: { index: [100, 101.5], returns: [null, 0.015] },
     },
   },
-  macro: { dates: ['2005-Q1'], indicators: { cash_rate: [5.25], cpi: [0.8], unemployment: [5.1] } },
   granger: {
     meta: { method: 'Granger causality (F-test)', max_lag: 8, significance: 0.05 },
     results: [

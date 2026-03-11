@@ -122,27 +122,28 @@ export function renderRegimeTimeline(svgEl, hmmData, pricesData, city) {
     .attr('stroke-width', 2)
     .attr('d', line);
 
-  // Price dots for hover and focus
+  // Price dots for hover and focus — bind {value, i} to avoid indexOf bug
+  const dotData = indexValues.map((value, i) => ({ value, i }));
+
   g.selectAll('.price-dot')
-    .data(indexValues)
+    .data(dotData)
     .join('circle')
     .attr('class', 'price-dot')
-    .attr('cx', (_, i) => x(dates[i]))
-    .attr('cy', d => y(d))
+    .attr('cx', d => x(dates[d.i]))
+    .attr('cy', d => y(d.value))
     .attr('r', 3)
     .attr('fill', 'transparent')
     .attr('stroke', 'transparent')
     .attr('tabindex', '0')
     .attr('role', 'img')
-    .attr('aria-label', (d, i) => `${CITY_NAMES[city]}, ${pricesData.dates[i]}, index ${d.toFixed(1)}`)
+    .attr('aria-label', d => `${CITY_NAMES[city]}, ${pricesData.dates[d.i]}, index ${d.value.toFixed(1)}`)
     .style('cursor', 'pointer')
     .on('mouseover', (event, d) => {
-      const i = indexValues.indexOf(d);
       tooltip.transition().duration(150).style('opacity', 1);
       tooltip.html(
         `<strong>${CITY_NAMES[city]}</strong><br/>` +
-        `${pricesData.dates[i]}<br/>` +
-        `Index: ${d.toFixed(1)}`
+        `${pricesData.dates[d.i]}<br/>` +
+        `Index: ${d.value.toFixed(1)}`
       )
         .style('left', (event.pageX + 12) + 'px')
         .style('top', (event.pageY - 12) + 'px');
@@ -153,13 +154,12 @@ export function renderRegimeTimeline(svgEl, hmmData, pricesData, city) {
       d3.select(event.target).attr('r', 3).attr('fill', 'transparent');
     })
     .on('focus', (event, d) => {
-      const i = indexValues.indexOf(d);
       const domRect = event.target.getBoundingClientRect();
       tooltip.transition().duration(150).style('opacity', 1);
       tooltip.html(
         `<strong>${CITY_NAMES[city]}</strong><br/>` +
-        `${pricesData.dates[i]}<br/>` +
-        `Index: ${d.toFixed(1)}`
+        `${pricesData.dates[d.i]}<br/>` +
+        `Index: ${d.value.toFixed(1)}`
       )
         .style('left', (domRect.left + window.scrollX + 12) + 'px')
         .style('top', (domRect.top + window.scrollY - 12) + 'px');

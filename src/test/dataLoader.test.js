@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { loadPrices, loadMacro, loadGranger, loadHMM, loadXGBoost, loadAllData } from '../utils/dataLoader.js';
+import { loadPrices, loadGranger, loadHMM, loadXGBoost, loadAllData } from '../utils/dataLoader.js';
 
 const mockPrices = { cities: ['sydney'], dates: ['2005-Q1'], series: {} };
-const mockMacro = { dates: ['2005-Q1'], indicators: {} };
 const mockGranger = { results: [] };
 const mockHMM = { cities: {}, dates: [] };
 const mockXGBoost = { cities: {} };
@@ -11,7 +10,6 @@ beforeEach(() => {
   global.fetch = vi.fn((url) => {
     let data;
     if (url.includes('prices.json')) data = mockPrices;
-    else if (url.includes('macro.json')) data = mockMacro;
     else if (url.includes('granger.json')) data = mockGranger;
     else if (url.includes('hmm.json')) data = mockHMM;
     else if (url.includes('xgboost.json')) data = mockXGBoost;
@@ -31,11 +29,6 @@ describe('dataLoader', () => {
     expect(fetch).toHaveBeenCalledWith(expect.stringContaining('prices.json'));
   });
 
-  it('loadMacro fetches macro.json', async () => {
-    const result = await loadMacro();
-    expect(result).toEqual(mockMacro);
-  });
-
   it('loadGranger fetches granger.json', async () => {
     const result = await loadGranger();
     expect(result).toEqual(mockGranger);
@@ -51,10 +44,9 @@ describe('dataLoader', () => {
     expect(result).toEqual(mockXGBoost);
   });
 
-  it('loadAllData fetches all 5 files', async () => {
+  it('loadAllData fetches all 4 data files', async () => {
     const result = await loadAllData();
     expect(result).toHaveProperty('prices');
-    expect(result).toHaveProperty('macro');
     expect(result).toHaveProperty('granger');
     expect(result).toHaveProperty('hmm');
     expect(result).toHaveProperty('xgboost');

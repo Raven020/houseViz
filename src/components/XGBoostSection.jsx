@@ -1,25 +1,39 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { renderFeatureImportanceChart } from '../d3/featureImportanceChart.js';
 import { CITY_NAMES } from '../utils/constants.js';
 
 export default function XGBoostSection({ data, prices }) {
   const svgRef = useRef(null);
+  const containerRef = useRef(null);
   const [selectedCity, setSelectedCity] = useState('sydney');
 
   const cities = prices ? prices.cities : [];
 
-  useEffect(() => {
+  const renderChart = useCallback(() => {
     if (data && svgRef.current) {
       renderFeatureImportanceChart(svgRef.current, data, selectedCity);
     }
   }, [data, selectedCity]);
+
+  useEffect(() => {
+    renderChart();
+  }, [renderChart]);
+
+  // ResizeObserver for responsive chart redraw
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => renderChart());
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [renderChart]);
 
   if (!data || !prices) return null;
 
   const cityData = data.cities[selectedCity];
 
   return (
-    <section className="section" id="xgboost">
+    <section className="section" id="xgboost" ref={containerRef}>
       <h2 className="section__title">What Drives Prices: LightGBM Feature Importance</h2>
       <p className="section__explanation">
         A LightGBM model trained on macroeconomic indicators reveals which factors

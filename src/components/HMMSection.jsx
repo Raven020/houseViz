@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import { renderRegimeTimeline } from '../d3/regimeTimeline.js';
 import { renderTransitionMatrix } from '../d3/transitionMatrix.js';
 import { CITY_NAMES } from '../utils/constants.js';
@@ -6,26 +6,37 @@ import { CITY_NAMES } from '../utils/constants.js';
 export default function HMMSection({ data, prices }) {
   const svgRef = useRef(null);
   const matrixSvgRef = useRef(null);
+  const containerRef = useRef(null);
   const [selectedCity, setSelectedCity] = useState('sydney');
 
   const cities = prices ? prices.cities : [];
 
-  useEffect(() => {
+  const renderCharts = useCallback(() => {
     if (data && prices && svgRef.current) {
       renderRegimeTimeline(svgRef.current, data, prices, selectedCity);
+    }
+    if (data && matrixSvgRef.current) {
+      renderTransitionMatrix(matrixSvgRef.current, data, selectedCity);
     }
   }, [data, prices, selectedCity]);
 
   useEffect(() => {
-    if (data && matrixSvgRef.current) {
-      renderTransitionMatrix(matrixSvgRef.current, data, selectedCity);
-    }
-  }, [data, selectedCity]);
+    renderCharts();
+  }, [renderCharts]);
+
+  // ResizeObserver for responsive chart redraw
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => renderCharts());
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [renderCharts]);
 
   if (!data || !prices) return null;
 
   return (
-    <section className="section" id="hmm">
+    <section className="section" id="hmm" ref={containerRef}>
       <h2 className="section__title">Market Regimes: Hidden Markov Model</h2>
       <p className="section__explanation">
         A Hidden Markov Model identifies latent market regimes in each city's
