@@ -392,7 +392,11 @@ def fetch_real_data():
     # Parse housing prices
     log.info("\nProcessing housing prices...")
     price_data = fetch_rppi(rppi_content)
-    cities = sorted(price_data.keys())
+    # Spec-defined order: sydney, melbourne, brisbane, perth
+    CITY_ORDER = ["sydney", "melbourne", "brisbane", "perth"]
+    cities = [c for c in CITY_ORDER if c in price_data] + sorted(
+        c for c in price_data if c not in CITY_ORDER
+    )
     log.info(f"  Cities available: {cities}")
 
     if not cities:
