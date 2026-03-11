@@ -15,14 +15,24 @@
 
 ## Remaining Work — Prioritized
 
-All priorities (P0-P6) are fully resolved. Full spec compliance audit completed at v0.0.8.
+All priorities (P0-P7) are fully resolved. Full spec compliance audit completed at v0.0.9.
+
+### P7: Spec Compliance Audit & Fixes (v0.0.9)
+
+- [x] **Feature importance normalization bug** — Walk-forward CV counted all folds in the denominator but only accumulated importances from folds with non-zero gains. This caused importances to sum to ~0.535 instead of 1.0, making all displayed percentages roughly half their correct values. Fixed by counting only valid folds and adding a final normalization step.
+- [x] **Dead `gold_coast` in grangerGraph.js** — Removed unused `gold_coast` entry from `GEO_POSITIONS` object.
+- [x] **README `<username>` placeholder** — Replaced with `Raven020` in the Live Demo URL.
+- [x] **README Gold Coast reference** — Removed Gold Coast from overview text (only 4 cities in dataset).
+- [x] **README "CSS Modules" claim** — Corrected to "CSS (global stylesheet)" since the project uses plain CSS.
+- [x] **Specs updated for 4 cities** — All spec files updated to reflect 4 cities (Gold Coast dropped) instead of 5.
+- [x] **Data pipeline returns validation** — Added `validate_no_nan` for `returns[1:]` arrays (previously only `index` arrays were validated).
+- [x] **xgboost.json regenerated** — Feature importances now correctly sum to 1.0 per city.
+- [n/a] **Footer author/LinkedIn placeholders** — Contain "Developer" / `linkedin.com/in/developer`. Cannot fix without knowing real author identity. Noted for manual update.
 
 ### P6: Spec Compliance Fixes (v0.0.8)
 
-- [x] **Footer GitHub URL was placeholder** — `Footer.jsx` linked to `github.com/developer/aus-housing-econometrics` (placeholder). Fixed to point to real repo `github.com/Raven020/houseViz`.
-- [x] **Spec color inconsistency resolved** — `specs/frontend.md` specified Brisbane `#D97706` and Gold Coast `#059669`, but these fail the spec's own WCAG AA 4.5:1 contrast requirement. Updated spec to match the WCAG-compliant values already in code (`#B45309`, `#047857`).
-- [n/a] **Footer author/LinkedIn placeholders** — Contain "Developer" / `linkedin.com/in/developer`. Cannot fix without knowing real author identity. Noted for manual update.
-- [n/a] **Header subtitle** — Says "across major Australian cities" vs spec's "across 5 cities". Current wording is more accurate (4 cities, not 5). Intentional adaptation.
+- [x] **Footer GitHub URL was placeholder** — Fixed to point to real repo `github.com/Raven020/houseViz`.
+- [x] **Spec color inconsistency resolved** — Updated spec to match WCAG-compliant values in code (`#B45309`, `#047857`).
 
 ---
 
@@ -56,7 +66,7 @@ Pairwise Granger causality tests across all directed city pairs (max lag 8Q, F-t
 
 ### Phase 5: Feature Importance (`python/xgboost_model.py`) — COMPLETE
 
-Feature engineering with macro lags and cross-city returns; one model per city; 75/25 chronological train/test split; gain-based importances normalized to 1.0; reports both train and test R²/RMSE; output `data/xgboost.json`. Fully migrated to LGBMRegressor per spec.
+Feature engineering with macro lags and cross-city returns; one model per city; walk-forward CV (min 20 obs, expanding window); gain-based importances averaged across valid folds and normalized to sum to 1.0; reports both in-sample and OOF R²/RMSE; output `data/xgboost.json`. Fully migrated to LGBMRegressor per spec.
 
 ### Phase 6: Frontend App Shell & Data Loading — COMPLETE
 
@@ -111,7 +121,8 @@ D3 horizontal bar chart with group color-coding, top-10 display with "Other" col
 - **ABS Excel files have duplicate column names:** Different series types (Trend/Seasonally Adjusted/Original) share column names across sheets. Parse by column index, not column name, to avoid silent mismatches.
 - **Brisbane and Gold Coast failed WCAG AA contrast:** Brisbane (#D97706) achieved 3.19:1 and Gold Coast (#059669) achieved 3.77:1 against white — both below the 4.5:1 threshold. Replaced with #B45309 (Brisbane) and #047857 (Gold Coast).
 - **Sydney returns are non-stationary (ADF p=0.12):** Sydney's return series does not pass the ADF unit-root test at conventional thresholds. Granger causality results for Sydney pairs should be interpreted with caution.
-- **Walk-forward CV replaced single train/test split for LightGBM:** Walk-forward CV with expanding window (min 20 obs, ~43 folds per city) provides ~3x more out-of-sample evaluation points than the previous 75/25 split. OOF R² ranges from -0.01 (Sydney) to 0.26 (Melbourne). Feature importances are averaged across all folds for greater stability than single-model importances. Full-sample in-sample R² ranges from 0.52 (Perth) to 0.76 (Sydney).
+- **Walk-forward CV replaced single train/test split for LightGBM:** Walk-forward CV with expanding window (min 20 obs, 23 valid folds per city out of 43 total) provides robust out-of-sample evaluation. OOF R² ranges from -0.01 (Sydney) to 0.26 (Melbourne). Feature importances are averaged across valid folds (those with non-zero gains) and normalized to sum to 1.0. Full-sample in-sample R² ranges from 0.52 (Perth) to 0.76 (Sydney).
+- **Walk-forward fold counting bug (fixed v0.0.9):** Early folds with few training observations produced all-zero feature importances from LightGBM. The original code counted these zero-gain folds in the denominator, deflating all importances to ~0.535 total. Fixed by only incrementing `n_folds` when gains are non-zero, plus a final normalization to 1.0.
 
 ---
 

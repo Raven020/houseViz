@@ -138,16 +138,20 @@ def walk_forward_cv(X, y, feature_cols, min_train_size):
         model.fit(X_train, y_train)
         oof_preds[t] = model.predict(X.iloc[[t]])[0]
 
-        # Accumulate gain-based importances
+        # Accumulate gain-based importances (only count folds with signal)
         imp = model.feature_importances_
         total = imp.sum()
         if total > 0:
             importance_accum += imp / total
-        n_folds += 1
+            n_folds += 1
 
-    # Average importances across all folds
+    # Average importances across folds that had non-zero gains, then
+    # normalise to sum to 1.0 so displayed percentages are correct.
     if n_folds > 0:
         importance_accum /= n_folds
+        final_total = importance_accum.sum()
+        if final_total > 0:
+            importance_accum /= final_total
 
     # Mask: only indices where we have OOF predictions
     mask = ~np.isnan(oof_preds)

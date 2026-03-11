@@ -4,12 +4,12 @@
 Test whether lagged housing price returns in one city help predict returns in another. This reveals lead/lag dynamics — e.g., does a Sydney boom precede a Melbourne boom?
 
 ## Input
-- `data/prices.json` — quarterly returns series for all 5 cities
+- `data/prices.json` — quarterly returns series for all 4 cities
 
 ## Analysis
 
 ### Method
-- Pairwise Granger causality tests across all city pairs (5 × 4 = 20 directed pairs)
+- Pairwise Granger causality tests across all city pairs (4 × 3 = 12 directed pairs)
 - Library: `statsmodels.tsa.stattools.grangercausalitytests`
 
 ### Parameters
@@ -64,7 +64,7 @@ For each directed pair (city_a → city_b), record:
 ## Visualisation
 
 ### Primary: Directed Network Graph
-- **Nodes:** 5 cities, positioned in an approximate geographic layout
+- **Nodes:** 4 cities, positioned in an approximate geographic layout
 - **Edges:** Directed arrows for each significant Granger-causal pair
   - Arrow thickness or opacity proportional to F-statistic (strength)
   - Label on edge: optimal lag in quarters (e.g., "2Q")
@@ -75,7 +75,7 @@ For each directed pair (city_a → city_b), record:
   - Toggle: show/hide non-significant pairs
 
 ### Secondary (optional): Heatmap
-- 5×5 matrix, rows = "from" city, columns = "to" city
+- 4×4 matrix, rows = "from" city, columns = "to" city
 - Cell colour: p-value (green = significant, grey = not)
 - Cell label: optimal lag
 - Diagonal: blank (no self-causality)

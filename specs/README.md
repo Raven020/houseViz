@@ -4,11 +4,11 @@ Quick-reference keyword index for all specification files in this directory.
 
 ## data-pipeline.md
 **Python data ingestion and JSON output**
-Keywords: ABS, RBA, housing prices, macro indicators, cash rate, CPI, unemployment, quarterly, resampling, forward-fill, prices.json, macro.json, Gold Coast policy, SA4, Cat 6416.0, Cat 6401.0, Cat 6202.0, pandas, openpyxl, idempotent, synthetic data, date alignment, QoQ returns, validation, NaN check
+Keywords: ABS, RBA, housing prices, macro indicators, cash rate, CPI, unemployment, quarterly, resampling, forward-fill, prices.json, macro.json, 4 cities, SA4, Cat 6416.0, Cat 6401.0, Cat 6202.0, pandas, openpyxl, idempotent, synthetic data, date alignment, QoQ returns, validation, NaN check
 
 ## granger-causality.md
 **Lead/lag relationships between cities**
-Keywords: Granger causality, pairwise, directed pairs, F-test, ssr_ftest, p-value, optimal lag, significance, statsmodels, stationarity, ADF test, network graph, force-directed, D3, directed arrows, heatmap, granger.json, 20 city pairs, max lag 8
+Keywords: Granger causality, pairwise, directed pairs, F-test, ssr_ftest, p-value, optimal lag, significance, statsmodels, stationarity, ADF test, network graph, force-directed, D3, directed arrows, heatmap, granger.json, 12 city pairs, max lag 8
 
 ## hmm-regimes.md
 **Market regime detection per city**
@@ -20,7 +20,7 @@ Keywords: LightGBM, LGBMRegressor, feature importance, gain-based, feature engin
 
 ## frontend.md
 **React + D3 single-page application**
-Keywords: React 18, Vite, D3.js v7, CSS Modules, single-page, scrollable, App.jsx, Header, Footer, GrangerSection, HMMSection, XGBoostSection, useRef, useEffect, ResizeObserver, city color palette, Sydney #2563EB, Melbourne #7C3AED, Brisbane #D97706, Perth #DC2626, Gold Coast #059669, accessibility, WCAG AA, aria-label, dataLoader.js, constants.js, public/data/
+Keywords: React 18, Vite, D3.js v7, CSS Modules, single-page, scrollable, App.jsx, Header, Footer, GrangerSection, HMMSection, XGBoostSection, useRef, useEffect, ResizeObserver, city color palette, Sydney #2563EB, Melbourne #7C3AED, Brisbane #B45309, Perth #DC2626, 4 cities, accessibility, WCAG AA, aria-label, dataLoader.js, constants.js, public/data/
 
 ## deployment.md
 **GitHub Pages deployment and CI**

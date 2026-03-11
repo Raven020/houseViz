@@ -48,7 +48,7 @@ The page reads as a top-to-bottom data story:
 
 ### `Header.jsx`
 - Project title: "Australian Housing Market Econometrics"
-- Subtitle: "An interactive exploration of price dynamics across 5 cities"
+- Subtitle: "An interactive exploration of price dynamics across 4 cities"
 - Brief 2–3 sentence intro setting the narrative context
 
 ### `GrangerSection.jsx`
@@ -58,7 +58,7 @@ The page reads as a top-to-bottom data story:
 
 ### `HMMSection.jsx`
 - Section heading + plain-language explanation of HMM regimes
-- City selector (dropdown or tabs): Sydney | Melbourne | Brisbane | Perth | Gold Coast
+- City selector (dropdown or tabs): Sydney | Melbourne | Brisbane | Perth
 - Embeds `RegimeTimeline` (D3 component)
 - See `specs/hmm-regimes.md` for visualisation details
 
@@ -87,12 +87,11 @@ The page reads as a top-to-bottom data story:
 
 ## Styling Guidelines
 - Clean, minimal aesthetic — white background, dark text
-- Accent colour palette for the 5 cities (consistent across all charts):
+- Accent colour palette for the 4 cities (consistent across all charts):
   - Sydney: `#2563EB` (blue)
   - Melbourne: `#7C3AED` (purple)
   - Brisbane: `#B45309` (dark amber — WCAG AA compliant; original `#D97706` fails 4.5:1 contrast)
   - Perth: `#DC2626` (red)
-  - Gold Coast: `#047857` (dark teal — WCAG AA compliant; original `#059669` fails 4.5:1 contrast)
 - Typography: system font stack or Inter/DM Sans from Google Fonts
 - Max content width: 900px, centred
 - Generous whitespace between sections

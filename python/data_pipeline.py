@@ -596,6 +596,9 @@ def main():
         assert len(series[city]["returns"]) == len(dates), \
             f"{city} returns length mismatch"
         validate_no_nan(series[city]["index"], f"{city}.index")
+        # Validate returns (skip first element which is null by design)
+        returns_tail = series[city]["returns"][1:]
+        validate_no_nan(returns_tail, f"{city}.returns[1:]")
 
     for indicator in ["cash_rate", "cpi", "unemployment"]:
         assert len(macro_indicators[indicator]) == len(dates), \
