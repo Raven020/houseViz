@@ -74,16 +74,20 @@ def granger_causality_test(x, y, max_lag):
 
 
 def run_adf_test(series, name):
-    """Run Augmented Dickey-Fuller test and log result."""
+    """Run Augmented Dickey-Fuller test and return result dict."""
     try:
         from statsmodels.tsa.stattools import adfuller
         result = adfuller(series, autolag="AIC")
         stationary = result[1] < 0.05
         print(f"  ADF test for {name}: statistic={result[0]:.4f}, p-value={result[1]:.4f} → {'stationary' if stationary else 'NON-STATIONARY'}")
-        return stationary
+        return {
+            "stationary": bool(stationary),
+            "adf_statistic": round(float(result[0]), 4),
+            "p_value": round(float(result[1]), 4),
+        }
     except Exception as e:
         print(f"  ADF test failed for {name}: {e}")
-        return True  # Assume stationary if test fails
+        return {"stationary": True, "adf_statistic": None, "p_value": None}
 
 
 def main():
@@ -103,8 +107,9 @@ def main():
 
     # ADF stationarity check
     print("\nStationarity checks (ADF test on returns):")
+    stationarity = {}
     for city in cities:
-        run_adf_test(returns[city], city)
+        stationarity[city] = run_adf_test(returns[city], city)
 
     # Pairwise Granger tests
     results = []
@@ -131,6 +136,7 @@ def main():
             "significance": SIGNIFICANCE,
             "note": f"No multiple-testing correction applied. With {len(pairs)} tests at α={SIGNIFICANCE}, expect ~{len(pairs) * SIGNIFICANCE:.1f} false positives by chance.",
         },
+        "stationarity": stationarity,
         "results": [
             {
                 "from": r["from"],
