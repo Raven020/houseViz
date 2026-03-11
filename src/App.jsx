@@ -26,7 +26,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="loading">
+      <div className="loading" role="status" aria-live="polite">
         <div className="spinner" />
         <p>Loading analysis data...</p>
       </div>

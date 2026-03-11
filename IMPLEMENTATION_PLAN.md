@@ -15,20 +15,8 @@
 
 ## Remaining Work — Prioritized
 
-### P0: Critical — Spec Violations
-
-- [x] **LightGBM migration COMPLETE** — All code migrated from XGBoost to LightGBM; model re-run; tests pass. `python/xgboost_model.py` now uses `LGBMRegressor`, `python/requirements.txt` uses `lightgbm>=4.0`, all user-facing text updated to "LightGBM" across `XGBoostSection.jsx`, `Header.jsx`, and `Footer.jsx`, and `data/xgboost.json` regenerated with correct meta.
-- [ ] **HMM output quality review** — The code already has regularization (`covars_prior`, `covars_weight=2.0`) and a 2-state fallback for degenerate cities. However, the actual output data (`data/hmm.json`) should be inspected to verify whether Brisbane/Melbourne regime assignments are now reasonable after these mitigations. If not, consider switching to `covariance_type="diag"` for 1-D data (simpler and equally expressive). File: `python/hmm_regimes.py`, `data/hmm.json`
-- [ ] **Known Issues entries are stale** — (a) Line 132 references "HMM degenerate stagnation state" but does not mention the existing mitigations (regularization, 2-state fallback). (b) Line 138 says "Near-perfect in-sample fit … without out-of-sample validation" but the code now has a 75/25 train/test split with test-set metrics. Update both entries to reflect current state.
-
 ### P1: Spec Compliance Gaps
 
-- [ ] **No ResizeObserver for responsive chart redraw** — `specs/frontend.md` requires `ResizeObserver` or container-width-based redraw. All 5 D3 renderers read `svgEl.parentElement.clientWidth` once at render; resizing the browser does not re-render charts. Fix: add `ResizeObserver` in each section component's `useEffect` to trigger D3 re-render on container resize. Files: `src/components/GrangerSection.jsx`, `src/components/HMMSection.jsx`, `src/components/XGBoostSection.jsx`
-- [ ] **Granger tabs missing `aria-controls` and arrow-key navigation** — `specs/frontend.md` requires WCAG AA. The `role="tab"` buttons in `GrangerSection.jsx` lack `aria-controls` attributes pointing to their `tabpanel` IDs. The ARIA tabs pattern also requires arrow-key navigation between tabs (currently Tab moves focus away from the tablist). File: `src/components/GrangerSection.jsx`
-- [ ] **Transition matrix hover border not keyboard-accessible** — The `tm-hover-rect` overlay in `transitionMatrix.js` only handles `mouseover`/`mouseout`; keyboard focus on cells shows the tooltip but not the blue border highlight. Fix: add `focus`/`blur` handlers on the overlay rect (or the parent `<g>`) that toggle the border stroke. File: `src/d3/transitionMatrix.js`
-- [ ] **regimeTimeline.js `indexOf(d)` tooltip bug** — At lines 140 and 156, `indexValues.indexOf(d)` finds the date index by value. If two quarters share the same price index value, it returns the first occurrence, showing the wrong date. Fix: bind index-aware data (e.g., `{value, i}` objects) or use D3's selection index. File: `src/d3/regimeTimeline.js`
-- [ ] **`macro` data fetched but never used** — `loadAllData()` fetches `macro.json` and stores it in state, but no component receives or renders it. The spec does not require a macro chart. Fix: remove `loadMacro` from `loadAllData()` and remove the `macro` key from the returned object. Files: `src/utils/dataLoader.js`, `src/App.jsx`
-- [ ] **No `aria-live` on loading spinner** — The loading `<div>` in `App.jsx` has no `role="status"` or `aria-live="polite"`, so screen readers cannot announce the loading state. File: `src/App.jsx`
 - [ ] **`constants.test.js` asserts "all 5 cities"** — Test descriptions say "all 5 cities" including `gold_coast`, which is harmless (constants intentionally include Gold Coast) but misleading given 4-city reality. Low priority. File: `src/test/constants.test.js`
 
 ### P2: Robustness & Error Handling
@@ -36,8 +24,6 @@
 - [ ] **No React ErrorBoundary** — An unhandled runtime error in any D3 render function crashes the entire app with no recovery UI. Add an ErrorBoundary wrapper around `<main>` or per-section. File: `src/App.jsx` (new component or inline)
 - [ ] **Synthetic fallback includes `gold_coast`** — If real data fetch fails, `data_pipeline.py` falls back to synthetic data with 5 cities including `gold_coast`, creating a city-count mismatch vs. real data (4 cities). Either remove `gold_coast` from synthetic generation or document as intentional scaffolding. File: `python/data_pipeline.py`
 - [ ] **No Granger multiple-testing correction** — 12 pairwise tests (4 cities) at α=0.05 with no Bonferroni/BH correction risks false positives. Consider noting this limitation in the output metadata or applying correction. File: `python/granger.py`
-- [ ] **No `prefers-reduced-motion` CSS rule** — The spinner animation plays regardless of OS accessibility settings. Add `@media (prefers-reduced-motion: reduce)` to disable/reduce animations. File: `src/styles/index.css`
-- [ ] **`public/data/` not in `.gitignore`** — The prebuild script copies JSON files into `public/data/`, and these build artifacts could be accidentally committed. Add `public/data/` to `.gitignore`. File: `.gitignore`
 
 ### P3: Deployment & CI Polish
 
@@ -111,11 +97,11 @@ D3 horizontal bar chart with group color-coding, top-10 display with "Other" col
 - [x] Tooltips on both hover and focus
 - [x] Verify WCAG AA contrast (Brisbane #B45309, Gold Coast #047857)
 - [x] Responsive CSS breakpoint at 640px
-- [ ] ResizeObserver for dynamic chart redraw (see P1)
-- [ ] Granger tab `aria-controls` + arrow-key navigation (see P1)
-- [ ] Transition matrix keyboard hover highlight (see P1)
-- [ ] `aria-live` on loading spinner (see P1)
-- [ ] `prefers-reduced-motion` CSS rule (see P2)
+- [x] ResizeObserver for dynamic chart redraw (see P1)
+- [x] Granger tab `aria-controls` + arrow-key navigation (see P1)
+- [x] Transition matrix keyboard hover highlight (see P1)
+- [x] `aria-live` on loading spinner (see P1)
+- [x] `prefers-reduced-motion` CSS rule (see P2)
 
 ### Phase 11: Deployment & CI — MOSTLY COMPLETE
 

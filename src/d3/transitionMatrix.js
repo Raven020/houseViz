@@ -184,29 +184,32 @@ export function renderTransitionMatrix(svgEl, hmmData, city) {
         tooltip.transition().duration(150).style('opacity', 0);
       }
 
-      cell
-        .on('mouseover', showTooltip)
-        .on('mousemove', showTooltip)
-        .on('mouseout', hideTooltip)
-        .on('focus', showTooltipFromFocus)
-        .on('blur', hideTooltip);
-
       // Highlight border on hover/focus via a transparent overlay rect
-      cell.append('rect')
+      const hoverRect = cell.append('rect')
         .attr('class', 'tm-hover-rect')
         .attr('width', cellSize)
         .attr('height', cellSize)
         .attr('fill', 'transparent')
         .attr('stroke', 'transparent')
         .attr('stroke-width', 2)
-        .attr('rx', 2)
-        .on('mouseover', function (event) {
-          d3.select(this).attr('stroke', '#1d4ed8');
+        .attr('rx', 2);
+
+      cell
+        .on('mouseover', (event) => {
+          hoverRect.attr('stroke', '#1d4ed8');
           showTooltip(event);
         })
         .on('mousemove', showTooltip)
-        .on('mouseout', function () {
-          d3.select(this).attr('stroke', 'transparent');
+        .on('mouseout', () => {
+          hoverRect.attr('stroke', 'transparent');
+          hideTooltip();
+        })
+        .on('focus', (event) => {
+          hoverRect.attr('stroke', '#1d4ed8');
+          showTooltipFromFocus(event);
+        })
+        .on('blur', () => {
+          hoverRect.attr('stroke', 'transparent');
           hideTooltip();
         });
     });

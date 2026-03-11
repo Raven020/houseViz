@@ -21,6 +21,7 @@ Run scripts in order — each depends on output from prior steps.
 Use `python3` (not `python`). `pip` is not available by default — use `pip3`.
 
 ## Python Gotchas
+- **pip3 on Python 3.12**: This system uses an externally-managed environment — run `pip3 install --break-system-packages -r requirements.txt`.
 - **hmmlearn 0.3.3**: `GaussianHMM` has no `n_init` param — use a manual loop to run multiple initializations and keep the best result.
 - **JSON serialization**: numpy bools are not JSON serializable — wrap in `bool()` before `json.dump`.
 
