@@ -15,13 +15,11 @@
 
 ## Remaining Work — Prioritized
 
-All priorities (P0-P9) are fully resolved. Full spec compliance audit completed at v0.0.9. Test/spec hygiene pass at v0.0.10. Spec alignment pass at v0.0.11.
+All priorities (P0-P10) are fully resolved. Full spec compliance audit completed at v0.0.9. Test/spec hygiene pass at v0.0.10. Spec alignment pass at v0.0.11. Test/spec schema sync at v0.0.12.
 
-### P9: Spec Alignment (v0.0.11)
+### P10: Test/Spec Schema Sync (v0.0.12)
 
-- [x] **`gold_coast` still in `constants.js`** — `CITY_COLORS` and `CITY_NAMES` had gold_coast entries despite Gold Coast being dropped. Removed. Updated `constants.test.js` to assert exactly 4 cities.
-- [x] **Header subtitle didn't match spec** — Said "across major Australian cities" instead of spec's "across 4 cities". Fixed.
-- [x] **Vite base path mismatch** — Spec assumed repo name `aus-housing-econometrics` but actual GitHub repo is `houseViz`. Base path `/aus-housing-econometrics/` would cause all assets to 404 on GitHub Pages. Changed to `/houseViz/`. Updated `deployment.md` spec to match.
+- [x] **Python test `test_xgboost_json` expected `n_test` but implementation uses `n_folds`** — Walk-forward CV (the spec's preferred approach) produces `n_folds` instead of `n_test`. Updated `python/test_pipeline.py` to validate `n_folds`. Updated `specs/xgboost-features.md` example JSON schema to reflect walk-forward CV fields (`validation`, `min_train_size`, `n_folds`) instead of single-split fields (`train_fraction`, `n_test`).
 - [n/a] **Footer author/LinkedIn placeholders** — Contain "Developer" / `linkedin.com/in/developer`. Cannot fix without knowing real author identity. Noted for manual update.
 
 ---
