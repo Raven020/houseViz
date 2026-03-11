@@ -25,22 +25,43 @@ function getDescription(name) {
   return lagMatch ? `${desc} (${lagMatch[1]}-quarter lag)` : desc;
 }
 
-export function renderFeatureImportanceChart(svgEl, data, city) {
+export function renderFeatureImportanceChart(svgEl, data, city, options = {}) {
+  const { aggregateByCategory = false } = options;
   const width = svgEl.parentElement?.clientWidth || 800;
   const margin = { top: 20, right: 30, bottom: 20, left: 180 };
 
   const cityData = data.cities[city];
   if (!cityData) return;
 
-  // Top 10 features; collapse rest to "Other"
-  const sortedFeatures = [...cityData.features].sort((a, b) => b.importance - a.importance);
   let features;
-  if (sortedFeatures.length > 10) {
-    const top10 = sortedFeatures.slice(0, 10);
-    const otherImportance = sortedFeatures.slice(10).reduce((s, f) => s + f.importance, 0);
-    features = [...top10, { name: 'other', importance: otherImportance, group: 'Other' }];
+  if (aggregateByCategory) {
+    // Aggregate lagged variants of the same base feature into one bar
+    const baseMap = new Map();
+    cityData.features.forEach(f => {
+      const base = f.name.replace(/_lag\d+$/, '');
+      if (!baseMap.has(base)) {
+        baseMap.set(base, { name: base, importance: 0, group: f.group });
+      }
+      baseMap.get(base).importance += f.importance;
+    });
+    const sorted = [...baseMap.values()].sort((a, b) => b.importance - a.importance);
+    if (sorted.length > 10) {
+      const top10 = sorted.slice(0, 10);
+      const otherImportance = sorted.slice(10).reduce((s, f) => s + f.importance, 0);
+      features = [...top10, { name: 'other', importance: otherImportance, group: 'Other' }];
+    } else {
+      features = sorted;
+    }
   } else {
-    features = sortedFeatures;
+    // Top 10 features; collapse rest to "Other"
+    const sortedFeatures = [...cityData.features].sort((a, b) => b.importance - a.importance);
+    if (sortedFeatures.length > 10) {
+      const top10 = sortedFeatures.slice(0, 10);
+      const otherImportance = sortedFeatures.slice(10).reduce((s, f) => s + f.importance, 0);
+      features = [...top10, { name: 'other', importance: otherImportance, group: 'Other' }];
+    } else {
+      features = sortedFeatures;
+    }
   }
 
   const barHeight = 28;
