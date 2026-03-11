@@ -3,6 +3,7 @@
     "method": "Gaussian HMM",
     "n_states": 3,
     "covariance_type": "full",
+    "n_init": 10,
     "regime_labels": [
       "correction",
       "stagnation",

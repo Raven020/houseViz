@@ -5,6 +5,28 @@
     "significance": 0.05,
     "note": "No multiple-testing correction applied. With 12 tests at \u03b1=0.05, expect ~0.6 false positives by chance."
   },
+  "stationarity": {
+    "sydney": {
+      "stationary": false,
+      "adf_statistic": -2.4625,
+      "p_value": 0.1249
+    },
+    "melbourne": {
+      "stationary": true,
+      "adf_statistic": -3.5202,
+      "p_value": 0.0075
+    },
+    "brisbane": {
+      "stationary": true,
+      "adf_statistic": -2.8955,
+      "p_value": 0.0459
+    },
+    "perth": {
+      "stationary": true,
+      "adf_statistic": -3.0823,
+      "p_value": 0.0279
+    }
+  },
   "results": [
     {
       "from": "sydney",
