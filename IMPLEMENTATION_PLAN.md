@@ -1,8 +1,10 @@
 # Implementation Plan — Australian Housing Market Econometrics
 
-> Project scaffolding, analysis pipeline, frontend, and all D3 visualizations are complete.
+> Project is feature-complete. All 14 frontend tests and 5 pipeline tests pass. Build succeeds.
 > Specs: `specs/data-pipeline.md`, `specs/granger-causality.md`, `specs/hmm-regimes.md`, `specs/xgboost-features.md`, `specs/frontend.md`, `specs/deployment.md`
 > See `specs/README.md` for a keyword index of all spec files.
+
+---
 
 ## Key Decisions
 
@@ -13,88 +15,23 @@
 
 ---
 
-## Remaining Work — Prioritized
-
-All priorities (P0-P10) are fully resolved. Full spec compliance audit completed at v0.0.9. Test/spec hygiene pass at v0.0.10. Spec alignment pass at v0.0.11. Test/spec schema sync at v0.0.12.
-
-### P10: Test/Spec Schema Sync (v0.0.12)
-
-- [x] **Python test `test_xgboost_json` expected `n_test` but implementation uses `n_folds`** — Walk-forward CV (the spec's preferred approach) produces `n_folds` instead of `n_test`. Updated `python/test_pipeline.py` to validate `n_folds`. Updated `specs/xgboost-features.md` example JSON schema to reflect walk-forward CV fields (`validation`, `min_train_size`, `n_folds`) instead of single-split fields (`train_fraction`, `n_test`).
-- [n/a] **Footer author/LinkedIn placeholders** — Contain "Developer" / `linkedin.com/in/developer`. Cannot fix without knowing real author identity. Noted for manual update.
-
----
-
 ## Completed Phases
 
-### Phase 1: Project Scaffolding — COMPLETE
+| Phase | Name | Status |
+|-------|------|--------|
+| 1 | Project Scaffolding | COMPLETE |
+| 2 | Data Pipeline (`python/data_pipeline.py`) | COMPLETE |
+| 3 | Granger Causality Analysis (`python/granger.py`) | COMPLETE |
+| 4 | HMM Regime Detection (`python/hmm_regimes.py`) | COMPLETE |
+| 5 | Feature Importance (`python/xgboost_model.py`) | COMPLETE |
+| 6 | Frontend App Shell & Data Loading | COMPLETE |
+| 7 | Granger Causality Visualization | COMPLETE |
+| 8 | HMM Regime Visualization | COMPLETE |
+| 9 | Feature Importance Visualization | COMPLETE |
+| 10 | Styling, Responsiveness & Accessibility | COMPLETE |
+| 11 | Deployment & CI | COMPLETE (one manual step: set repo public) |
 
-Directory structure, `package.json`, `vite.config.js`, `index.html`, `python/requirements.txt`, `.gitignore`, and `AGENTS.md` all created and verified.
-
-### Phase 2: Data Pipeline (`python/data_pipeline.py`) — COMPLETE
-
-- [x] Implement synthetic/sample data generation fallback for offline development
-- [x] ABS Cat. 6416.0 housing price data (series ceased Dec 2021, data covers Q1 2003–Q4 2021)
-- [x] Gold Coast — ABS 6416.0 only covers 8 capital cities, no SA4 data. Dropped to 4 cities.
-- [x] RBA cash rate (monthly → quarterly, end-of-quarter resampling)
-- [x] ABS Cat. 6401.0 CPI (quarterly % change from previous period)
-- [x] ABS Cat. 6202.0 unemployment (monthly → quarterly, seasonally adjusted, end-of-quarter)
-- [x] Align to common quarterly dates Q1 2005 – Q4 2021 (68 quarters)
-- [x] Compute QoQ returns
-- [x] Output prices.json and macro.json
-- [x] Validation (no NaN, same length)
-- [x] Idempotent
-
-### Phase 3: Granger Causality Analysis (`python/granger.py`) — COMPLETE
-
-Pairwise Granger causality tests across all directed city pairs (max lag 8Q, F-test, α=0.05); ADF stationarity check per city; output `data/granger.json`.
-
-### Phase 4: HMM Regime Detection (`python/hmm_regimes.py`) — COMPLETE (with mitigations for degeneracy)
-
-3-state Gaussian HMM per city (boom/stagnation/correction), Viterbi decoding, transition matrices, regularization via `covars_prior`/`covars_weight`, automatic 2-state fallback for degenerate cities; output `data/hmm.json`.
-
-### Phase 5: Feature Importance (`python/xgboost_model.py`) — COMPLETE
-
-Feature engineering with macro lags and cross-city returns; one model per city; walk-forward CV (min 20 obs, expanding window); gain-based importances averaged across valid folds and normalized to sum to 1.0; reports both in-sample and OOF R²/RMSE; output `data/xgboost.json`. Fully migrated to LGBMRegressor per spec.
-
-### Phase 6: Frontend App Shell & Data Loading — COMPLETE
-
-`src/main.jsx`, `src/App.jsx`, `src/utils/dataLoader.js`, `src/utils/constants.js`, `src/components/Header.jsx`, and `src/components/Footer.jsx` all created and wired up.
-
-### Phase 7: Granger Causality Visualization — COMPLETE
-
-D3 network graph + NxN heatmap with tab toggle, directed arrows, F-statistic-weighted edges, hover/focus tooltips, and non-significant pair toggle.
-
-### Phase 8: HMM Regime Visualization — COMPLETE
-
-D3 timeline chart with price index line, color-coded regime bands, hover/focus tooltips, and 3x3 transition matrix heatmap per city.
-
-### Phase 9: Feature Importance Visualization — COMPLETE
-
-D3 horizontal bar chart with group color-coding, top-10 display with "Other" collapse, hover/focus tooltips.
-
-### Phase 10: Styling, Responsiveness & Accessibility — COMPLETE
-
-- [x] Create global stylesheet (`src/styles/index.css`) — white bg, dark text, max-width 900px centered, Inter font
-- [x] `aria-label` on all chart SVGs and interactive elements
-- [x] Keyboard-navigable city selectors and toggles
-- [x] Tooltips on both hover and focus
-- [x] Verify WCAG AA contrast (Brisbane #B45309, Gold Coast #047857)
-- [x] Responsive CSS breakpoint at 640px
-- [x] ResizeObserver for dynamic chart redraw (see P1)
-- [x] Granger tab `aria-controls` + arrow-key navigation (see P1)
-- [x] Transition matrix keyboard hover highlight (see P1)
-- [x] `aria-live` on loading spinner (see P1)
-- [x] `prefers-reduced-motion` CSS rule (see P2)
-
-### Phase 11: Deployment & CI — CODE COMPLETE; one manual step remains
-
-- [x] Set `vite.config.js` `base` to `/aus-housing-econometrics/`
-- [x] Add `prebuild` script in `package.json`
-- [x] Create `.github/workflows/deploy.yml`
-- [x] README.md created
-- [x] Verify pre-deployment checklist: 5 JSON files in data/, build succeeds
-- [x] `deploy.yml` polish: permissions, caching, SHA pinning
-- [ ] Set GitHub repo to public, add live URL to About section — manual step, no code required
+> **Deployment note:** `specs/deployment.md` prebuild command updated to match implementation (`mkdir -p public/data && cp data/*.json public/data/`) and gh-pages action updated to v4.
 
 ---
 
@@ -119,26 +56,26 @@ D3 horizontal bar chart with group color-coding, top-10 display with "Other" col
 Each slice is end-to-end: Python script → JSON output → React/D3 visualization.
 
 ```
-Step 1: Scaffolding (Phase 1)                    ✅ COMPLETE
+Step 1: Scaffolding (Phase 1)                    COMPLETE
   └── Project setup, directories, configs, synthetic data for dev
 
-Step 2: Real Data Pipeline (Phase 2)              ✅ COMPLETE
+Step 2: Real Data Pipeline (Phase 2)             COMPLETE
   └── ABS/RBA fetching → prices.json + macro.json (real data replaces synthetic)
 
-Step 3: Granger Slice (Phases 3 + 7)              ✅ COMPLETE
+Step 3: Granger Slice (Phases 3 + 7)             COMPLETE
   └── granger.py → granger.json → GrangerSection.jsx + grangerGraph.js
 
-Step 4: HMM Slice (Phases 4 + 8)                  ✅ COMPLETE
+Step 4: HMM Slice (Phases 4 + 8)                 COMPLETE
   └── hmm_regimes.py → hmm.json → HMMSection.jsx + regimeTimeline.js
 
-Step 5: Feature Importance Slice (Phases 5 + 9)   ✅ COMPLETE
+Step 5: Feature Importance Slice (Phases 5 + 9)  COMPLETE
   └── xgboost_model.py → xgboost.json → XGBoostSection.jsx + featureImportanceChart.js
 
-Step 6: Styling & Polish (Phase 10)               ✅ COMPLETE
+Step 6: Styling & Polish (Phase 10)              COMPLETE
   └── CSS, responsiveness, accessibility
 
-Step 7: Deployment (Phase 11)                     🔶 CODE COMPLETE
-  └── GitHub Actions, README, deploy.yml polish all done — only manual step: set repo public
+Step 7: Deployment (Phase 11)                    COMPLETE (manual: set repo public)
+  └── GitHub Actions, README, deploy.yml — only remaining step is manual
 ```
 
 ### Notes

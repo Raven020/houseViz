@@ -61,7 +61,7 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npm run build
-      - uses: peaceiris/actions-gh-pages@v3
+      - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
@@ -72,7 +72,7 @@ Before `npm run build`, copy `data/` into `public/data/` so Vite includes it in 
 ```json
 // package.json scripts
 {
-  "prebuild": "cp -r data/ public/data/",
+  "prebuild": "mkdir -p public/data && cp data/*.json public/data/",
   "build": "vite build"
 }
 ```
