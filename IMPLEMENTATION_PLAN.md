@@ -1,6 +1,6 @@
 # Implementation Plan — Australian Housing Market Econometrics
 
-> Project is feature-complete. All 14 frontend tests and 5 pipeline tests pass. Build succeeds.
+> Project is feature-complete. All 16 frontend tests and 5 pipeline tests pass. Build succeeds.
 > Specs: `specs/data-pipeline.md`, `specs/granger-causality.md`, `specs/hmm-regimes.md`, `specs/xgboost-features.md`, `specs/frontend.md`, `specs/deployment.md`
 > See `specs/README.md` for a keyword index of all spec files.
 
@@ -53,6 +53,10 @@
 - **Duplicated `humanReadableName` (fixed v0.0.15):** Identical function was defined in both `featureImportanceChart.js` and `crossCityComparison.js`. Extracted to `src/utils/constants.js` as a single source of truth with unit test coverage (15 tests now, up from 14).
 - **HMM meta missing `n_init` (fixed v0.0.16):** The `hmm.json` meta block did not record the `n_init` parameter despite the spec listing it as a model parameter. Added `"n_init": 10` to the meta dict for reproducibility.
 - **Granger ADF results were console-only (fixed v0.0.16):** `run_adf_test()` ran the ADF stationarity test but only logged results to stdout. Enhanced to return structured results (stationary bool, ADF statistic, p-value) and added a `"stationarity"` section to `granger.json` so downstream consumers can see which cities' return series are non-stationary. Confirms Sydney p=0.1249 (non-stationary) while Melbourne, Brisbane, Perth are stationary.
+- **public/data in .gitignore but tracked (fixed v0.0.17):** `public/data/` is listed in `.gitignore` but the files were previously force-added and tracked. After v0.0.16 added stationarity and n_init to `data/` originals, the `public/data/` copies were not committed. Fixed in v0.0.17 by force-adding the synced copies. Future pipeline runs that update `data/` must also `git add -f public/data/` to keep them in sync.
+- **Full spec compliance verified (v0.0.17):** All 6 specs reviewed and confirmed fully implemented. All D3 modules have both hover and focus tooltip events for accessibility.
+- **Toggle label mismatch (fixed v0.0.18):** XGBoostSection toggle read "Group lag variants" but spec says "Group by category". Fixed to match spec.
+- **REGIME_COLORS_SOLID untested (fixed v0.0.18):** Added test coverage for solid regime colors. Test count now 16 (up from 15).
 
 ---
 
