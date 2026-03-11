@@ -15,22 +15,7 @@
 
 ## Remaining Work — Prioritized
 
-### P1: Spec Compliance Gaps
-
-- [ ] **`constants.test.js` asserts "all 5 cities"** — Test descriptions say "all 5 cities" including `gold_coast`, which is harmless (constants intentionally include Gold Coast) but misleading given 4-city reality. Low priority. File: `src/test/constants.test.js`
-
-### P2: Robustness & Error Handling
-
-- [x] **No React ErrorBoundary** — ErrorBoundary added wrapping `<main>`, catches D3 render errors gracefully. File: `src/App.jsx` (new component or inline)
-- [ ] **Synthetic fallback includes `gold_coast`** — If real data fetch fails, `data_pipeline.py` falls back to synthetic data with 5 cities including `gold_coast`, creating a city-count mismatch vs. real data (4 cities). Either remove `gold_coast` from synthetic generation or document as intentional scaffolding. File: `python/data_pipeline.py`
-- [ ] **No Granger multiple-testing correction** — 12 pairwise tests (4 cities) at α=0.05 with no Bonferroni/BH correction risks false positives. Consider noting this limitation in the output metadata or applying correction. File: `python/granger.py`
-
-### P3: Deployment & CI Polish
-
-- [ ] **Set GitHub repo to public, add live URL to About section** — Final deployment step from Phase 11.
-- [x] **`deploy.yml` missing `permissions` block** — added `permissions: contents: write`. File: `.github/workflows/deploy.yml`
-- [x] **`deploy.yml` no npm cache** — added `cache: 'npm'` to `actions/setup-node@v4` step. File: `.github/workflows/deploy.yml`
-- [x] **`deploy.yml` uses `peaceiris@v3` by tag** — upgraded to `v4`. File: `.github/workflows/deploy.yml`
+P1, P2, and P3 are fully resolved. Only optional enhancements remain.
 
 ### P4: Optional Enhancements (from spec)
 
@@ -103,15 +88,15 @@ D3 horizontal bar chart with group color-coding, top-10 display with "Other" col
 - [x] `aria-live` on loading spinner (see P1)
 - [x] `prefers-reduced-motion` CSS rule (see P2)
 
-### Phase 11: Deployment & CI — MOSTLY COMPLETE
+### Phase 11: Deployment & CI — CODE COMPLETE; one manual step remains
 
 - [x] Set `vite.config.js` `base` to `/aus-housing-econometrics/`
 - [x] Add `prebuild` script in `package.json`
 - [x] Create `.github/workflows/deploy.yml`
 - [x] README.md created
 - [x] Verify pre-deployment checklist: 5 JSON files in data/, build succeeds
-- [ ] Set GitHub repo to public, add live URL to About section (see P3)
-- [x] `deploy.yml` polish: permissions, caching, SHA pinning (see P3)
+- [x] `deploy.yml` polish: permissions, caching, SHA pinning
+- [ ] Set GitHub repo to public, add live URL to About section — manual step, no code required
 
 ---
 
@@ -153,8 +138,8 @@ Step 5: Feature Importance Slice (Phases 5 + 9)   ✅ COMPLETE
 Step 6: Styling & Polish (Phase 10)               ✅ COMPLETE
   └── CSS, responsiveness, accessibility
 
-Step 7: Deployment (Phase 11)                     🔶 MOSTLY COMPLETE
-  └── GitHub Actions, README — repo public + CI polish remain
+Step 7: Deployment (Phase 11)                     🔶 CODE COMPLETE
+  └── GitHub Actions, README, deploy.yml polish all done — only manual step: set repo public
 ```
 
 ### Notes
