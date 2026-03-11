@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { renderRegimeTimeline } from '../d3/regimeTimeline.js';
+import { renderRegimeTimeline, renderRegimeTimelineOverlay } from '../d3/regimeTimeline.js';
 import { renderTransitionMatrix } from '../d3/transitionMatrix.js';
 import { CITY_NAMES } from '../utils/constants.js';
 
@@ -8,17 +8,22 @@ export default function HMMSection({ data, prices }) {
   const matrixSvgRef = useRef(null);
   const containerRef = useRef(null);
   const [selectedCity, setSelectedCity] = useState('sydney');
+  const [compareMode, setCompareMode] = useState(false);
 
   const cities = prices ? prices.cities : [];
 
   const renderCharts = useCallback(() => {
     if (data && prices && svgRef.current) {
-      renderRegimeTimeline(svgRef.current, data, prices, selectedCity);
+      if (compareMode) {
+        renderRegimeTimelineOverlay(svgRef.current, data, prices, cities);
+      } else {
+        renderRegimeTimeline(svgRef.current, data, prices, selectedCity);
+      }
     }
-    if (data && matrixSvgRef.current) {
+    if (!compareMode && data && matrixSvgRef.current) {
       renderTransitionMatrix(matrixSvgRef.current, data, selectedCity);
     }
-  }, [data, prices, selectedCity]);
+  }, [data, prices, selectedCity, compareMode, cities]);
 
   useEffect(() => {
     renderCharts();
@@ -48,39 +53,57 @@ export default function HMMSection({ data, prices }) {
         how each city has cycled through these phases over the past two decades.
       </p>
       <div className="section__controls">
-        <label htmlFor="hmm-city-select" className="sr-only">Select city</label>
-        <select
-          id="hmm-city-select"
-          className="city-selector"
-          value={selectedCity}
-          onChange={(e) => setSelectedCity(e.target.value)}
-        >
-          {cities.map((city) => (
-            <option key={city} value={city}>
-              {CITY_NAMES[city] || city}
-            </option>
-          ))}
-        </select>
+        {!compareMode && (
+          <>
+            <label htmlFor="hmm-city-select" className="sr-only">Select city</label>
+            <select
+              id="hmm-city-select"
+              className="city-selector"
+              value={selectedCity}
+              onChange={(e) => setSelectedCity(e.target.value)}
+            >
+              {cities.map((city) => (
+                <option key={city} value={city}>
+                  {CITY_NAMES[city] || city}
+                </option>
+              ))}
+            </select>
+          </>
+        )}
+        <label className="toggle-label">
+          <input
+            type="checkbox"
+            checked={compareMode}
+            onChange={(e) => setCompareMode(e.target.checked)}
+          />
+          Compare all cities
+        </label>
       </div>
       <div className="chart-container">
         <svg
           ref={svgRef}
-          aria-label={`HMM regime timeline for ${CITY_NAMES[selectedCity] || selectedCity}`}
+          aria-label={
+            compareMode
+              ? 'HMM regime timeline comparing all cities'
+              : `HMM regime timeline for ${CITY_NAMES[selectedCity] || selectedCity}`
+          }
           role="img"
         />
       </div>
-      <div className="chart-container chart-container--matrix">
-        <h3 className="chart-container__label">Transition Probabilities</h3>
-        <p className="chart-container__sublabel">
-          Each cell shows the probability of moving from one market regime (row) to
-          another (column) in the next quarter.
-        </p>
-        <svg
-          ref={matrixSvgRef}
-          aria-label={`Transition probability matrix for ${CITY_NAMES[selectedCity] || selectedCity}`}
-          role="img"
-        />
-      </div>
+      {!compareMode && (
+        <div className="chart-container chart-container--matrix">
+          <h3 className="chart-container__label">Transition Probabilities</h3>
+          <p className="chart-container__sublabel">
+            Each cell shows the probability of moving from one market regime (row) to
+            another (column) in the next quarter.
+          </p>
+          <svg
+            ref={matrixSvgRef}
+            aria-label={`Transition probability matrix for ${CITY_NAMES[selectedCity] || selectedCity}`}
+            role="img"
+          />
+        </div>
+      )}
     </section>
   );
 }

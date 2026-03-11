@@ -1,6 +1,166 @@
 import * as d3 from 'd3';
 import { CITY_COLORS, CITY_NAMES, REGIME_COLORS, REGIME_COLORS_SOLID } from '../utils/constants.js';
 
+/**
+ * Overlay multiple cities' normalised price index lines on a single chart.
+ * No regime bands are drawn — the purpose is cross-city comparison.
+ * Each line uses the city's standard colour from CITY_COLORS.
+ */
+export function renderRegimeTimelineOverlay(svgEl, hmmData, pricesData, cities) {
+  const width = svgEl.parentElement?.clientWidth || 800;
+  const height = 380;
+  const margin = { top: 30, right: 20, bottom: 40, left: 55 };
+
+  const svg = d3.select(svgEl)
+    .attr('width', width)
+    .attr('height', height)
+    .attr('viewBox', `0 0 ${width} ${height}`);
+
+  svg.selectAll('*').remove();
+
+  if (!cities || cities.length === 0) return;
+
+  const dates = pricesData.dates.map(parseQuarter);
+
+  // Normalise each city's index to 100 at start date for fair comparison
+  const normalised = {};
+  cities.forEach(city => {
+    const raw = pricesData.series[city]?.index;
+    if (!raw || raw.length === 0) return;
+    const base = raw[0];
+    normalised[city] = raw.map(v => (v / base) * 100);
+  });
+
+  const activeCities = cities.filter(c => normalised[c]);
+  if (activeCities.length === 0) return;
+
+  // Tooltip
+  let tooltip = d3.select('body').select('.d3-tooltip.hmm-overlay-tip');
+  if (tooltip.empty()) {
+    tooltip = d3.select('body').append('div')
+      .attr('class', 'd3-tooltip hmm-overlay-tip')
+      .style('opacity', 0);
+  }
+
+  // Compute global Y domain across all selected cities
+  const allValues = activeCities.flatMap(c => normalised[c]);
+  const yMin = d3.min(allValues) * 0.95;
+  const yMax = d3.max(allValues) * 1.05;
+
+  const x = d3.scaleTime()
+    .domain(d3.extent(dates))
+    .range([margin.left, width - margin.right]);
+
+  const y = d3.scaleLinear()
+    .domain([yMin, yMax])
+    .range([height - margin.bottom, margin.top]);
+
+  const g = svg.append('g');
+
+  // Draw a line for each city
+  activeCities.forEach(city => {
+    const values = normalised[city];
+    const line = d3.line()
+      .x((_, i) => x(dates[i]))
+      .y(d => y(d))
+      .defined(d => d != null);
+
+    g.append('path')
+      .datum(values)
+      .attr('fill', 'none')
+      .attr('stroke', CITY_COLORS[city] || '#333')
+      .attr('stroke-width', 2)
+      .attr('d', line);
+  });
+
+  // Vertical hover line + crosshair tooltip showing all cities' values
+  const hoverLine = g.append('line')
+    .attr('stroke', '#9ca3af')
+    .attr('stroke-width', 1)
+    .attr('stroke-dasharray', '4,3')
+    .attr('y1', margin.top)
+    .attr('y2', height - margin.bottom)
+    .style('opacity', 0);
+
+  // Invisible overlay rect for mouse tracking
+  g.append('rect')
+    .attr('x', margin.left)
+    .attr('y', margin.top)
+    .attr('width', width - margin.left - margin.right)
+    .attr('height', height - margin.top - margin.bottom)
+    .attr('fill', 'transparent')
+    .style('cursor', 'crosshair')
+    .on('mousemove', (event) => {
+      const [mx] = d3.pointer(event);
+      const dateAtMouse = x.invert(mx);
+      // Find nearest quarter index
+      const bisect = d3.bisector(d => d).left;
+      let idx = bisect(dates, dateAtMouse, 1);
+      if (idx >= dates.length) idx = dates.length - 1;
+      if (idx > 0 && (dateAtMouse - dates[idx - 1]) < (dates[idx] - dateAtMouse)) {
+        idx = idx - 1;
+      }
+      const snappedX = x(dates[idx]);
+      hoverLine.attr('x1', snappedX).attr('x2', snappedX).style('opacity', 1);
+
+      const rows = activeCities.map(city => {
+        const val = normalised[city][idx];
+        const color = CITY_COLORS[city] || '#333';
+        return `<span style="color:${color}"><strong>${CITY_NAMES[city]}</strong>: ${val.toFixed(1)}</span>`;
+      }).join('<br/>');
+
+      tooltip.transition().duration(100).style('opacity', 1);
+      tooltip.html(`<strong>${pricesData.dates[idx]}</strong><br/>${rows}`)
+        .style('left', (event.pageX + 14) + 'px')
+        .style('top', (event.pageY - 14) + 'px');
+    })
+    .on('mouseout', () => {
+      hoverLine.style('opacity', 0);
+      tooltip.transition().duration(150).style('opacity', 0);
+    });
+
+  // Axes
+  g.append('g')
+    .attr('transform', `translate(0,${height - margin.bottom})`)
+    .call(d3.axisBottom(x).ticks(width > 500 ? 10 : 5))
+    .selectAll('text')
+    .attr('font-size', '0.75rem');
+
+  g.append('g')
+    .attr('transform', `translate(${margin.left},0)`)
+    .call(d3.axisLeft(y).ticks(6))
+    .selectAll('text')
+    .attr('font-size', '0.75rem');
+
+  // Y-axis label
+  g.append('text')
+    .attr('transform', 'rotate(-90)')
+    .attr('x', -(height / 2))
+    .attr('y', 14)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', '0.75rem')
+    .attr('fill', '#6b7280')
+    .text('Normalised Index (100 = start)');
+
+  // Legend — horizontal, top of chart
+  const legend = g.append('g')
+    .attr('transform', `translate(${margin.left + 10}, ${margin.top + 5})`);
+
+  activeCities.forEach((city, i) => {
+    const lg = legend.append('g').attr('transform', `translate(${i * 110}, 0)`);
+    lg.append('line')
+      .attr('x1', 0).attr('y1', 6)
+      .attr('x2', 14).attr('y2', 6)
+      .attr('stroke', CITY_COLORS[city])
+      .attr('stroke-width', 2);
+    lg.append('text')
+      .attr('x', 18).attr('y', 10)
+      .attr('font-size', '0.7rem')
+      .attr('fill', '#4b5563')
+      .text(CITY_NAMES[city] || city);
+  });
+}
+
 function parseQuarter(q) {
   // "2005-Q1" → Date(2005, 0, 1)
   const [year, qn] = q.split('-Q');

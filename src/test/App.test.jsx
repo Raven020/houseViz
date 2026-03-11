@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import React from 'react';
 import App from '../App.jsx';
 
@@ -11,7 +11,7 @@ vi.mock('../utils/dataLoader.js', () => ({
 // Mock D3 modules to avoid SVG rendering issues in jsdom
 vi.mock('../d3/grangerGraph.js', () => ({ renderGrangerGraph: vi.fn() }));
 vi.mock('../d3/grangerHeatmap.js', () => ({ renderGrangerHeatmap: vi.fn() }));
-vi.mock('../d3/regimeTimeline.js', () => ({ renderRegimeTimeline: vi.fn() }));
+vi.mock('../d3/regimeTimeline.js', () => ({ renderRegimeTimeline: vi.fn(), renderRegimeTimelineOverlay: vi.fn() }));
 vi.mock('../d3/transitionMatrix.js', () => ({ renderTransitionMatrix: vi.fn() }));
 vi.mock('../d3/featureImportanceChart.js', () => ({ renderFeatureImportanceChart: vi.fn() }));
 
@@ -96,5 +96,30 @@ describe('App', () => {
       expect(screen.getByText('Unable to load data')).toBeInTheDocument();
       expect(screen.getByText('Network error')).toBeInTheDocument();
     });
+  });
+
+  it('shows compare toggle in HMM section and hides city selector when enabled', async () => {
+    loadAllData.mockResolvedValue(mockData);
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Market Regimes/)).toBeInTheDocument();
+    });
+
+    // Compare toggle should be present
+    const toggle = screen.getByLabelText('Compare all cities');
+    expect(toggle).toBeInTheDocument();
+    expect(toggle.checked).toBe(false);
+
+    // HMM city selector should be visible
+    const hmmSelect = document.getElementById('hmm-city-select');
+    expect(hmmSelect).toBeInTheDocument();
+
+    // Enable compare mode
+    fireEvent.click(toggle);
+    expect(toggle.checked).toBe(true);
+
+    // HMM city selector should be hidden
+    expect(document.getElementById('hmm-city-select')).not.toBeInTheDocument();
   });
 });
