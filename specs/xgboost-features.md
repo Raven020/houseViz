@@ -95,16 +95,17 @@ The component filename (`XGBoostSection.jsx`) and data key (`xgboost`) in the da
     "method": "LightGBM Regressor",
     "n_estimators": 200,
     "max_depth": 4,
-    "train_fraction": 0.75
+    "validation": "walk-forward CV",
+    "min_train_size": 20
   },
   "cities": {
     "sydney": {
-      "r_squared": 0.45,
+      "r_squared": -0.01,
       "rmse": 0.012,
-      "r_squared_train": 0.78,
+      "r_squared_train": 0.76,
       "rmse_train": 0.008,
-      "n_train": 45,
-      "n_test": 15,
+      "n_train": 64,
+      "n_folds": 23,
       "features": [
         { "name": "cash_rate_change_lag1", "importance": 0.22, "group": "Interest Rates" },
         { "name": "unemployment_lag2", "importance": 0.18, "group": "Employment" },
@@ -119,6 +120,8 @@ The component filename (`XGBoostSection.jsx`) and data key (`xgboost`) in the da
   }
 }
 ```
+
+> **Note:** The schema uses walk-forward CV fields (`validation`, `min_train_size`, `n_folds`) rather than a single train/test split (`train_fraction`, `n_test`). Walk-forward CV is the preferred validation approach, providing ~40+ true out-of-sample predictions per city. `r_squared` is the out-of-fold R², which can be negative for cities where macro features have limited predictive power (e.g. Sydney).
 
 ## Visualisation
 

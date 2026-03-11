@@ -165,10 +165,10 @@ def test_xgboost_json():
         assert city_data["r_squared"] < 0.99, \
             f"{city} out-of-sample R²={city_data['r_squared']} suspiciously high"
 
-        # Train/test split metadata
+        # Walk-forward CV metadata
         assert "n_train" in city_data, f"{city} missing n_train"
-        assert "n_test" in city_data, f"{city} missing n_test"
-        assert city_data["n_test"] > 0, f"{city} n_test must be > 0"
+        assert "n_folds" in city_data, f"{city} missing n_folds"
+        assert city_data["n_folds"] > 0, f"{city} n_folds must be > 0"
 
         # Feature importances should sum to ~1.0
         total_imp = sum(f["importance"] for f in city_data["features"])
