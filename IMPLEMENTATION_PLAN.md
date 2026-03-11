@@ -15,14 +15,18 @@
 
 ## Remaining Work — Prioritized
 
-P1, P2, and P3 are fully resolved. Only optional enhancements remain.
+All priorities (P0-P5) are fully resolved. Full spec compliance audit completed at v0.0.7.
 
-### P4: Optional Enhancements (from spec)
+### P4: Optional Enhancements (from spec) — ALL COMPLETE
 
-- [x] **Walk-forward cross-validation for LightGBM** — Implemented expanding-window walk-forward CV (min 20 obs, ~43 folds). Replaces single 75/25 split with robust OOF metrics. Feature importances averaged across all folds for stability. Frontend updated to show OOF R², Train R², and fold count. Brisbane OOF R² improved from -0.098 to 0.23.
-- [x] **HMM multi-city overlay** — Implemented "Compare all cities" checkbox toggle in HMMSection. When enabled, overlays all cities' normalised price index lines (base 100) on a single chart with crosshair tooltip showing all values at each quarter. Regime bands and transition matrix are hidden in compare mode to avoid clutter. New `renderRegimeTimelineOverlay()` function in `regimeTimeline.js`. Test added for toggle behaviour.
-- [x] **LightGBM cross-city comparison viz** — Vertical bar chart showing each city's #1 most important feature side by side, color-coded by city. New `src/d3/crossCityComparison.js` module integrated into XGBoostSection below the per-city chart. Hover tooltips show feature name, importance, and group.
-- [x] **LightGBM category aggregation toggle** — "Group lag variants" checkbox in XGBoostSection. When enabled, aggregates all lagged variants of the same base feature (e.g. `cash_rate_lag1`, `cash_rate_lag2`, `cash_rate_lag4`) into a single bar. Implemented via `aggregateByCategory` option in `renderFeatureImportanceChart()`.
+- [x] Walk-forward cross-validation for LightGBM
+- [x] HMM multi-city overlay
+- [x] LightGBM cross-city comparison viz
+- [x] LightGBM category aggregation toggle
+
+### P5: Spec Compliance Audit (v0.0.7)
+
+- [x] **Footer: GitHub link + author attribution** — Added GitHub README link to methodology section and author name with LinkedIn link to meta section, per `specs/frontend.md` lines 73-75. Previously the only unimplemented spec requirement.
 
 ---
 
