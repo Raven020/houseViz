@@ -5,7 +5,7 @@ export default function Header() {
     <header className="header">
       <h1 className="header__title">Australian Housing Market Econometrics</h1>
       <p className="header__subtitle">
-        An interactive exploration of price dynamics across major Australian cities
+        An interactive exploration of price dynamics across 4 cities
       </p>
       <p className="header__intro">
         This project applies three econometric techniques to quarterly housing price data

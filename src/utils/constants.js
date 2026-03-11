@@ -3,7 +3,6 @@ export const CITY_COLORS = {
   melbourne: '#7C3AED',
   brisbane: '#B45309',
   perth: '#DC2626',
-  gold_coast: '#047857',
 };
 
 export const CITY_NAMES = {
@@ -11,7 +10,6 @@ export const CITY_NAMES = {
   melbourne: 'Melbourne',
   brisbane: 'Brisbane',
   perth: 'Perth',
-  gold_coast: 'Gold Coast',
 };
 
 export const REGIME_COLORS = {

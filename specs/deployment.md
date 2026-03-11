@@ -5,7 +5,7 @@ Deploy the static React app to GitHub Pages. The Python analysis pipeline runs l
 
 ## Repository Structure
 ```
-aus-housing-econometrics/
+houseViz/
 ├── python/                  # Analysis scripts
 │   ├── data_pipeline.py
 │   ├── granger.py
@@ -33,7 +33,7 @@ aus-housing-econometrics/
 ```js
 // vite.config.js
 export default {
-  base: '/aus-housing-econometrics/',
+  base: '/houseViz/',
   build: {
     outDir: 'dist'
   }
@@ -42,7 +42,7 @@ export default {
 
 ### Deployment Method
 - Use `gh-pages` npm package or GitHub Actions
-- Target URL: `https://<username>.github.io/aus-housing-econometrics/`
+- Target URL: `https://<username>.github.io/houseViz/`
 
 ### GitHub Actions Workflow (recommended)
 ```yaml

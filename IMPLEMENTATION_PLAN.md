@@ -15,14 +15,13 @@
 
 ## Remaining Work — Prioritized
 
-All priorities (P0-P8) are fully resolved. Full spec compliance audit completed at v0.0.9. Test/spec hygiene pass at v0.0.10.
+All priorities (P0-P9) are fully resolved. Full spec compliance audit completed at v0.0.9. Test/spec hygiene pass at v0.0.10. Spec alignment pass at v0.0.11.
 
-### P8: Test & Spec Hygiene (v0.0.10)
+### P9: Spec Alignment (v0.0.11)
 
-- [x] **Test mock data included `gold_coast`** — `App.test.jsx` mock had 5 cities including gold_coast, but actual data only has 4 cities. Removed gold_coast from mock to match real dataset shape.
-- [x] **Frontend spec said "CSS Modules or Tailwind CSS"** — Corrected to "CSS (global stylesheet)" to match implementation.
-- [x] **Frontend spec said "3 JSON files"** — Corrected to "4 JSON files (prices, granger, hmm, xgboost)".
-- [x] **Frontend spec missing Footer GitHub link** — Added GitHub repository link to Footer.jsx spec.
+- [x] **`gold_coast` still in `constants.js`** — `CITY_COLORS` and `CITY_NAMES` had gold_coast entries despite Gold Coast being dropped. Removed. Updated `constants.test.js` to assert exactly 4 cities.
+- [x] **Header subtitle didn't match spec** — Said "across major Australian cities" instead of spec's "across 4 cities". Fixed.
+- [x] **Vite base path mismatch** — Spec assumed repo name `aus-housing-econometrics` but actual GitHub repo is `houseViz`. Base path `/aus-housing-econometrics/` would cause all assets to 404 on GitHub Pages. Changed to `/houseViz/`. Updated `deployment.md` spec to match.
 - [n/a] **Footer author/LinkedIn placeholders** — Contain "Developer" / `linkedin.com/in/developer`. Cannot fix without knowing real author identity. Noted for manual update.
 
 ---
