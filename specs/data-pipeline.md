@@ -1,16 +1,15 @@
 # Data Pipeline Specification
 
 ## Overview
-Source, clean, and prepare Australian housing price data for 5 cities, along with macroeconomic indicators, outputting structured JSON files consumed by the frontend and the three analysis modules.
+Source, clean, and prepare Australian housing price data for 4 cities, along with macroeconomic indicators, outputting structured JSON files consumed by the frontend and the three analysis modules.
 
 ## Cities
 - Sydney
 - Melbourne
 - Brisbane
 - Perth
-- Gold Coast
 
-> **Gold Coast policy:** Attempt to source Gold Coast data from ABS SA4-level tables (the "Gold Coast" SA4 region). If sufficient suburb-level or SA4 data exists to build a representative picture, include it. If no usable data is available, **drop Gold Coast entirely** and proceed with 4 cities. Do not fabricate or proxy Gold Coast data — this project uses real data only. Document the outcome and source used.
+> **Note:** Gold Coast was excluded because no usable SA4-level data exists for it in ABS Cat. 6416.0. The project uses real data only — Gold Coast data was not fabricated or proxied.
 
 ## Data Sources
 
@@ -18,7 +17,7 @@ Source, clean, and prepare Australian housing price data for 5 cities, along wit
 - **Primary:** ABS Cat. 6416.0 — Residential Property Price Indexes (RPPI)
 - **Granularity:** Quarterly (ABS standard cadence)
 - **Metric:** Established house price index (index numbers, base period aligned)
-- **Gold Coast:** ABS SA4-level tables if available; otherwise drop Gold Coast from the city list (see Gold Coast policy above)
+- **Coverage:** Sydney, Melbourne, Brisbane, Perth — all available in ABS Cat. 6416.0 capital city tables
 
 ### Macroeconomic Indicators
 | Indicator | Source | Frequency |
@@ -29,7 +28,7 @@ Source, clean, and prepare Australian housing price data for 5 cities, along wit
 
 ## Date Range
 - **Target:** Q1 2005 – latest available quarter
-- If a series starts later (e.g., Gold Coast), align all series to the longest common overlap and document any truncation.
+- Align all series to the longest common overlap and document any truncation.
 
 ## Processing Steps
 1. **Download** raw CSV/Excel files from ABS and RBA.
@@ -50,14 +49,13 @@ Source, clean, and prepare Australian housing price data for 5 cities, along wit
     "base_period": "2011-12 = 100",
     "frequency": "quarterly"
   },
-  "cities": ["sydney", "melbourne", "brisbane", "perth", "gold_coast"],  // gold_coast omitted if data unavailable
+  "cities": ["sydney", "melbourne", "brisbane", "perth"],
   "dates": ["2005-Q1", "2005-Q2", "..."],
   "series": {
     "sydney": { "index": [100.0, 102.3, "..."], "returns": [null, 0.023, "..."] },
     "melbourne": { "...": "..." },
     "brisbane": { "...": "..." },
-    "perth": { "...": "..." },
-    "gold_coast": { "...": "..." }
+    "perth": { "...": "..." }
   }
 }
 ```

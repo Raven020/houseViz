@@ -32,7 +32,7 @@ All user-facing references to "XGBoost" should be updated to "LightGBM":
 The component filename (`XGBoostSection.jsx`) and data key (`xgboost`) in the data loader may optionally be renamed but are not required to change since they are internal identifiers.
 
 ## Input
-- `data/prices.json` — quarterly returns for all 5 cities (target variable)
+- `data/prices.json` — quarterly returns for all 4 cities (target variable)
 - `data/macro.json` — macroeconomic indicators (features)
 
 ## Feature Engineering
@@ -60,7 +60,7 @@ The component filename (`XGBoostSection.jsx`) and data key (`xgboost`) in the da
 ## Model
 
 ### Method
-- One LightGBM regressor per city (5 models total)
+- One LightGBM regressor per city (4 models total)
 - Library: `lightgbm.LGBMRegressor`
 
 ### Parameters
@@ -115,8 +115,7 @@ The component filename (`XGBoostSection.jsx`) and data key (`xgboost`) in the da
     },
     "melbourne": { "...": "..." },
     "brisbane": { "...": "..." },
-    "perth": { "...": "..." },
-    "gold_coast": { "...": "..." }
+    "perth": { "...": "..." }
   }
 }
 ```

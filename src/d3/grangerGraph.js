@@ -7,7 +7,6 @@ const GEO_POSITIONS = {
   melbourne: { x: 0.72, y: 0.75 },
   brisbane: { x: 0.85, y: 0.35 },
   perth: { x: 0.15, y: 0.55 },
-  gold_coast: { x: 0.90, y: 0.42 },
 };
 
 export function renderGrangerGraph(svgEl, data, prices, options = {}) {

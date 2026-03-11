@@ -4,7 +4,7 @@
 Fit a Gaussian Hidden Markov Model to each city's housing price returns to identify latent market regimes (e.g., boom, stagnation, correction). Regimes are overlaid as coloured bands on a price timeline.
 
 ## Input
-- `data/prices.json` — quarterly returns series for all 5 cities
+- `data/prices.json` — quarterly returns series for all 4 cities
 
 ## Analysis
 
@@ -60,8 +60,7 @@ For each city:
     },
     "melbourne": { "...": "..." },
     "brisbane": { "...": "..." },
-    "perth": { "...": "..." },
-    "gold_coast": { "...": "..." }
+    "perth": { "...": "..." }
   },
   "dates": ["2005-Q1", "2005-Q2", "..."]
 }
@@ -77,7 +76,7 @@ For each city:
   - Boom: green (semi-transparent)
   - Stagnation: amber/yellow
   - Correction: red/pink
-- **City selector:** Dropdown or tab bar to switch between cities (default: Sydney)
+- **City selector:** Dropdown or tab bar to switch between 4 cities (default: Sydney)
 
 ### Interaction
 - Hover on a regime band: tooltip showing regime label, duration, average return during that period
