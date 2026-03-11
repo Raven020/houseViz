@@ -73,6 +73,15 @@ export function renderFeatureImportanceChart(svgEl, data, city) {
 
   const g = svg.append('g');
 
+  function buildBarTooltipHTML(d) {
+    return (
+      `<strong>${humanReadableName(d.name)}</strong><br/>` +
+      `${getDescription(d.name)}<br/>` +
+      `Importance: ${(d.importance * 100).toFixed(1)}%<br/>` +
+      `Group: ${d.group}`
+    );
+  }
+
   // Bars
   g.selectAll('.bar')
     .data(features)
@@ -84,20 +93,32 @@ export function renderFeatureImportanceChart(svgEl, data, city) {
     .attr('height', y.bandwidth())
     .attr('fill', d => FEATURE_GROUP_COLORS[d.group] || '#9ca3af')
     .attr('rx', 3)
+    .attr('tabindex', '0')
+    .attr('role', 'img')
+    .attr('aria-label', d =>
+      `${humanReadableName(d.name)}, importance ${(d.importance * 100).toFixed(1)}%, group ${d.group}`
+    )
     .style('cursor', 'pointer')
     .on('mouseover', (event, d) => {
       tooltip.transition().duration(150).style('opacity', 1);
-      tooltip.html(
-        `<strong>${humanReadableName(d.name)}</strong><br/>` +
-        `${getDescription(d.name)}<br/>` +
-        `Importance: ${(d.importance * 100).toFixed(1)}%<br/>` +
-        `Group: ${d.group}`
-      )
+      tooltip.html(buildBarTooltipHTML(d))
         .style('left', (event.pageX + 12) + 'px')
         .style('top', (event.pageY - 12) + 'px');
       d3.select(event.target).attr('opacity', 0.8);
     })
     .on('mouseout', (event) => {
+      tooltip.transition().duration(150).style('opacity', 0);
+      d3.select(event.target).attr('opacity', 1);
+    })
+    .on('focus', (event, d) => {
+      const domRect = event.target.getBoundingClientRect();
+      tooltip.transition().duration(150).style('opacity', 1);
+      tooltip.html(buildBarTooltipHTML(d))
+        .style('left', (domRect.right + window.scrollX + 12) + 'px')
+        .style('top', (domRect.top + window.scrollY) + 'px');
+      d3.select(event.target).attr('opacity', 0.8);
+    })
+    .on('blur', (event) => {
       tooltip.transition().duration(150).style('opacity', 0);
       d3.select(event.target).attr('opacity', 1);
     });

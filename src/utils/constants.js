@@ -1,9 +1,9 @@
 export const CITY_COLORS = {
   sydney: '#2563EB',
   melbourne: '#7C3AED',
-  brisbane: '#D97706',
+  brisbane: '#B45309',
   perth: '#DC2626',
-  gold_coast: '#059669',
+  gold_coast: '#047857',
 };
 
 export const CITY_NAMES = {
@@ -29,6 +29,6 @@ export const REGIME_COLORS_SOLID = {
 export const FEATURE_GROUP_COLORS = {
   'Interest Rates': '#2563EB',
   'Employment': '#7C3AED',
-  'Inflation': '#D97706',
-  'Cross-City': '#059669',
+  'Inflation': '#B45309',
+  'Cross-City': '#047857',
 };
