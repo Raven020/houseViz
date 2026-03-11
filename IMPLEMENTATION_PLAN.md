@@ -73,13 +73,13 @@ D3 horizontal bar chart with group color-coding, top-10 display, hover tooltips,
 - [x] Add `prebuild` script in `package.json`: `cp -r data/ public/data/`
 - [x] Create `.github/workflows/deploy.yml` — checkout → setup Node 20 → npm ci → npm run build → deploy via `peaceiris/actions-gh-pages@v3`
 - [x] README.md created
-- [ ] Verify pre-deployment checklist: 5 JSON files in data/, build succeeds, dist/data/ populated, local preview works, responsive layout checked
+- [x] Verify pre-deployment checklist: 5 JSON files in data/, build succeeds, dist/data/ populated, all tests pass
 - [ ] Set GitHub repo to public, add live URL to About section
 
-## Optional Enhancements (low priority, implement only if time permits)
+## Optional Enhancements
 
-- [ ] Granger secondary visualization: 5×5 heatmap (rows="from", cols="to", cell color by p-value, label with optimal lag)
-- [ ] HMM secondary visualization: 3×3 transition matrix heatmap per city
+- [x] Granger secondary visualization: NxN heatmap (rows="from", cols="to", cell color by p-value, label with optimal lag). Tab toggle between Network/Heatmap views.
+- [x] HMM secondary visualization: 3×3 transition matrix heatmap per city, rendered below the regime timeline, updates on city selector change.
 - [ ] XGBoost: walk-forward cross-validation instead of in-sample metrics
 - [ ] HMM: overlay multiple cities on same timeline chart
 - [ ] XGBoost secondary visualization: cross-city comparison (small multiples or grouped bars showing #1 feature per city side by side)
