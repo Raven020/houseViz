@@ -1,0 +1,105 @@
+{
+  "meta": {
+    "method": "Granger causality (F-test)",
+    "max_lag": 8,
+    "significance": 0.05
+  },
+  "results": [
+    {
+      "from": "brisbane",
+      "to": "melbourne",
+      "optimal_lag": 4,
+      "p_value": 0.054375,
+      "f_statistic": 2.4836,
+      "significant": false
+    },
+    {
+      "from": "brisbane",
+      "to": "perth",
+      "optimal_lag": 6,
+      "p_value": 0.010542,
+      "f_statistic": 3.1736,
+      "significant": true
+    },
+    {
+      "from": "brisbane",
+      "to": "sydney",
+      "optimal_lag": 4,
+      "p_value": 0.094925,
+      "f_statistic": 2.089,
+      "significant": false
+    },
+    {
+      "from": "melbourne",
+      "to": "brisbane",
+      "optimal_lag": 5,
+      "p_value": 0.12886,
+      "f_statistic": 1.8032,
+      "significant": false
+    },
+    {
+      "from": "melbourne",
+      "to": "perth",
+      "optimal_lag": 5,
+      "p_value": 0.048891,
+      "f_statistic": 2.4105,
+      "significant": true
+    },
+    {
+      "from": "melbourne",
+      "to": "sydney",
+      "optimal_lag": 4,
+      "p_value": 0.157332,
+      "f_statistic": 1.7276,
+      "significant": false
+    },
+    {
+      "from": "perth",
+      "to": "brisbane",
+      "optimal_lag": 3,
+      "p_value": 0.047762,
+      "f_statistic": 2.8051,
+      "significant": true
+    },
+    {
+      "from": "perth",
+      "to": "melbourne",
+      "optimal_lag": 6,
+      "p_value": 0.134946,
+      "f_statistic": 1.7275,
+      "significant": false
+    },
+    {
+      "from": "perth",
+      "to": "sydney",
+      "optimal_lag": 6,
+      "p_value": 0.52359,
+      "f_statistic": 0.8703,
+      "significant": false
+    },
+    {
+      "from": "sydney",
+      "to": "brisbane",
+      "optimal_lag": 3,
+      "p_value": 0.250492,
+      "f_statistic": 1.4057,
+      "significant": false
+    },
+    {
+      "from": "sydney",
+      "to": "melbourne",
+      "optimal_lag": 7,
+      "p_value": 0.088461,
+      "f_statistic": 1.9201,
+      "significant": false
+    },
+    {
+      "from": "sydney",
+      "to": "perth",
+      "optimal_lag": 3,
+      "p_value": 0.032667,
+      "f_statistic": 3.1271,
+      "significant": true
+    }
+  ]
+}
