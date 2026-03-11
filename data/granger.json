@@ -2,7 +2,8 @@
   "meta": {
     "method": "Granger causality (F-test)",
     "max_lag": 8,
-    "significance": 0.05
+    "significance": 0.05,
+    "note": "No multiple-testing correction applied. With 12 tests at \u03b1=0.05, expect ~0.6 false positives by chance."
   },
   "results": [
     {

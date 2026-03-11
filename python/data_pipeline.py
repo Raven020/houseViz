@@ -565,7 +565,7 @@ def main():
 
     if use_synthetic:
         log.info("Using synthetic data (--synthetic flag)")
-        cities = ["sydney", "melbourne", "brisbane", "perth", "gold_coast"]
+        cities = ["sydney", "melbourne", "brisbane", "perth"]
         dates = generate_dates(2005, 2025)
         series = generate_synthetic_prices(dates, cities)
         macro_indicators = generate_synthetic_macro(dates)
@@ -581,7 +581,7 @@ def main():
         except Exception as e:
             log.error(f"\nFailed to fetch real data: {e}")
             log.info("Falling back to synthetic data...")
-            cities = ["sydney", "melbourne", "brisbane", "perth", "gold_coast"]
+            cities = ["sydney", "melbourne", "brisbane", "perth"]
             dates = generate_dates(2005, 2025)
             series = generate_synthetic_prices(dates, cities)
             macro_indicators = generate_synthetic_macro(dates)

@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { CITY_COLORS, CITY_NAMES, REGIME_COLORS, FEATURE_GROUP_COLORS } from '../utils/constants.js';
 
 describe('constants', () => {
-  it('defines colors for all 5 cities', () => {
+  it('defines colors for all cities including Gold Coast (forward-compat)', () => {
     const cities = ['sydney', 'melbourne', 'brisbane', 'perth', 'gold_coast'];
     cities.forEach(city => {
       expect(CITY_COLORS[city]).toBeDefined();
@@ -10,7 +10,7 @@ describe('constants', () => {
     });
   });
 
-  it('defines display names for all 5 cities', () => {
+  it('defines display names for all cities including Gold Coast (forward-compat)', () => {
     expect(CITY_NAMES.sydney).toBe('Sydney');
     expect(CITY_NAMES.melbourne).toBe('Melbourne');
     expect(CITY_NAMES.brisbane).toBe('Brisbane');

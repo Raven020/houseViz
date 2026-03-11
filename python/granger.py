@@ -129,6 +129,7 @@ def main():
             "method": "Granger causality (F-test)",
             "max_lag": MAX_LAG,
             "significance": SIGNIFICANCE,
+            "note": f"No multiple-testing correction applied. With {len(pairs)} tests at α={SIGNIFICANCE}, expect ~{len(pairs) * SIGNIFICANCE:.1f} false positives by chance.",
         },
         "results": [
             {
