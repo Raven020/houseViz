@@ -1,0 +1,14 @@
+Project: Australian Housing Market Econometrics Visualiser
+Goal: Build and deploy an interactive web app visualising econometric analysis of Australian housing prices, to be shared as a LinkedIn portfolio project. The builder is a software engineer looking for software engineering and technical analyst roles.
+Dataset: ABS (Australian Bureau of Statistics) freely available housing price data — 4 cities: Sydney, Melbourne, Brisbane, Perth.
+Modelling (Python, pre-computed):
+Run the following analyses in Python, export all results to static JSON files:
+
+Granger Causality Tests — inter-city price lead/lag relationships, visualised as a directed graph or heatmap
+Gaussian HMM — hidden market regimes (boom, stagnation, correction) overlaid as coloured bands on a price timeline
+XGBoost — feature importance showing which macro indicators (interest rates, CPI, unemployment) drive price movements, visualised as a feature importance chart
+
+Frontend: React + D3.js interactive web app. Reads pre-computed JSON files (no backend). The narrative flow is: Granger = relationships between cities, HMM = what state the market is in, XGBoost = what's driving it.
+Hosting: GitHub Pages (static). Target URL format: username.github.io/aus-housing-econometrics
+Scope: Keep it tight — 3 visualisations, 4 cities, pre-baked data, clean UI.
+Deliverable: A live linked demo URL to post on LinkedIn alongside a short write-up explaining the methodology and what the data reveals.
