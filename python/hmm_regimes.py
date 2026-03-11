@@ -210,6 +210,7 @@ def main():
             "method": "Gaussian HMM",
             "n_states": N_STATES,
             "covariance_type": COVARIANCE_TYPE,
+            "n_init": N_INIT,
             "regime_labels": REGIME_LABELS_3,
         },
         "cities": {},

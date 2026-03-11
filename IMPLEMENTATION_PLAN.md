@@ -51,6 +51,8 @@
 - **City ordering mismatch (fixed v0.0.14):** `data_pipeline.py` used `sorted(price_data.keys())` producing alphabetical order `["brisbane","melbourne","perth","sydney"]`, but the spec requires `["sydney","melbourne","brisbane","perth"]`. This affected Granger heatmap row/column layout and dropdown ordering. Fixed by replacing `sorted()` with a spec-defined `CITY_ORDER` list.
 - **Dead `gold_coast` in synthetic data (fixed v0.0.15):** `generate_synthetic_prices()` still had a `gold_coast` entry in its `city_params` dict — unreachable dead code since the cities list never includes it. Removed.
 - **Duplicated `humanReadableName` (fixed v0.0.15):** Identical function was defined in both `featureImportanceChart.js` and `crossCityComparison.js`. Extracted to `src/utils/constants.js` as a single source of truth with unit test coverage (15 tests now, up from 14).
+- **HMM meta missing `n_init` (fixed v0.0.16):** The `hmm.json` meta block did not record the `n_init` parameter despite the spec listing it as a model parameter. Added `"n_init": 10` to the meta dict for reproducibility.
+- **Granger ADF results were console-only (fixed v0.0.16):** `run_adf_test()` ran the ADF stationarity test but only logged results to stdout. Enhanced to return structured results (stationary bool, ADF statistic, p-value) and added a `"stationarity"` section to `granger.json` so downstream consumers can see which cities' return series are non-stationary. Confirms Sydney p=0.1249 (non-stationary) while Melbourne, Brisbane, Perth are stationary.
 
 ---
 
