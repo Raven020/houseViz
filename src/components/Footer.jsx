@@ -33,7 +33,7 @@ export default function Footer() {
         <p>
           Granger causality tests use statsmodels (F-test, max 8 lags).
           HMM regime detection uses hmmlearn (3-state Gaussian HMM).
-          Feature importance uses XGBoost (gain-based, normalised).
+          Feature importance uses LightGBM (gain-based, normalised).
           All analysis runs on quarterly data from Q1 2005 to the latest available quarter.
         </p>
       </div>

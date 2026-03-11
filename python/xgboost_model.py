@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """
-XGBoost feature importance analysis for Australian housing markets.
+LightGBM feature importance analysis for Australian housing markets.
 
-Trains one XGBRegressor per city to predict quarterly price returns
+Trains one LGBMRegressor per city to predict quarterly price returns
 from macroeconomic features. Outputs gain-based feature importances.
+
+Uses a time-series-aware train/test split (first 75% train, last 25% test)
+to produce honest out-of-sample metrics and avoid overfitting on ~60 samples.
 
 Usage:
     python xgboost_model.py
@@ -23,9 +26,16 @@ MODEL_PARAMS = {
     "learning_rate": 0.05,
     "subsample": 0.8,
     "colsample_bytree": 0.8,
-    "objective": "reg:squarederror",
+    "objective": "regression",
     "random_state": 42,
+    "verbose": -1,
+    "importance_type": "gain",
 }
+
+# Fraction of data used for training (remainder is test).
+# Time-series split: first TRAIN_FRACTION chronologically for training,
+# the rest for out-of-sample evaluation.
+TRAIN_FRACTION = 0.75
 
 FEATURE_GROUPS = {
     "cash_rate": "Interest Rates",
@@ -47,7 +57,6 @@ def load_data():
 def build_features(prices, macro, target_city):
     """Build feature DataFrame for a given target city."""
     dates = prices["dates"]
-    n = len(dates)
 
     df = pd.DataFrame({"date": dates})
 
@@ -104,20 +113,22 @@ def get_feature_group(feature_name):
 
 
 def main():
-    from xgboost import XGBRegressor
+    from lightgbm import LGBMRegressor
     from sklearn.metrics import r2_score, mean_squared_error
 
     prices, macro = load_data()
     cities = prices["cities"]
 
-    print(f"Training XGBoost models for {len(cities)} cities...")
+    print(f"Training LightGBM models for {len(cities)} cities...")
     print(f"Parameters: {MODEL_PARAMS}")
+    print(f"Train/test split: {TRAIN_FRACTION*100:.0f}% / {(1-TRAIN_FRACTION)*100:.0f}% (chronological)")
 
     output = {
         "meta": {
-            "method": "XGBoost Regressor",
+            "method": "LightGBM Regressor",
             "n_estimators": MODEL_PARAMS["n_estimators"],
             "max_depth": MODEL_PARAMS["max_depth"],
+            "train_fraction": TRAIN_FRACTION,
         },
         "cities": {},
     }
@@ -125,18 +136,32 @@ def main():
     for city in cities:
         print(f"\n  {city}:")
         X, y, feature_cols = build_features(prices, macro, city)
-        print(f"    Features: {len(feature_cols)}, Samples: {len(X)}")
+        n = len(X)
+        split_idx = int(n * TRAIN_FRACTION)
 
-        model = XGBRegressor(**MODEL_PARAMS)
-        model.fit(X, y)
+        X_train, X_test = X.iloc[:split_idx], X.iloc[split_idx:]
+        y_train, y_test = y.iloc[:split_idx], y.iloc[split_idx:]
 
-        # Predictions & metrics
-        y_pred = model.predict(X)
-        r2 = r2_score(y, y_pred)
-        rmse = float(np.sqrt(mean_squared_error(y, y_pred)))
-        print(f"    R² = {r2:.4f}, RMSE = {rmse:.6f}")
+        print(f"    Features: {len(feature_cols)}, "
+              f"Train: {len(X_train)}, Test: {len(X_test)}")
 
-        # Feature importances (gain-based)
+        model = LGBMRegressor(**MODEL_PARAMS)
+        model.fit(X_train, y_train)
+
+        # In-sample metrics (train set)
+        y_train_pred = model.predict(X_train)
+        r2_train = r2_score(y_train, y_train_pred)
+        rmse_train = float(np.sqrt(mean_squared_error(y_train, y_train_pred)))
+
+        # Out-of-sample metrics (test set)
+        y_test_pred = model.predict(X_test)
+        r2_test = r2_score(y_test, y_test_pred)
+        rmse_test = float(np.sqrt(mean_squared_error(y_test, y_test_pred)))
+
+        print(f"    Train — R² = {r2_train:.4f}, RMSE = {rmse_train:.6f}")
+        print(f"    Test  — R² = {r2_test:.4f}, RMSE = {rmse_test:.6f}")
+
+        # Feature importances (gain-based) from train-set model
         importances = model.feature_importances_
         total = importances.sum()
         if total > 0:
@@ -155,8 +180,12 @@ def main():
             print(f"    {f['name']}: {f['importance']:.4f} ({f['group']})")
 
         output["cities"][city] = {
-            "r_squared": round(float(r2), 4),
-            "rmse": round(float(rmse), 6),
+            "r_squared": round(float(r2_test), 4),
+            "rmse": round(float(rmse_test), 6),
+            "r_squared_train": round(float(r2_train), 4),
+            "rmse_train": round(float(rmse_train), 6),
+            "n_train": len(X_train),
+            "n_test": len(X_test),
             "features": features_list,
         }
 

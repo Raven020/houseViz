@@ -6,7 +6,7 @@ An interactive single-page application exploring price dynamics across Australia
 
 This project applies quantitative methods from time-series econometrics and machine learning to Australian residential property data spanning 2005 to the present. Rather than presenting static charts, it builds an interactive data story that lets users interrogate the relationships and patterns embedded in two decades of housing market data.
 
-The application is structured around three analyses. Granger causality tests reveal directional price-leadership relationships between Sydney, Melbourne, Brisbane, Perth, and Gold Coast — identifying which cities tend to move first and which follow. Hidden Markov Model (HMM) regime detection classifies each city's market history into boom, stagnation, and correction states, producing timeline visualisations that map how regimes have evolved and how often markets transition between them. XGBoost feature importance analysis quantifies the relative contribution of macroeconomic drivers — interest rates, inflation, unemployment, and cross-city spillovers — to each city's quarterly price returns.
+The application is structured around three analyses. Granger causality tests reveal directional price-leadership relationships between Sydney, Melbourne, Brisbane, Perth, and Gold Coast — identifying which cities tend to move first and which follow. Hidden Markov Model (HMM) regime detection classifies each city's market history into boom, stagnation, and correction states, producing timeline visualisations that map how regimes have evolved and how often markets transition between them. LightGBM feature importance analysis quantifies the relative contribution of macroeconomic drivers — interest rates, inflation, unemployment, and cross-city spillovers — to each city's quarterly price returns.
 
 The frontend is a static React 18 / Vite application with D3.js v7 visualisations. All analysis is pre-computed by a Python pipeline that writes JSON files consumed at build time. There is no backend or runtime data fetching beyond loading those static assets.
 
@@ -35,9 +35,9 @@ Pairwise Granger causality tests are run across all directed city pairs using `s
 
 A 3-state Gaussian HMM is fit independently to each city's quarterly return series using `hmmlearn.GaussianHMM` (full covariance, 200 iterations, 10 random initialisations with best log-likelihood selected). States are post-labelled by mean return: boom (highest), stagnation (middle), and correction (lowest). Output includes the Viterbi-decoded state sequence, per-state means and variances, and a 3x3 transition probability matrix.
 
-### XGBoost Feature Importance
+### LightGBM Feature Importance
 
-One `XGBRegressor` is trained per city to predict quarterly price returns from a feature set of ~15–25 engineered inputs: base macro indicators (cash rate, CPI, unemployment), their quarter-on-quarter changes, lags at 1, 2, and 4 quarters, and cross-city lagged returns. Gain-based feature importances are normalised to sum to 1.0 and grouped into four categories: Interest Rates, Employment, Inflation, and Cross-City. In-sample R² and RMSE are reported per city.
+One `LGBMRegressor` is trained per city to predict quarterly price returns from a feature set of ~15–25 engineered inputs: base macro indicators (cash rate, CPI, unemployment), their quarter-on-quarter changes, lags at 1, 2, and 4 quarters, and cross-city lagged returns. Gain-based feature importances are normalised to sum to 1.0 and grouped into four categories: Interest Rates, Employment, Inflation, and Cross-City. Train and test R² and RMSE are reported per city.
 
 ## Local Development
 
@@ -93,7 +93,7 @@ python3 python/test_pipeline.py    # data pipeline validation
 | Visualisation | D3.js v7 — direct SVG bindings |
 | Styling | CSS Modules |
 | Build | Vite — static output to `dist/` |
-| Data pipeline | Python 3 — pandas, statsmodels, hmmlearn, xgboost, scikit-learn |
+| Data pipeline | Python 3 — pandas, statsmodels, hmmlearn, lightgbm, scikit-learn |
 | Deployment | GitHub Pages via GitHub Actions |
 
 ## Project Structure

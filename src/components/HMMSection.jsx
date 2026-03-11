@@ -28,12 +28,13 @@ export default function HMMSection({ data, prices }) {
     <section className="section" id="hmm">
       <h2 className="section__title">Market Regimes: Hidden Markov Model</h2>
       <p className="section__explanation">
-        A Hidden Markov Model identifies three latent market regimes in each city's
-        price history: boom (strong growth), stagnation (flat or modest growth), and
-        correction (declining prices). The model learns these states from the data
-        without being told when they occur, then assigns each quarter to its most
-        likely regime. The coloured bands below show how each city has cycled through
-        these phases over the past two decades.
+        A Hidden Markov Model identifies latent market regimes in each city's
+        price history. The model typically finds three states — boom (strong growth),
+        stagnation (flat or modest growth), and correction (declining prices) — but
+        may use fewer when the data does not support a full three-state separation.
+        It learns these states from the data without being told when they occur, then
+        assigns each quarter to its most likely regime. The coloured bands below show
+        how each city has cycled through these phases over the past two decades.
       </p>
       <div className="section__controls">
         <label htmlFor="hmm-city-select" className="sr-only">Select city</label>

@@ -7,7 +7,6 @@ import sys
 from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
-CITIES = ["sydney", "melbourne", "brisbane", "perth", "gold_coast"]
 
 
 def test_prices_json():
@@ -133,11 +132,14 @@ def test_hmm_json():
         for r in city_data["regimes"]:
             assert r in valid_regimes, f"Invalid regime '{r}' for {city}"
 
-        # Transition matrix should be 3x3
+        # Transition matrix dimensions match actual state count
+        actual_n = city_data.get("actual_n_states", data["meta"]["n_states"])
         tm = city_data["transition_matrix"]
-        assert len(tm) == 3
+        assert len(tm) == actual_n, \
+            f"{city} transition matrix has {len(tm)} rows, expected {actual_n}"
         for row in tm:
-            assert len(row) == 3
+            assert len(row) == actual_n, \
+                f"{city} transition matrix row has {len(row)} cols, expected {actual_n}"
 
     print(f"  hmm.json: OK ({len(data['cities'])} cities)")
 
@@ -154,10 +156,19 @@ def test_xgboost_json():
     assert "cities" in data
 
     for city, city_data in data["cities"].items():
-        assert "r_squared" in city_data
-        assert "rmse" in city_data
-        assert "features" in city_data
+        assert "r_squared" in city_data, f"{city} missing r_squared"
+        assert "rmse" in city_data, f"{city} missing rmse"
+        assert "features" in city_data, f"{city} missing features"
         assert len(city_data["features"]) > 0
+
+        # Out-of-sample R² should be substantially below 1.0 (sanity check)
+        assert city_data["r_squared"] < 0.99, \
+            f"{city} out-of-sample R²={city_data['r_squared']} suspiciously high"
+
+        # Train/test split metadata
+        assert "n_train" in city_data, f"{city} missing n_train"
+        assert "n_test" in city_data, f"{city} missing n_test"
+        assert city_data["n_test"] > 0, f"{city} n_test must be > 0"
 
         # Feature importances should sum to ~1.0
         total_imp = sum(f["importance"] for f in city_data["features"])

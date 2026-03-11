@@ -85,7 +85,7 @@ pandas>=2.0
 openpyxl>=3.1
 statsmodels>=0.14
 hmmlearn>=0.3
-xgboost>=2.0
+lightgbm>=4.0
 scikit-learn>=1.3
 ```
 
