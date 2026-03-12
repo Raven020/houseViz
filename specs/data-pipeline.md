@@ -19,6 +19,8 @@ Source, clean, and prepare Australian housing price data for 4 cities, along wit
 - **Metric:** Established house price index (index numbers, base period aligned)
 - **Coverage:** Sydney, Melbourne, Brisbane, Perth — all available in ABS Cat. 6416.0 capital city tables
 
+> **Data currency limitation:** ABS Cat. 6416.0 was **ceased after Dec 2021**, capping the RPPI at Q4 2021. The successor publication is **ABS Cat. 6432.0 — Total Value of Dwellings** (quarterly, still active as of Q4 2025). It provides **mean dwelling price by state** (not capital city, not an index). To extend the series beyond Q4 2021, the pipeline could splice RPPI with 6432.0 mean-price growth rates (state→city proxy: NSW→Sydney, VIC→Melbourne, QLD→Brisbane, WA→Perth). CoreLogic/Cotality publish per-city daily/monthly indices but the data is **commercial/subscription-only** — no free API or bulk download is available.
+
 ### Macroeconomic Indicators
 | Indicator | Source | Frequency |
 |---|---|---|
