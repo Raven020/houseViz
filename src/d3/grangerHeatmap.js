@@ -24,7 +24,7 @@ export function renderGrangerHeatmap(svgEl, data, prices) {
   const maxLabelLength = Math.max(...cities.map(c => (CITY_NAMES[c] || c).length));
   // Approximate: ~7px per character for 0.8rem font
   const labelWidth = Math.max(70, maxLabelLength * 7 + 8);
-  const labelHeight = 56; // room for rotated column headers
+  const labelHeight = 80; // room for rotated column headers
 
   const margin = {
     top: labelHeight,
@@ -68,34 +68,6 @@ export function renderGrangerHeatmap(svgEl, data, prices) {
   const resultMap = new Map(
     data.results.map(r => [`${r.from}|${r.to}`, r])
   );
-
-  // --- Column headers (city names — "to" axis, top) ---
-  const colHeaders = g.selectAll('.col-header')
-    .data(cities)
-    .join('text')
-    .attr('class', 'col-header')
-    .attr('x', (d, i) => i * cellSize + cellSize / 2)
-    .attr('y', -8)
-    .attr('text-anchor', 'end')
-    .attr('dominant-baseline', 'middle')
-    .attr('font-size', '0.78rem')
-    .attr('font-weight', '500')
-    .attr('fill', '#374151')
-    .attr('transform', (d, i) => {
-      const cx = i * cellSize + cellSize / 2;
-      return `rotate(-40, ${cx}, -8)`;
-    })
-    .text(d => CITY_NAMES[d] || d);
-
-  // "To →" axis label above columns
-  g.append('text')
-    .attr('x', innerW / 2)
-    .attr('y', -margin.top + 10)
-    .attr('text-anchor', 'middle')
-    .attr('font-size', '0.75rem')
-    .attr('fill', '#6b7280')
-    .attr('font-style', 'italic')
-    .text('→ To city (effect)');
 
   // --- Row headers (city names — "from" axis, left) ---
   g.selectAll('.row-header')
@@ -265,6 +237,35 @@ export function renderGrangerHeatmap(svgEl, data, prices) {
     .on('mouseleave', hideTooltip)
     .on('focus', showTooltipFromFocus)
     .on('blur', hideTooltip);
+
+  // --- Column headers (city names — "to" axis, top) ---
+  // Drawn after cells so headers render on top (SVG z-order = document order)
+  g.selectAll('.col-header')
+    .data(cities)
+    .join('text')
+    .attr('class', 'col-header')
+    .attr('x', (d, i) => i * cellSize + cellSize / 2)
+    .attr('y', -8)
+    .attr('text-anchor', 'end')
+    .attr('dominant-baseline', 'middle')
+    .attr('font-size', '0.78rem')
+    .attr('font-weight', '500')
+    .attr('fill', '#374151')
+    .attr('transform', (d, i) => {
+      const cx = i * cellSize + cellSize / 2;
+      return `rotate(-40, ${cx}, -8)`;
+    })
+    .text(d => CITY_NAMES[d] || d);
+
+  // "To →" axis label above columns
+  g.append('text')
+    .attr('x', innerW / 2)
+    .attr('y', -margin.top + 10)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', '0.75rem')
+    .attr('fill', '#6b7280')
+    .attr('font-style', 'italic')
+    .text('→ To city (effect)');
 
   // --- Grid border lines ---
   // Outer border

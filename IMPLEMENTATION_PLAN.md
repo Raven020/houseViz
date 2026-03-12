@@ -1,8 +1,20 @@
 # Implementation Plan — Australian Housing Market Econometrics
 
-> Project is feature-complete. All 16 frontend tests and 5 pipeline tests pass. Build succeeds.
+> Project is near-complete. All 16 frontend tests and 5 pipeline tests pass. Build succeeds.
 > Specs: `specs/data-pipeline.md`, `specs/granger-causality.md`, `specs/hmm-regimes.md`, `specs/lightgbm-features.md`, `specs/frontend.md`, `specs/deployment.md`
 > See `specs/README.md` for a keyword index of all spec files.
+
+---
+
+## Open Items (Priority Order)
+
+### P2 — Spec compliance gaps (minor)
+
+- **No `README.md` at project root:** `specs/deployment.md` lists `README.md` in the expected repo structure. No README exists. Should contain project overview, live demo link, setup instructions, and methodology summary (per Footer.jsx content).
+
+### P3 — Nice-to-have / polish
+
+- **Tooltip DOM leak:** All D3 modules create persistent `<div class="d3-tooltip">` elements appended to `<body>` and never remove them. On hot-reload or unmount, orphaned tooltips accumulate. Low impact in production (single-page, no routing) but could be cleaned up with a D3 cleanup function called from React `useEffect` return.
 
 ---
 
@@ -57,6 +69,7 @@
 - **Full spec compliance verified (v0.0.17):** All 6 specs reviewed and confirmed fully implemented. All D3 modules have both hover and focus tooltip events for accessibility.
 - **Toggle label mismatch (fixed v0.0.18):** LightGBMSection toggle read "Group lag variants" but spec says "Group by category". Fixed to match spec.
 - **REGIME_COLORS_SOLID untested (fixed v0.0.18):** Added test coverage for solid regime colors. Test count now 16 (up from 15).
+- **Granger heatmap column headers obscured (fixed v0.0.19):** Column headers were drawn before grid cells in SVG document order. Since SVG z-ordering follows document order (later elements render on top), cells painted over the rotated column header text. Fixed by moving column header rendering after cell rendering and increasing `labelHeight` from 56px to 80px for better spacing.
 
 ---
 
