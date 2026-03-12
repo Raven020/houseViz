@@ -50,19 +50,6 @@ export default function GrangerSection({ data, prices }) {
 
   if (!data) return null;
 
-  const tabStyle = (view) => ({
-    padding: '0.35rem 0.9rem',
-    fontSize: '0.875rem',
-    fontFamily: 'inherit',
-    fontWeight: activeView === view ? '600' : '400',
-    borderRadius: '6px',
-    border: activeView === view ? '2px solid #2563EB' : '1px solid #d1d5db',
-    background: activeView === view ? '#eff6ff' : '#fff',
-    color: activeView === view ? '#1d4ed8' : '#374151',
-    cursor: 'pointer',
-    transition: 'all 0.15s ease',
-  });
-
   return (
     <section className="section" id="granger" ref={containerRef}>
       <h2 className="section__title">City Relationships: Granger Causality</h2>
@@ -86,7 +73,7 @@ export default function GrangerSection({ data, prices }) {
             tabIndex={activeView === 'network' ? 0 : -1}
             onClick={() => setActiveView('network')}
             onKeyDown={handleTabKeyDown}
-            style={tabStyle('network')}
+            className={`tab-btn${activeView === 'network' ? ' tab-btn--active' : ''}`}
           >
             Network
           </button>
@@ -98,7 +85,7 @@ export default function GrangerSection({ data, prices }) {
             tabIndex={activeView === 'heatmap' ? 0 : -1}
             onClick={() => setActiveView('heatmap')}
             onKeyDown={handleTabKeyDown}
-            style={tabStyle('heatmap')}
+            className={`tab-btn${activeView === 'heatmap' ? ' tab-btn--active' : ''}`}
           >
             Heatmap
           </button>

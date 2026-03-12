@@ -25,12 +25,19 @@ export function renderTransitionMatrix(svgEl, hmmData, city) {
   const stateLabels = getStateLabels(cityHMM, hmmData.meta);
   const cityLabel = CITY_NAMES[city] || city;
 
-  // Layout constants — adapt to state count
-  const cellSize = 72;
+  // Layout constants — adapt to state count and container width
   const headerWidth = 84;   // left header column width
   const headerHeight = 48;  // top header row height
   const titleHeight = 32;
-  const padding = { top: titleHeight + headerHeight, left: headerWidth, right: 16, bottom: 16 };
+  const paddingRight = 16;
+  const paddingBottom = 16;
+
+  // Derive cellSize from container width, with min 44px and max 72px
+  const containerWidth = svgEl.parentElement?.clientWidth || 400;
+  const availableForCells = containerWidth - headerWidth - paddingRight;
+  const cellSize = Math.min(72, Math.max(44, Math.floor(availableForCells / nStates)));
+
+  const padding = { top: titleHeight + headerHeight, left: headerWidth, right: paddingRight, bottom: paddingBottom };
 
   const innerWidth = cellSize * nStates;
   const innerHeight = cellSize * nStates;

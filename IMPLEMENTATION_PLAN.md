@@ -20,11 +20,11 @@ All 6 specs are fully implemented. The items below are robustness, quality, and 
 
 ### P1 — Consistency / Polish
 
-- [ ] **`grangerHeatmap.js` tooltip has no transition** — Uses `.style('opacity', 1/0)` directly while all other D3 modules use `.transition().duration(150)`. Fix: add `.transition().duration(150)` to heatmap tooltip show/hide for consistency.
-- [ ] **`GrangerSection.jsx` inline tab styles** — The only component using inline `style={{}}` objects with hardcoded hex colors (`#2563EB`, `#1d4ed8`, `#374151`, `#d1d5db`). All other components use CSS classes from `index.css`. Fix: extract tab styling to CSS classes (e.g., `.tab-btn`, `.tab-btn--active`).
-- [ ] **`transitionMatrix.js` is not responsive** — Fixed `cellSize = 72` regardless of container width. All other D3 charts derive dimensions from container. The matrix overflows on narrow viewports. Fix: derive `cellSize` from `containerWidth / (nStates + headerRatio)` with a sensible minimum.
-- [ ] **`featureImportanceChart.js` legend spacing is fragile** — Uses `groups.length * 100` (100px per group) to position the legend. Can clip on narrow viewports. Fix: measure actual text widths or wrap the legend below the chart on small screens.
-- [ ] **`grangerHeatmap.js` significant color not from constants** — `COLOR_SIGNIFICANT = '#22c55e'` is defined locally instead of importing from `src/utils/constants.js`. Drift risk if the palette is updated. Fix: import from constants or define a shared palette entry.
+- [x] **`grangerHeatmap.js` tooltip has no transition** — Fixed: added `.transition().duration(150)` to both show and hide tooltip functions for consistency with all other D3 modules (v0.0.22).
+- [x] **`GrangerSection.jsx` inline tab styles** — Fixed: extracted inline `style={{}}` objects to `.tab-btn` / `.tab-btn--active` CSS classes in `index.css`. No more hardcoded hex colors in JSX (v0.0.22).
+- [x] **`transitionMatrix.js` is not responsive** — Fixed: `cellSize` now derived from container width (`min 44px, max 72px`), consistent with other D3 charts. No more overflow on narrow viewports (v0.0.22).
+- [x] **`featureImportanceChart.js` legend spacing is fragile** — Fixed: legend spacing now computed from actual group name length (~6.5px/char). Legend wraps below chart when it doesn't fit top-right, extending SVG height accordingly (v0.0.22).
+- [x] **`grangerHeatmap.js` significant color not from constants** — Fixed: `COLOR_SIGNIFICANT` now imports `REGIME_COLORS_SOLID.boom` from `src/utils/constants.js` instead of hardcoding `'#22c55e'` (v0.0.22).
 
 ### P2 — Accessibility
 

@@ -160,21 +160,43 @@ export function renderFeatureImportanceChart(svgEl, data, city, options = {}) {
     .attr('fill', '#6b7280')
     .text(d => `${(d.importance * 100).toFixed(1)}%`);
 
-  // Legend
+  // Legend — positioned top-right when space allows, otherwise below chart
   const groups = [...new Set(features.map(d => d.group))];
-  const legend = g.append('g')
-    .attr('transform', `translate(${width - margin.right - groups.length * 100}, ${margin.top - 14})`);
+  const legendItemGap = 16; // gap between swatch+text groups
+  const swatchSize = 10;
+  const swatchTextGap = 4;
 
+  // Estimate each item width: swatch + gap + ~6.5px per character
+  const itemWidths = groups.map(g => swatchSize + swatchTextGap + g.length * 6.5);
+  const totalLegendWidth = itemWidths.reduce((s, w) => s + w, 0) + (groups.length - 1) * legendItemGap;
+  const availableLegendWidth = width - margin.left - margin.right;
+
+  // If legend fits in top-right, place it there; otherwise wrap below chart
+  const legendFitsTop = totalLegendWidth <= availableLegendWidth;
+  const legendY = legendFitsTop ? margin.top - 14 : height - margin.bottom + 8;
+  const legendX = legendFitsTop ? width - margin.right - totalLegendWidth : margin.left;
+
+  // Extend SVG height if legend wraps below
+  if (!legendFitsTop) {
+    const newHeight = height + 24;
+    svg.attr('height', newHeight).attr('viewBox', `0 0 ${width} ${newHeight}`);
+  }
+
+  const legend = g.append('g')
+    .attr('transform', `translate(${legendX}, ${legendY})`);
+
+  let xOffset = 0;
   groups.forEach((group, i) => {
-    const lg = legend.append('g').attr('transform', `translate(${i * 100}, 0)`);
+    const lg = legend.append('g').attr('transform', `translate(${xOffset}, 0)`);
     lg.append('rect')
-      .attr('width', 10).attr('height', 10)
+      .attr('width', swatchSize).attr('height', swatchSize)
       .attr('fill', FEATURE_GROUP_COLORS[group] || '#9ca3af')
       .attr('rx', 2);
     lg.append('text')
-      .attr('x', 14).attr('y', 9)
+      .attr('x', swatchSize + swatchTextGap).attr('y', 9)
       .attr('font-size', '0.65rem')
       .attr('fill', '#6b7280')
       .text(group);
+    xOffset += itemWidths[i] + legendItemGap;
   });
 }

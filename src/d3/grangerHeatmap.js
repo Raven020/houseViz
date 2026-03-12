@@ -1,8 +1,8 @@
 import * as d3 from 'd3';
-import { CITY_NAMES } from '../utils/constants.js';
+import { CITY_NAMES, REGIME_COLORS_SOLID } from '../utils/constants.js';
 
-// Color constants
-const COLOR_SIGNIFICANT = '#22c55e';
+// Color constants — significant green sourced from shared palette
+const COLOR_SIGNIFICANT = REGIME_COLORS_SOLID.boom;
 const COLOR_NONSIGNIFICANT = '#e5e7eb';
 const COLOR_DIAGONAL = '#1f2937';
 
@@ -240,14 +240,16 @@ export function renderGrangerHeatmap(svgEl, data, prices) {
         `lag=${d.result.optimal_lag}Q`;
     }
     tooltip
-      .style('opacity', 1)
+      .transition().duration(150)
+      .style('opacity', 1);
+    tooltip
       .html(html)
       .style('left', (event.pageX + 14) + 'px')
       .style('top', (event.pageY - 14) + 'px');
   }
 
   function hideTooltip() {
-    tooltip.style('opacity', 0);
+    tooltip.transition().duration(150).style('opacity', 0);
   }
 
   function showTooltipFromFocus(event, d) {
