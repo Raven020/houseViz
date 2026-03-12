@@ -1,8 +1,46 @@
 # Implementation Plan — Australian Housing Market Econometrics
 
-> Project is feature-complete. All 16 frontend tests and 5 pipeline tests pass. Build succeeds.
+> Project is near-complete. All 16 frontend tests and 5 pipeline tests pass. Build succeeds.
 > Specs: `specs/data-pipeline.md`, `specs/granger-causality.md`, `specs/hmm-regimes.md`, `specs/lightgbm-features.md`, `specs/frontend.md`, `specs/deployment.md`
 > See `specs/README.md` for a keyword index of all spec files.
+
+---
+
+## Open Items (Priority Order)
+
+All 6 specs are fully implemented. The items below are robustness, quality, and accessibility gaps discovered during a code-vs-spec audit (2026-03-13).
+
+### P0 — Reliability / Correctness
+
+- [ ] **CI does not run tests before deploy** — `deploy.yml` runs `npm run build` but never `npm test`. A test regression ships silently to GitHub Pages. Fix: add `npm test` step before `npm run build` in the workflow.
+- [ ] **Granger D3 modules missing data guards** — `grangerGraph.js` and `grangerHeatmap.js` do not guard against `data.results` being undefined/null (unlike all other D3 modules which have early-return guards). A malformed `granger.json` will crash the entire app via uncaught TypeError. Fix: add `if (!data?.results) return;` early-return in both `renderGrangerGraph` and `renderGrangerHeatmap`.
+- [ ] **`ErrorBoundary` missing `componentDidCatch`** — `App.jsx` catches render errors via `getDerivedStateFromError` but never logs them (`componentDidCatch` is absent). Errors are silently swallowed with no `console.error`. Fix: add `componentDidCatch(error, info) { console.error('ErrorBoundary caught:', error, info); }`.
+
+### P1 — Consistency / Polish
+
+- [ ] **`grangerHeatmap.js` tooltip has no transition** — Uses `.style('opacity', 1/0)` directly while all other D3 modules use `.transition().duration(150)`. Fix: add `.transition().duration(150)` to heatmap tooltip show/hide for consistency.
+- [ ] **`GrangerSection.jsx` inline tab styles** — The only component using inline `style={{}}` objects with hardcoded hex colors (`#2563EB`, `#1d4ed8`, `#374151`, `#d1d5db`). All other components use CSS classes from `index.css`. Fix: extract tab styling to CSS classes (e.g., `.tab-btn`, `.tab-btn--active`).
+- [ ] **`transitionMatrix.js` is not responsive** — Fixed `cellSize = 72` regardless of container width. All other D3 charts derive dimensions from container. The matrix overflows on narrow viewports. Fix: derive `cellSize` from `containerWidth / (nStates + headerRatio)` with a sensible minimum.
+- [ ] **`featureImportanceChart.js` legend spacing is fragile** — Uses `groups.length * 100` (100px per group) to position the legend. Can clip on narrow viewports. Fix: measure actual text widths or wrap the legend below the chart on small screens.
+
+### P2 — Accessibility
+
+- [ ] **No `aria-live` region for chart updates** — When a user changes city selector or toggle, the chart re-renders silently. Screen reader users receive no announcement. Fix: add an `aria-live="polite"` region in each section that announces the selected city/mode on change.
+- [ ] **SVG `role="img"` on individual `<rect>`/`<circle>` elements** — `regimeTimeline.js` applies `role="img"` to individual SVG `<rect>` elements. Per ARIA spec, `role="img"` is for container elements. Current approach works in most screen readers but is technically incorrect. Low priority — consider wrapping in `<g role="img">` groups.
+
+### P3 — Test Coverage / Quality
+
+- [ ] **D3 modules have zero direct test coverage** — All 6 D3 modules are mocked in `App.test.jsx`. No tests verify rendering logic, data transformations, or DOM output. Consider adding smoke tests for each module using jsdom + mock container.
+- [ ] **Python pipeline tests only validate output JSON, not logic** — `test_pipeline.py` checks schema of pre-written JSON files but never exercises `parse_abs_excel`, `granger_causality_test`, `fit_hmm`, or `walk_forward_cv` directly. Unit tests would catch regressions from dependency upgrades.
+- [ ] **`test_granger_json` does not check `stationarity` block** — The stationarity section added in v0.0.16 has no test coverage. Fix: add assertions for `stationarity` key, per-city `stationary`/`adf_statistic`/`p_value` fields.
+- [ ] **`test_hmm_json` does not validate transition matrix row sums** — Spec requires each row sums to 1.0. Fix: add `assert abs(sum(row) - 1.0) < 0.01` for each row.
+- [ ] **No coverage tooling** — No `@vitest/coverage-v8` installed, no coverage scripts, no thresholds. Consider adding coverage reporting to CI.
+
+### P4 — Data Pipeline / Future
+
+- [ ] **Uncommitted spec change** — `specs/data-pipeline.md` has an uncommitted note documenting ABS 6416.0 cessation and 6432.0 splice option. Should be committed.
+- [ ] **ABS URLs are version-locked** — `data_pipeline.py` hardcodes URLs to specific ABS publication dates (Dec 2021 RPPI, Dec 2024 CPI, Jan 2026 Labour). These will break when ABS reorganizes their file structure. No automated detection of stale URLs.
+- [ ] **`requirements.txt` uses `>=` not `==`** — Python dependencies are not pinned, so the environment is not reproducible. A fresh `pip install` may pull breaking upgrades (especially hmmlearn or lightgbm major versions).
 
 ---
 
@@ -57,6 +95,9 @@
 - **Full spec compliance verified (v0.0.17):** All 6 specs reviewed and confirmed fully implemented. All D3 modules have both hover and focus tooltip events for accessibility.
 - **Toggle label mismatch (fixed v0.0.18):** LightGBMSection toggle read "Group lag variants" but spec says "Group by category". Fixed to match spec.
 - **REGIME_COLORS_SOLID untested (fixed v0.0.18):** Added test coverage for solid regime colors. Test count now 16 (up from 15).
+- **Granger heatmap column headers obscured (fixed v0.0.19):** Column headers were drawn before grid cells in SVG document order. Since SVG z-ordering follows document order (later elements render on top), cells painted over the rotated column header text. Fixed by moving column header rendering after cell rendering and increasing `labelHeight` from 56px to 80px for better spacing.
+- **README.md live demo URL incorrect (fixed v0.0.20):** README existed but had wrong live demo URL (`aus-housing-econometrics` instead of `houseViz`), outdated date range ("2005 to present" vs "Q1 2005 – Q4 2021"), missing walk-forward CV details in LightGBM methodology, wrong project directory name in structure tree, and incomplete D3 file listing. All corrected.
+- **Tooltip DOM leak (fixed v0.0.20):** D3 tooltip `<div>` elements appended to `<body>` were never removed on React component unmount. Added `useEffect` cleanup functions in `GrangerSection.jsx`, `HMMSection.jsx`, and `LightGBMSection.jsx` that remove their respective tooltip elements (`.granger-tip`, `.granger-heatmap-tip`, `.hmm-tip`, `.hmm-overlay-tip`, `.tm-tip`, `.lgbm-tip`, `.cc-tip`) on unmount. Prevents orphaned DOM nodes on hot-reload.
 
 ---
 

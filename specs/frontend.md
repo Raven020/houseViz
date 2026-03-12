@@ -103,6 +103,14 @@ The page reads as a top-to-bottom data story:
 - Tooltips triggered on both hover and focus
 - City selector is keyboard-navigable
 
+## Known Issues
+
+### [RESOLVED] Granger heatmap overlaps city column headers
+- **Status:** Fixed (v0.0.19)
+- **Component:** `src/d3/grangerHeatmap.js`
+- **Root cause:** SVG z-ordering follows document order — column headers were drawn before grid cells, so cells painted on top of the rotated text. Previous CSS-only fixes didn't work because this was a draw-order issue, not a layout issue.
+- **Fix:** Moved column header rendering to after cell rendering (SVG elements drawn later appear on top) and increased `labelHeight` from 56px to 80px for better spacing.
+
 ## File Structure
 ```
 src/
@@ -116,11 +124,15 @@ src/
 │   └── Footer.jsx
 ├── d3/
 │   ├── grangerGraph.js
+│   ├── grangerHeatmap.js
 │   ├── regimeTimeline.js
-│   └── featureImportanceChart.js
+│   ├── transitionMatrix.js
+│   ├── featureImportanceChart.js
+│   └── crossCityComparison.js
 ├── styles/
 │   └── (CSS files)
 └── utils/
+    ├── constants.js
     └── dataLoader.js
 public/
 └── data/
