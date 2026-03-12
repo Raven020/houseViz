@@ -67,10 +67,10 @@ export function renderFeatureImportanceChart(svgEl, data, city, options = {}) {
   svg.selectAll('*').remove();
 
   // Tooltip
-  let tooltip = d3.select('body').select('.d3-tooltip.xgb-tip');
+  let tooltip = d3.select('body').select('.d3-tooltip.lgbm-tip');
   if (tooltip.empty()) {
     tooltip = d3.select('body').append('div')
-      .attr('class', 'd3-tooltip xgb-tip')
+      .attr('class', 'd3-tooltip lgbm-tip')
       .style('opacity', 0);
   }
 

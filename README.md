@@ -62,7 +62,7 @@ pip3 install -r requirements.txt
 python3 data_pipeline.py    # generates data/prices.json + data/macro.json
 python3 granger.py          # generates data/granger.json
 python3 hmm_regimes.py      # generates data/hmm.json
-python3 xgboost_model.py    # generates data/xgboost.json
+python3 lightgbm_model.py    # generates data/lightgbm.json
 ```
 
 ### 3. Start the dev server
@@ -107,7 +107,7 @@ aus-housing-econometrics/
 │   │   ├── Header.jsx
 │   │   ├── GrangerSection.jsx       # Section 1: city relationships
 │   │   ├── HMMSection.jsx           # Section 2: market regimes
-│   │   ├── XGBoostSection.jsx       # Section 3: price drivers
+│   │   ├── LightGBMSection.jsx       # Section 3: price drivers
 │   │   └── Footer.jsx
 │   ├── d3/
 │   │   ├── grangerGraph.js          # Force-directed causality graph
@@ -122,14 +122,14 @@ aus-housing-econometrics/
 │   ├── data_pipeline.py
 │   ├── granger.py
 │   ├── hmm_regimes.py
-│   ├── xgboost_model.py
+│   ├── lightgbm_model.py
 │   └── test_pipeline.py
 ├── data/                            # Pre-computed JSON (source of truth)
 │   ├── prices.json
 │   ├── macro.json
 │   ├── granger.json
 │   ├── hmm.json
-│   └── xgboost.json
+│   └── lightgbm.json
 ├── public/data/                     # Copied at build time
 ├── specs/                           # Detailed technical specifications
 ├── .github/workflows/deploy.yml     # GitHub Actions deployment

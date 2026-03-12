@@ -46,7 +46,7 @@ const mockData = {
     },
     dates: ['2005-Q1', '2005-Q2'],
   },
-  xgboost: {
+  lightgbm: {
     meta: { method: 'LightGBM Regressor' },
     cities: {
       sydney: {

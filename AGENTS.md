@@ -14,7 +14,7 @@ pip3 install -r requirements.txt
 python3 data_pipeline.py    # generates data/prices.json + data/macro.json
 python3 granger.py          # generates data/granger.json
 python3 hmm_regimes.py      # generates data/hmm.json
-python3 xgboost_model.py    # generates data/xgboost.json
+python3 lightgbm_model.py    # generates data/lightgbm.json
 ```
 Run scripts in order — each depends on output from prior steps.
 

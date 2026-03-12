@@ -3,7 +3,7 @@ import { renderFeatureImportanceChart } from '../d3/featureImportanceChart.js';
 import { renderCrossCityComparison } from '../d3/crossCityComparison.js';
 import { CITY_NAMES } from '../utils/constants.js';
 
-export default function XGBoostSection({ data, prices }) {
+export default function LightGBMSection({ data, prices }) {
   const svgRef = useRef(null);
   const comparisonSvgRef = useRef(null);
   const containerRef = useRef(null);
@@ -39,7 +39,7 @@ export default function XGBoostSection({ data, prices }) {
   const cityData = data.cities[selectedCity];
 
   return (
-    <section className="section" id="xgboost" ref={containerRef}>
+    <section className="section" id="lightgbm" ref={containerRef}>
       <h2 className="section__title">What Drives Prices: LightGBM Feature Importance</h2>
       <p className="section__explanation">
         A LightGBM model trained on macroeconomic indicators reveals which factors
@@ -49,9 +49,9 @@ export default function XGBoostSection({ data, prices }) {
         to the model's predictions, grouped by category.
       </p>
       <div className="section__controls">
-        <label htmlFor="xgb-city-select" className="sr-only">Select city</label>
+        <label htmlFor="lgbm-city-select" className="sr-only">Select city</label>
         <select
-          id="xgb-city-select"
+          id="lgbm-city-select"
           className="city-selector"
           value={selectedCity}
           onChange={(e) => setSelectedCity(e.target.value)}

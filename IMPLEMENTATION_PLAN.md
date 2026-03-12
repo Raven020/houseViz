@@ -1,7 +1,7 @@
 # Implementation Plan — Australian Housing Market Econometrics
 
 > Project is feature-complete. All 16 frontend tests and 5 pipeline tests pass. Build succeeds.
-> Specs: `specs/data-pipeline.md`, `specs/granger-causality.md`, `specs/hmm-regimes.md`, `specs/xgboost-features.md`, `specs/frontend.md`, `specs/deployment.md`
+> Specs: `specs/data-pipeline.md`, `specs/granger-causality.md`, `specs/hmm-regimes.md`, `specs/lightgbm-features.md`, `specs/frontend.md`, `specs/deployment.md`
 > See `specs/README.md` for a keyword index of all spec files.
 
 ---
@@ -23,7 +23,7 @@
 | 2 | Data Pipeline (`python/data_pipeline.py`) | COMPLETE |
 | 3 | Granger Causality Analysis (`python/granger.py`) | COMPLETE |
 | 4 | HMM Regime Detection (`python/hmm_regimes.py`) | COMPLETE |
-| 5 | Feature Importance (`python/xgboost_model.py`) | COMPLETE |
+| 5 | Feature Importance (`python/lightgbm_model.py`) | COMPLETE |
 | 6 | Frontend App Shell & Data Loading | COMPLETE |
 | 7 | Granger Causality Visualization | COMPLETE |
 | 8 | HMM Regime Visualization | COMPLETE |
@@ -55,7 +55,7 @@
 - **Granger ADF results were console-only (fixed v0.0.16):** `run_adf_test()` ran the ADF stationarity test but only logged results to stdout. Enhanced to return structured results (stationary bool, ADF statistic, p-value) and added a `"stationarity"` section to `granger.json` so downstream consumers can see which cities' return series are non-stationary. Confirms Sydney p=0.1249 (non-stationary) while Melbourne, Brisbane, Perth are stationary.
 - **public/data in .gitignore but tracked (fixed v0.0.17):** `public/data/` is listed in `.gitignore` but the files were previously force-added and tracked. After v0.0.16 added stationarity and n_init to `data/` originals, the `public/data/` copies were not committed. Fixed in v0.0.17 by force-adding the synced copies. Future pipeline runs that update `data/` must also `git add -f public/data/` to keep them in sync.
 - **Full spec compliance verified (v0.0.17):** All 6 specs reviewed and confirmed fully implemented. All D3 modules have both hover and focus tooltip events for accessibility.
-- **Toggle label mismatch (fixed v0.0.18):** XGBoostSection toggle read "Group lag variants" but spec says "Group by category". Fixed to match spec.
+- **Toggle label mismatch (fixed v0.0.18):** LightGBMSection toggle read "Group lag variants" but spec says "Group by category". Fixed to match spec.
 - **REGIME_COLORS_SOLID untested (fixed v0.0.18):** Added test coverage for solid regime colors. Test count now 16 (up from 15).
 
 ---
@@ -78,7 +78,7 @@ Step 4: HMM Slice (Phases 4 + 8)                 COMPLETE
   └── hmm_regimes.py → hmm.json → HMMSection.jsx + regimeTimeline.js
 
 Step 5: Feature Importance Slice (Phases 5 + 9)  COMPLETE
-  └── xgboost_model.py → xgboost.json → XGBoostSection.jsx + featureImportanceChart.js
+  └── lightgbm_model.py → lightgbm.json → LightGBMSection.jsx + featureImportanceChart.js
 
 Step 6: Styling & Polish (Phase 10)              COMPLETE
   └── CSS, responsiveness, accessibility

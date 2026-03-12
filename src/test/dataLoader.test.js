@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { loadPrices, loadGranger, loadHMM, loadXGBoost, loadAllData } from '../utils/dataLoader.js';
+import { loadPrices, loadGranger, loadHMM, loadLightGBM, loadAllData } from '../utils/dataLoader.js';
 
 const mockPrices = { cities: ['sydney'], dates: ['2005-Q1'], series: {} };
 const mockGranger = { results: [] };
 const mockHMM = { cities: {}, dates: [] };
-const mockXGBoost = { cities: {} };
+const mockLightGBM = { cities: {} };
 
 beforeEach(() => {
   global.fetch = vi.fn((url) => {
@@ -12,7 +12,7 @@ beforeEach(() => {
     if (url.includes('prices.json')) data = mockPrices;
     else if (url.includes('granger.json')) data = mockGranger;
     else if (url.includes('hmm.json')) data = mockHMM;
-    else if (url.includes('xgboost.json')) data = mockXGBoost;
+    else if (url.includes('lightgbm.json')) data = mockLightGBM;
     else return Promise.resolve({ ok: false, status: 404, statusText: 'Not Found' });
 
     return Promise.resolve({
@@ -39,9 +39,9 @@ describe('dataLoader', () => {
     expect(result).toEqual(mockHMM);
   });
 
-  it('loadXGBoost fetches xgboost.json', async () => {
-    const result = await loadXGBoost();
-    expect(result).toEqual(mockXGBoost);
+  it('loadLightGBM fetches lightgbm.json', async () => {
+    const result = await loadLightGBM();
+    expect(result).toEqual(mockLightGBM);
   });
 
   it('loadAllData fetches all 4 data files', async () => {
@@ -49,7 +49,7 @@ describe('dataLoader', () => {
     expect(result).toHaveProperty('prices');
     expect(result).toHaveProperty('granger');
     expect(result).toHaveProperty('hmm');
-    expect(result).toHaveProperty('xgboost');
+    expect(result).toHaveProperty('lightgbm');
   });
 
   it('throws on fetch failure', async () => {

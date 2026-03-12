@@ -21,16 +21,16 @@ export async function loadHMM() {
   return fetchJSON('hmm.json');
 }
 
-export async function loadXGBoost() {
-  return fetchJSON('xgboost.json');
+export async function loadLightGBM() {
+  return fetchJSON('lightgbm.json');
 }
 
 export async function loadAllData() {
-  const [prices, granger, hmm, xgboost] = await Promise.all([
+  const [prices, granger, hmm, lightgbm] = await Promise.all([
     loadPrices(),
     loadGranger(),
     loadHMM(),
-    loadXGBoost(),
+    loadLightGBM(),
   ]);
-  return { prices, granger, hmm, xgboost };
+  return { prices, granger, hmm, lightgbm };
 }

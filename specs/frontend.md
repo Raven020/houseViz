@@ -62,12 +62,11 @@ The page reads as a top-to-bottom data story:
 - Embeds `RegimeTimeline` (D3 component)
 - See `specs/hmm-regimes.md` for visualisation details
 
-### `XGBoostSection.jsx`
+### `LightGBMSection.jsx`
 - Section heading + plain-language explanation of feature importance (LightGBM)
-- User-facing text references "LightGBM", not "XGBoost"
 - City selector (shared or independent from HMM section)
 - Embeds `FeatureImportanceChart` (D3 component)
-- See `specs/xgboost-features.md` for visualisation details
+- See `specs/lightgbm-features.md` for visualisation details
 
 ### `Footer.jsx`
 - Data sources with links (ABS, RBA)
@@ -83,7 +82,7 @@ The page reads as a top-to-bottom data story:
 ## Data Loading
 - All JSON in `public/data/` (copied from `data/` at build time or symlinked)
 - Fetch on mount in `App.jsx`, store in state
-- Show a simple loading spinner until all 4 JSON files are loaded (prices, granger, hmm, xgboost)
+- Show a simple loading spinner until all 4 JSON files are loaded (prices, granger, hmm, lightgbm)
 - Handle fetch errors with a user-friendly message
 
 ## Styling Guidelines
@@ -113,7 +112,7 @@ src/
 │   ├── Header.jsx
 │   ├── GrangerSection.jsx
 │   ├── HMMSection.jsx
-│   ├── XGBoostSection.jsx
+│   ├── LightGBMSection.jsx
 │   └── Footer.jsx
 ├── d3/
 │   ├── grangerGraph.js
@@ -129,5 +128,5 @@ public/
     ├── macro.json
     ├── granger.json
     ├── hmm.json
-    └── xgboost.json
+    └── lightgbm.json
 ```

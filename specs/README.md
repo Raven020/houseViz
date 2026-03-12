@@ -14,13 +14,13 @@ Keywords: Granger causality, pairwise, directed pairs, F-test, ssr_ftest, p-valu
 **Market regime detection per city**
 Keywords: Hidden Markov Model, HMM, Gaussian, hmmlearn, 3 states, boom, stagnation, correction, Viterbi, transition matrix, regime labels, mean return, covariance, EM algorithm, timeline chart, regime bands, green/amber/red, city selector, hmm.json
 
-## xgboost-features.md
+## lightgbm-features.md
 **Macro feature importance for price prediction (LightGBM)**
-Keywords: LightGBM, LGBMRegressor, feature importance, gain-based, feature engineering, lagged features, cross-city returns, cash_rate_change, unemployment_change, CPI, R-squared, RMSE, horizontal bar chart, feature groups, Interest Rates, Employment, Inflation, Cross-City, xgboost.json, migration from XGBoost
+Keywords: LightGBM, LGBMRegressor, feature importance, gain-based, feature engineering, lagged features, cross-city returns, cash_rate_change, unemployment_change, CPI, R-squared, RMSE, horizontal bar chart, feature groups, Interest Rates, Employment, Inflation, Cross-City, lightgbm.json
 
 ## frontend.md
 **React + D3 single-page application**
-Keywords: React 18, Vite, D3.js v7, CSS Modules, single-page, scrollable, App.jsx, Header, Footer, GrangerSection, HMMSection, XGBoostSection, useRef, useEffect, ResizeObserver, city color palette, Sydney #2563EB, Melbourne #7C3AED, Brisbane #B45309, Perth #DC2626, 4 cities, accessibility, WCAG AA, aria-label, dataLoader.js, constants.js, public/data/
+Keywords: React 18, Vite, D3.js v7, CSS Modules, single-page, scrollable, App.jsx, Header, Footer, GrangerSection, HMMSection, LightGBMSection, useRef, useEffect, ResizeObserver, city color palette, Sydney #2563EB, Melbourne #7C3AED, Brisbane #B45309, Perth #DC2626, 4 cities, accessibility, WCAG AA, aria-label, dataLoader.js, constants.js, public/data/
 
 ## deployment.md
 **GitHub Pages deployment and CI**
