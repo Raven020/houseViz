@@ -10,6 +10,7 @@ const GEO_POSITIONS = {
 };
 
 export function renderGrangerGraph(svgEl, data, prices, options = {}) {
+  if (!data?.results || !prices?.cities) return;
   const { showNonSignificant = false } = options;
   const cities = prices.cities;
   const width = svgEl.parentElement?.clientWidth || 800;

@@ -8,13 +8,15 @@
 
 ## Open Items (Priority Order)
 
-All 6 specs are fully implemented. The items below are robustness, quality, and accessibility gaps discovered during a code-vs-spec audit (2026-03-13).
+All 6 specs are fully implemented. The items below are robustness, quality, and accessibility gaps discovered during a full code-vs-spec audit (2026-03-13).
 
 ### P0 — Reliability / Correctness
 
-- [ ] **CI does not run tests before deploy** — `deploy.yml` runs `npm run build` but never `npm test`. A test regression ships silently to GitHub Pages. Fix: add `npm test` step before `npm run build` in the workflow.
-- [ ] **Granger D3 modules missing data guards** — `grangerGraph.js` and `grangerHeatmap.js` do not guard against `data.results` being undefined/null (unlike all other D3 modules which have early-return guards). A malformed `granger.json` will crash the entire app via uncaught TypeError. Fix: add `if (!data?.results) return;` early-return in both `renderGrangerGraph` and `renderGrangerHeatmap`.
-- [ ] **`ErrorBoundary` missing `componentDidCatch`** — `App.jsx` catches render errors via `getDerivedStateFromError` but never logs them (`componentDidCatch` is absent). Errors are silently swallowed with no `console.error`. Fix: add `componentDidCatch(error, info) { console.error('ErrorBoundary caught:', error, info); }`.
+- [x] **CI does not run tests before deploy** — Fixed: added `npm test` step before `npm run build` in `deploy.yml` (v0.0.21).
+- [x] **Granger D3 modules missing data guards** — Fixed: added `if (!data?.results || !prices?.cities) return;` early-return in both `renderGrangerGraph` and `renderGrangerHeatmap` (v0.0.21).
+- [x] **`ErrorBoundary` missing `componentDidCatch`** — Fixed: added `componentDidCatch` with `console.error` logging (v0.0.21).
+- [x] **Error div missing `role="alert"`** — Fixed: added `role="alert"` to both error divs in `App.jsx` (v0.0.21).
+- [x] **`LightGBMSection.jsx` unguarded `.toFixed()` calls** — Fixed: added `?? 0` fallbacks for `r_squared` and `rmse` (v0.0.21).
 
 ### P1 — Consistency / Polish
 
@@ -22,10 +24,12 @@ All 6 specs are fully implemented. The items below are robustness, quality, and 
 - [ ] **`GrangerSection.jsx` inline tab styles** — The only component using inline `style={{}}` objects with hardcoded hex colors (`#2563EB`, `#1d4ed8`, `#374151`, `#d1d5db`). All other components use CSS classes from `index.css`. Fix: extract tab styling to CSS classes (e.g., `.tab-btn`, `.tab-btn--active`).
 - [ ] **`transitionMatrix.js` is not responsive** — Fixed `cellSize = 72` regardless of container width. All other D3 charts derive dimensions from container. The matrix overflows on narrow viewports. Fix: derive `cellSize` from `containerWidth / (nStates + headerRatio)` with a sensible minimum.
 - [ ] **`featureImportanceChart.js` legend spacing is fragile** — Uses `groups.length * 100` (100px per group) to position the legend. Can clip on narrow viewports. Fix: measure actual text widths or wrap the legend below the chart on small screens.
+- [ ] **`grangerHeatmap.js` significant color not from constants** — `COLOR_SIGNIFICANT = '#22c55e'` is defined locally instead of importing from `src/utils/constants.js`. Drift risk if the palette is updated. Fix: import from constants or define a shared palette entry.
 
 ### P2 — Accessibility
 
 - [ ] **No `aria-live` region for chart updates** — When a user changes city selector or toggle, the chart re-renders silently. Screen reader users receive no announcement. Fix: add an `aria-live="polite"` region in each section that announces the selected city/mode on change.
+- [ ] **HMM overlay (compare-all-cities) mode has no keyboard-accessible data points** — In compare mode, `regimeTimeline.js` renders lines without focusable elements. Keyboard-only users cannot access individual data points. Fix: add focusable anchor points or an accessible data table fallback.
 - [ ] **SVG `role="img"` on individual `<rect>`/`<circle>` elements** — `regimeTimeline.js` applies `role="img"` to individual SVG `<rect>` elements. Per ARIA spec, `role="img"` is for container elements. Current approach works in most screen readers but is technically incorrect. Low priority — consider wrapping in `<g role="img">` groups.
 
 ### P3 — Test Coverage / Quality
@@ -35,6 +39,7 @@ All 6 specs are fully implemented. The items below are robustness, quality, and 
 - [ ] **`test_granger_json` does not check `stationarity` block** — The stationarity section added in v0.0.16 has no test coverage. Fix: add assertions for `stationarity` key, per-city `stationary`/`adf_statistic`/`p_value` fields.
 - [ ] **`test_hmm_json` does not validate transition matrix row sums** — Spec requires each row sums to 1.0. Fix: add `assert abs(sum(row) - 1.0) < 0.01` for each row.
 - [ ] **No coverage tooling** — No `@vitest/coverage-v8` installed, no coverage scripts, no thresholds. Consider adding coverage reporting to CI.
+- [ ] **Python test runner not using pytest** — `test_pipeline.py` uses bare `assert` + manual `try/except` runner. `pytest` is not in `requirements.txt`. Fix: add `pytest` to requirements and convert to pytest-style tests for better failure reporting.
 
 ### P4 — Data Pipeline / Future
 

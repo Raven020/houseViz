@@ -73,10 +73,10 @@ export default function LightGBMSection({ data, prices }) {
         {cityData && (
           <div className="model-metrics">
             <span className="metric" title="Out-of-sample R² from walk-forward cross-validation">
-              OOF R² = {cityData.r_squared.toFixed(3)}
+              OOF R² = {(cityData.r_squared ?? 0).toFixed(3)}
             </span>
             <span className="metric" title="Out-of-sample RMSE from walk-forward cross-validation">
-              OOF RMSE = {cityData.rmse.toFixed(4)}
+              OOF RMSE = {(cityData.rmse ?? 0).toFixed(4)}
             </span>
             {cityData.r_squared_train != null && (
               <span className="metric" title="In-sample R² (full training set)">

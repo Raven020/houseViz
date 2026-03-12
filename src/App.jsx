@@ -16,10 +16,14 @@ class ErrorBoundary extends React.Component {
     return { hasError: true, error };
   }
 
+  componentDidCatch(error, info) {
+    console.error('ErrorBoundary caught:', error, info);
+  }
+
   render() {
     if (this.state.hasError) {
       return (
-        <div className="error">
+        <div className="error" role="alert">
           <h2>Something went wrong</h2>
           <p>{this.state.error?.message || 'An unexpected error occurred while rendering a chart.'}</p>
           <p>Try refreshing the page.</p>
@@ -59,7 +63,7 @@ export default function App() {
 
   if (error) {
     return (
-      <div className="error">
+      <div className="error" role="alert">
         <h2>Unable to load data</h2>
         <p>{error}</p>
         <p>Ensure the JSON data files are present in the <code>public/data/</code> directory.</p>

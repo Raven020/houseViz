@@ -14,6 +14,7 @@ const COLOR_DIAGONAL = '#1f2937';
  * @param {object}        prices  - Prices data ({ cities: [...], ... }).
  */
 export function renderGrangerHeatmap(svgEl, data, prices) {
+  if (!data?.results || !prices?.cities) return;
   const cities = prices.cities;
   const n = cities.length;
 
