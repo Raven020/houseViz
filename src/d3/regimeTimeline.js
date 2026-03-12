@@ -119,6 +119,57 @@ export function renderRegimeTimelineOverlay(svgEl, hmmData, pricesData, cities) 
       tooltip.transition().duration(150).style('opacity', 0);
     });
 
+  // Keyboard-accessible data points for each city
+  activeCities.forEach(city => {
+    const values = normalised[city];
+    const dotData = values.map((value, i) => ({ value, i, city }));
+
+    g.selectAll(`.overlay-dot-${city}`)
+      .data(dotData)
+      .join('circle')
+      .attr('class', `overlay-dot overlay-dot-${city}`)
+      .attr('cx', d => x(dates[d.i]))
+      .attr('cy', d => y(d.value))
+      .attr('r', 3)
+      .attr('fill', 'transparent')
+      .attr('stroke', 'transparent')
+      .attr('tabindex', '0')
+      .attr('role', 'img')
+      .attr('aria-label', d => `${CITY_NAMES[city]}, ${pricesData.dates[d.i]}, index ${d.value.toFixed(1)}`)
+      .style('cursor', 'pointer')
+      .on('mouseover', (event, d) => {
+        tooltip.transition().duration(150).style('opacity', 1);
+        tooltip.html(
+          `<strong style="color:${CITY_COLORS[city]}">${CITY_NAMES[city]}</strong><br/>` +
+          `${pricesData.dates[d.i]}<br/>` +
+          `Index: ${d.value.toFixed(1)}`
+        )
+          .style('left', (event.pageX + 12) + 'px')
+          .style('top', (event.pageY - 12) + 'px');
+        d3.select(event.target).attr('r', 5).attr('fill', CITY_COLORS[city]);
+      })
+      .on('mouseout', (event) => {
+        tooltip.transition().duration(150).style('opacity', 0);
+        d3.select(event.target).attr('r', 3).attr('fill', 'transparent');
+      })
+      .on('focus', (event, d) => {
+        const domRect = event.target.getBoundingClientRect();
+        tooltip.transition().duration(150).style('opacity', 1);
+        tooltip.html(
+          `<strong style="color:${CITY_COLORS[city]}">${CITY_NAMES[city]}</strong><br/>` +
+          `${pricesData.dates[d.i]}<br/>` +
+          `Index: ${d.value.toFixed(1)}`
+        )
+          .style('left', (domRect.left + window.scrollX + 12) + 'px')
+          .style('top', (domRect.top + window.scrollY - 12) + 'px');
+        d3.select(event.target).attr('r', 5).attr('fill', CITY_COLORS[city]).attr('stroke', CITY_COLORS[city]);
+      })
+      .on('blur', (event) => {
+        tooltip.transition().duration(150).style('opacity', 0);
+        d3.select(event.target).attr('r', 3).attr('fill', 'transparent').attr('stroke', 'transparent');
+      });
+  });
+
   // Axes
   g.append('g')
     .attr('transform', `translate(0,${height - margin.bottom})`)

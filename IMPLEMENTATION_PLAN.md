@@ -28,8 +28,8 @@ All 6 specs are fully implemented. The items below are robustness, quality, and 
 
 ### P2 — Accessibility
 
-- [ ] **No `aria-live` region for chart updates** — When a user changes city selector or toggle, the chart re-renders silently. Screen reader users receive no announcement. Fix: add an `aria-live="polite"` region in each section that announces the selected city/mode on change.
-- [ ] **HMM overlay (compare-all-cities) mode has no keyboard-accessible data points** — In compare mode, `regimeTimeline.js` renders lines without focusable elements. Keyboard-only users cannot access individual data points. Fix: add focusable anchor points or an accessible data table fallback.
+- [x] **No `aria-live` region for chart updates** — Fixed: added `aria-live="polite"` `role="status"` regions (visually hidden via `.sr-only`) in `GrangerSection.jsx`, `HMMSection.jsx`, and `LightGBMSection.jsx`. Each announces the current view/city/mode when changed (v0.0.23).
+- [x] **HMM overlay (compare-all-cities) mode has no keyboard-accessible data points** — Fixed: added focusable `<circle>` data points with `tabindex="0"`, `role="img"`, `aria-label`, and focus/blur tooltip handlers for each city in `renderRegimeTimelineOverlay()` in `regimeTimeline.js`. Keyboard users can now tab through individual data points per city (v0.0.23).
 - [ ] **SVG `role="img"` on individual `<rect>`/`<circle>` elements** — `regimeTimeline.js` applies `role="img"` to individual SVG `<rect>` elements. Per ARIA spec, `role="img"` is for container elements. Current approach works in most screen readers but is technically incorrect. Low priority — consider wrapping in `<g role="img">` groups.
 
 ### P3 — Test Coverage / Quality

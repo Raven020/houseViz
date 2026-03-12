@@ -50,8 +50,13 @@ export default function GrangerSection({ data, prices }) {
 
   if (!data) return null;
 
+  const liveMessage = activeView === 'network'
+    ? `Showing network view${showNonSignificant ? ', including non-significant pairs' : ''}`
+    : 'Showing heatmap view';
+
   return (
     <section className="section" id="granger" ref={containerRef}>
+      <div className="sr-only" aria-live="polite" role="status">{liveMessage}</div>
       <h2 className="section__title">City Relationships: Granger Causality</h2>
       <p className="section__explanation">
         Granger causality tests whether past price movements in one city help predict

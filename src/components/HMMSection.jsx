@@ -40,8 +40,13 @@ export default function HMMSection({ data, prices }) {
 
   if (!data || !prices) return null;
 
+  const liveMessage = compareMode
+    ? 'Comparing all cities'
+    : `Showing ${CITY_NAMES[selectedCity] || selectedCity}`;
+
   return (
     <section className="section" id="hmm" ref={containerRef}>
+      <div className="sr-only" aria-live="polite" role="status">{liveMessage}</div>
       <h2 className="section__title">Market Regimes: Hidden Markov Model</h2>
       <p className="section__explanation">
         A Hidden Markov Model identifies latent market regimes in each city's

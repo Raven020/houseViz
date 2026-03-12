@@ -38,8 +38,11 @@ export default function LightGBMSection({ data, prices }) {
 
   const cityData = data.cities[selectedCity];
 
+  const liveMessage = `Showing ${CITY_NAMES[selectedCity] || selectedCity}${aggregateLags ? ', grouped by category' : ''}`;
+
   return (
     <section className="section" id="lightgbm" ref={containerRef}>
+      <div className="sr-only" aria-live="polite" role="status">{liveMessage}</div>
       <h2 className="section__title">What Drives Prices: LightGBM Feature Importance</h2>
       <p className="section__explanation">
         A LightGBM model trained on macroeconomic indicators reveals which factors
