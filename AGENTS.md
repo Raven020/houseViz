@@ -33,6 +33,14 @@ npm run preview  # preview the built site
 
 Prebuild copies JSON files with `mkdir -p public/data && cp data/*.json public/data/`. Do NOT use `cp -r data/ public/data/` — it nests the directory instead of flattening the files.
 
+## Git
+Git identity must be configured per-repo (not set globally):
+```bash
+git config user.name "raven"
+git config user.email "raven@users.noreply.github.com"
+```
+`public/data/` is in `.gitignore` — use `git add -f public/data/<file>` to track files there.
+
 ## Tests
 ```bash
 npm test                            # frontend tests (vitest)
