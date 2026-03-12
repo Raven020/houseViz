@@ -25,6 +25,13 @@ export default function GrangerSection({ data, prices }) {
     renderCharts();
   }, [renderCharts]);
 
+  // Clean up tooltips on unmount
+  useEffect(() => {
+    return () => {
+      document.querySelectorAll('.granger-tip, .granger-heatmap-tip').forEach(el => el.remove());
+    };
+  }, []);
+
   // ResizeObserver for responsive chart redraw
   useEffect(() => {
     const el = containerRef.current;

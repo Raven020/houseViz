@@ -25,6 +25,13 @@ export default function LightGBMSection({ data, prices }) {
     renderChart();
   }, [renderChart]);
 
+  // Clean up tooltips on unmount
+  useEffect(() => {
+    return () => {
+      document.querySelectorAll('.lgbm-tip, .cc-tip').forEach(el => el.remove());
+    };
+  }, []);
+
   // ResizeObserver for responsive chart redraw
   useEffect(() => {
     const el = containerRef.current;

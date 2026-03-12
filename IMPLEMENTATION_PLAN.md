@@ -8,13 +8,7 @@
 
 ## Open Items (Priority Order)
 
-### P2 — Spec compliance gaps (minor)
-
-- **No `README.md` at project root:** `specs/deployment.md` lists `README.md` in the expected repo structure. No README exists. Should contain project overview, live demo link, setup instructions, and methodology summary (per Footer.jsx content).
-
-### P3 — Nice-to-have / polish
-
-- **Tooltip DOM leak:** All D3 modules create persistent `<div class="d3-tooltip">` elements appended to `<body>` and never remove them. On hot-reload or unmount, orphaned tooltips accumulate. Low impact in production (single-page, no routing) but could be cleaned up with a D3 cleanup function called from React `useEffect` return.
+No open items. All specs are fully implemented, all tests pass, and build succeeds.
 
 ---
 
@@ -70,6 +64,8 @@
 - **Toggle label mismatch (fixed v0.0.18):** LightGBMSection toggle read "Group lag variants" but spec says "Group by category". Fixed to match spec.
 - **REGIME_COLORS_SOLID untested (fixed v0.0.18):** Added test coverage for solid regime colors. Test count now 16 (up from 15).
 - **Granger heatmap column headers obscured (fixed v0.0.19):** Column headers were drawn before grid cells in SVG document order. Since SVG z-ordering follows document order (later elements render on top), cells painted over the rotated column header text. Fixed by moving column header rendering after cell rendering and increasing `labelHeight` from 56px to 80px for better spacing.
+- **README.md live demo URL incorrect (fixed v0.0.20):** README existed but had wrong live demo URL (`aus-housing-econometrics` instead of `houseViz`), outdated date range ("2005 to present" vs "Q1 2005 – Q4 2021"), missing walk-forward CV details in LightGBM methodology, wrong project directory name in structure tree, and incomplete D3 file listing. All corrected.
+- **Tooltip DOM leak (fixed v0.0.20):** D3 tooltip `<div>` elements appended to `<body>` were never removed on React component unmount. Added `useEffect` cleanup functions in `GrangerSection.jsx`, `HMMSection.jsx`, and `LightGBMSection.jsx` that remove their respective tooltip elements (`.granger-tip`, `.granger-heatmap-tip`, `.hmm-tip`, `.hmm-overlay-tip`, `.tm-tip`, `.lgbm-tip`, `.cc-tip`) on unmount. Prevents orphaned DOM nodes on hot-reload.
 
 ---
 

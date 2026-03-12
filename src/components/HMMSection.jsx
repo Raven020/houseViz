@@ -29,6 +29,13 @@ export default function HMMSection({ data, prices }) {
     renderCharts();
   }, [renderCharts]);
 
+  // Clean up tooltips on unmount
+  useEffect(() => {
+    return () => {
+      document.querySelectorAll('.hmm-tip, .hmm-overlay-tip, .tm-tip').forEach(el => el.remove());
+    };
+  }, []);
+
   // ResizeObserver for responsive chart redraw
   useEffect(() => {
     const el = containerRef.current;

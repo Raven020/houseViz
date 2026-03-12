@@ -4,7 +4,7 @@ An interactive single-page application exploring price dynamics across Australia
 
 ## Overview
 
-This project applies quantitative methods from time-series econometrics and machine learning to Australian residential property data spanning 2005 to the present. Rather than presenting static charts, it builds an interactive data story that lets users interrogate the relationships and patterns embedded in two decades of housing market data.
+This project applies quantitative methods from time-series econometrics and machine learning to Australian residential property data from Q1 2005 to Q4 2021. Rather than presenting static charts, it builds an interactive data story that lets users interrogate the relationships and patterns embedded in two decades of housing market data.
 
 The application is structured around three analyses. Granger causality tests reveal directional price-leadership relationships between Sydney, Melbourne, Brisbane, and Perth — identifying which cities tend to move first and which follow. Hidden Markov Model (HMM) regime detection classifies each city's market history into boom, stagnation, and correction states, producing timeline visualisations that map how regimes have evolved and how often markets transition between them. LightGBM feature importance analysis quantifies the relative contribution of macroeconomic drivers — interest rates, inflation, unemployment, and cross-city spillovers — to each city's quarterly price returns.
 
@@ -12,7 +12,7 @@ The frontend is a static React 18 / Vite application with D3.js v7 visualisation
 
 ## Live Demo
 
-[https://Raven020.github.io/aus-housing-econometrics/](https://Raven020.github.io/aus-housing-econometrics/)
+[https://Raven020.github.io/houseViz/](https://Raven020.github.io/houseViz/)
 
 ## Data Sources
 
@@ -37,7 +37,7 @@ A 3-state Gaussian HMM is fit independently to each city's quarterly return seri
 
 ### LightGBM Feature Importance
 
-One `LGBMRegressor` is trained per city to predict quarterly price returns from a feature set of ~15–25 engineered inputs: base macro indicators (cash rate, CPI, unemployment), their quarter-on-quarter changes, lags at 1, 2, and 4 quarters, and cross-city lagged returns. Gain-based feature importances are normalised to sum to 1.0 and grouped into four categories: Interest Rates, Employment, Inflation, and Cross-City. Train and test R² and RMSE are reported per city.
+One `LGBMRegressor` is trained per city to predict quarterly price returns from a feature set of ~15–25 engineered inputs: base macro indicators (cash rate, CPI, unemployment), their quarter-on-quarter changes, lags at 1, 2, and 4 quarters, and cross-city lagged returns. Walk-forward cross-validation with expanding windows (minimum 20 observations) provides robust out-of-sample evaluation. Gain-based feature importances are averaged across valid folds (those with non-zero gains) and normalised to sum to 1.0, grouped into four categories: Interest Rates, Employment, Inflation, and Cross-City. Out-of-fold R² and RMSE are reported per city.
 
 ## Local Development
 
@@ -99,7 +99,7 @@ python3 python/test_pipeline.py    # data pipeline validation
 ## Project Structure
 
 ```
-aus-housing-econometrics/
+houseViz/
 ├── src/
 │   ├── App.jsx                      # Root layout, data loading
 │   ├── main.jsx                     # React DOM entry point
@@ -111,8 +111,11 @@ aus-housing-econometrics/
 │   │   └── Footer.jsx
 │   ├── d3/
 │   │   ├── grangerGraph.js          # Force-directed causality graph
+│   │   ├── grangerHeatmap.js        # P-value heatmap
 │   │   ├── regimeTimeline.js        # HMM regime timeline chart
-│   │   └── featureImportanceChart.js
+│   │   ├── transitionMatrix.js      # HMM transition probability matrix
+│   │   ├── featureImportanceChart.js # Per-city feature bars
+│   │   └── crossCityComparison.js   # Top feature comparison
 │   ├── styles/
 │   └── utils/
 │       ├── dataLoader.js
