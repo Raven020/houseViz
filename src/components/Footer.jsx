@@ -45,8 +45,8 @@ export default function Footer() {
       <div className="footer__section footer__meta">
         <p>
           Built with React, D3.js, and Python by{' '}
-          <a href="https://linkedin.com/in/developer" target="_blank" rel="noopener noreferrer">
-            Developer
+          <a href="https://www.linkedin.com/in/raven-clodd" target="_blank" rel="noopener noreferrer">
+            Raven Clodd
           </a>.
         </p>
       </div>

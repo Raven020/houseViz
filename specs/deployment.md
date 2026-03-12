@@ -10,14 +10,14 @@ houseViz/
 │   ├── data_pipeline.py
 │   ├── granger.py
 │   ├── hmm_regimes.py
-│   ├── xgboost_model.py
+│   ├── lightgbm_model.py
 │   └── requirements.txt
 ├── data/                    # Generated JSON (committed to repo)
 │   ├── prices.json
 │   ├── macro.json
 │   ├── granger.json
 │   ├── hmm.json
-│   └── xgboost.json
+│   └── lightgbm.json
 ├── src/                     # React app source
 ├── public/
 │   └── data/ → ../data/     # Symlink or copy at build time
@@ -96,7 +96,7 @@ pip install -r requirements.txt
 python data_pipeline.py
 python granger.py
 python hmm_regimes.py
-python xgboost_model.py
+python lightgbm_model.py
 ```
 
 All scripts read from and write to `data/`. Run them in order (pipeline first, then analyses).

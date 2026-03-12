@@ -10,7 +10,7 @@ one quarter ahead at each step, collecting true out-of-sample predictions
 across the full evaluation period for robust metrics.
 
 Usage:
-    python xgboost_model.py
+    python lightgbm_model.py
 """
 
 import json
@@ -231,7 +231,7 @@ def main():
             "features": features_list,
         }
 
-    output_path = DATA_DIR / "xgboost.json"
+    output_path = DATA_DIR / "lightgbm.json"
     with open(output_path, "w") as f:
         json.dump(output, f, indent=2)
     print(f"\nWrote {output_path}")

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/Header.jsx';
 import GrangerSection from './components/GrangerSection.jsx';
 import HMMSection from './components/HMMSection.jsx';
-import XGBoostSection from './components/XGBoostSection.jsx';
+import LightGBMSection from './components/LightGBMSection.jsx';
 import Footer from './components/Footer.jsx';
 import { loadAllData } from './utils/dataLoader.js';
 
@@ -74,7 +74,7 @@ export default function App() {
         <main>
           <GrangerSection data={data.granger} prices={data.prices} />
           <HMMSection data={data.hmm} prices={data.prices} />
-          <XGBoostSection data={data.xgboost} prices={data.prices} />
+          <LightGBMSection data={data.lightgbm} prices={data.prices} />
         </main>
       </ErrorBoundary>
       <Footer />

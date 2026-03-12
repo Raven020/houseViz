@@ -144,9 +144,9 @@ def test_hmm_json():
     print(f"  hmm.json: OK ({len(data['cities'])} cities)")
 
 
-def test_xgboost_json():
-    """Validate xgboost.json schema."""
-    path = DATA_DIR / "xgboost.json"
+def test_lightgbm_json():
+    """Validate lightgbm.json schema."""
+    path = DATA_DIR / "lightgbm.json"
     assert path.exists(), f"{path} does not exist"
 
     with open(path) as f:
@@ -181,12 +181,12 @@ def test_xgboost_json():
             assert "group" in feat
             assert feat["importance"] >= 0
 
-    print(f"  xgboost.json: OK ({len(data['cities'])} cities)")
+    print(f"  lightgbm.json: OK ({len(data['cities'])} cities)")
 
 
 if __name__ == "__main__":
     print("Running data validation tests...")
-    tests = [test_prices_json, test_macro_json, test_granger_json, test_hmm_json, test_xgboost_json]
+    tests = [test_prices_json, test_macro_json, test_granger_json, test_hmm_json, test_lightgbm_json]
     passed = 0
     failed = 0
     for test in tests:
